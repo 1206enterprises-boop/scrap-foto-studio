@@ -1,8 +1,24 @@
-<!-- force deploy -->
-
 <!DOCTYPE html>
-<html>
-  <body>
-    <h1>Studio page is live ✅</h1>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrap Foto Studio</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <h1>Scrap Foto Studio 📸</h1>
+
+  <div class="camera-container">
+    <video id="video" autoplay muted playsinline></video>
+    <button id="captureBtn">Take Photo</button>
+    <div id="thumbnails"></div>
+  </div>
+
+  <canvas id="canvas" style="display:none;"></canvas>
+
+  <script src="js/camera.js"></script>
+</body>
 </html>
+
