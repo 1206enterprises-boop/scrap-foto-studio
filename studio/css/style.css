@@ -5,15 +5,16 @@ body {
   text-align: center;
 }
 
-h1 {
-  margin-top: 16px;
+h1, h2 {
+  margin: 16px 0;
 }
 
-.camera-container {
+.camera-container, .scrap-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 16px;
+  border-bottom: 2px solid #ddd;
 }
 
 video {
@@ -34,11 +35,6 @@ button {
   cursor: pointer;
 }
 
-button:disabled {
-  background: grey;
-  cursor: not-allowed;
-}
-
 #thumbnails {
   display: flex;
   gap: 8px;
@@ -52,4 +48,27 @@ button:disabled {
   object-fit: cover;
   border-radius: 8px;
   border: 2px solid #333;
+  cursor: grab;
 }
+
+.scrap-area {
+  width: 300px;
+  height: 400px;
+  border: 2px dashed #aaa;
+  margin-top: 16px;
+  position: relative;
+  background-color: white;
+}
+
+.scrap-area img {
+  position: absolute;
+  width: 60px;
+  cursor: grab;
+}
+
+.stickers img {
+  width: 50px;
+  margin: 8px;
+  cursor: grab;
+}
+
