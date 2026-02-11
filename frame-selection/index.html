@@ -7,6 +7,10 @@
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
+<div class="logo-container">
+  <img src="../img/logo.png" alt="Scrap Foto Studio Logo" class="logo">
+</div>
+
 <div class="centered-container">
   <h2>Select a Frame</h2>
   <div id="frameOptions" class="frame-options-scroll"></div>
@@ -16,7 +20,6 @@
   const urlParams = new URLSearchParams(window.location.search);
   const typeParam = urlParams.get('type'); // strip or 4x6
 
-  // Example Canva frames
   const frames = [
     {url:'../img/strip-template1.png', type:'strip'},
     {url:'../img/strip-template2.png', type:'strip'},
@@ -25,7 +28,6 @@
   ];
 
   const frameOptionsDiv = document.getElementById('frameOptions');
-
   const filteredFrames = frames.filter(f => f.type === typeParam);
 
   filteredFrames.forEach(frame => {
@@ -45,6 +47,7 @@
 </script>
 </body>
 </html>
+
 
 
 
