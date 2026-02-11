@@ -1,56 +1,103 @@
+/* === BODY & BACKGROUND === */
 body {
-  background-color: #000;
+  background: #000;
   color: #fff;
   font-family: 'Arial', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.centered-container {
-  text-align: center;
+body::before {
+  content: "";
+  position: fixed;
+  width: 200%;
+  height: 200%;
+  background-image: url("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExb2Z3Z2h3amR1a2I2M3p0dWlrbGZzZm5uYjBsc2M0d2N1c3N4d3VwbiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3oEjI6SIIHBdRxXI40/giphy.gif");
+  opacity: 0.05;
+  animation: floatBg 60s linear infinite;
+  z-index: 0;
 }
 
-video {
-  width: 360px;
-  height: 540px;
-  border: 2px solid gold;
-  margin-bottom: 10px;
+@keyframes floatBg {
+  from { transform: translate(0,0); }
+  to { transform: translate(-25%,-25%); }
 }
 
-.controls button, .button-group button {
-  margin: 5px;
-  padding: 10px 20px;
-  background-color: gold;
-  border: none;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.scrap-canvas {
-  position: relative;
-  width: 360px;
-  height: 540px;
-  margin: 20px auto;
-  border: 2px solid gold;
-}
-
-.scrap-canvas img.template {
+/* === HEADER LOGO === */
+header {
   width: 100%;
-  height: 100%;
-  position: absolute;
-  top:0; left:0;
+  text-align: center;
+  margin: 15px 0;
 }
 
-#photoLayer img {
-  position: absolute;
-  cursor: move;
-  resize: both;
-  overflow: hidden;
+header img {
+  height: 60px;
+  object-fit: contain;
 }
+
+/* === VIDEO & CANVAS === */
+#video {
+  border: 4px solid #222;
+  border-radius: 10px;
+  max-width: 360px;
+  width: 90%;
+  height: auto;
+  display: block;
+  margin-bottom: 15px;
+}
+
+#scrapCanvas {
+  position: relative;
+  width: 320px;
+  height: 480px; /* 4x6 portrait ratio */
+  border: 3px solid #444;
+  margin-bottom: 15px;
+  background-color: #111;
+}
+
+/* === LAYERS === */
+#photoLayer img,
+#stickerLayer img {
+  position: absolute;
+}
+
+/* === BUTTONS === */
+.modern-btn {
+  background: linear-gradient(135deg,#111,#333);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 12px 22px;
+  border-radius: 40px;
+  font-weight: 500;
+  letter-spacing: .5px;
+  cursor: pointer;
+  margin: 5px;
+  transition: all .3s ease;
+}
+
+.modern-btn:hover {
+  background: linear-gradient(135deg,#222,#444);
+  transform: translateY(-2px);
+}
+
+/* === STICKER BAR === */
+#stickerBar {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  margin-bottom: 15px;
+  padding: 5px;
+  width: 90%;
+}
+#stickerBar button img {
+  width: 50px;
+  height: 50px;
+}
+
 
 
 
