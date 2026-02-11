@@ -6,33 +6,35 @@
 <title>Scrap Foto Studio</title>
 <link rel="stylesheet" href="css/style.css">
 
+<!-- Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/@interactjs/interactjs/dist/interact.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
 
 <header>
-  <img src="https://i.imgur.com/YourLogo.png" alt="Logo" class="logo">
+  <img src="../img/logo.png" alt="Logo" class="logo">
   <h1>Scrap Foto Studio 📸</h1>
 </header>
 
+<!-- Camera -->
 <div class="camera-container">
   <video id="video" autoplay muted playsinline></video>
   <button id="captureBtn" class="btn primary">Take Photo</button>
 </div>
 
+<!-- Controls -->
 <div class="controls">
-  <span>Select Background:</span>
-  <button class="bg-btn" data-bg="template1">Template 1</button>
-  <button class="bg-btn" data-bg="template2">Template 2</button>
   <button id="resetBtn" class="btn secondary">Reset</button>
   <button id="exportBtn" class="btn primary">Download Scrap</button>
 </div>
 
+<!-- Photostrip -->
 <div id="scrapArea">
   <div id="photoStrip"></div>
 </div>
 
+<!-- Stickers -->
 <div class="stickers-container">
   <span>Add Stickers:</span>
   <img src="https://i.imgur.com/3Oe2Z7J.png" class="sticker" alt="Sticker 1">
@@ -41,9 +43,9 @@
 
 <canvas id="canvas" style="display:none;"></canvas>
 <script src="js/camera.js"></script>
-
 </body>
 </html>
+
 
 
 
