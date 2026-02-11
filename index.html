@@ -3,57 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>1x3 Photo Strip Studio</title>
-<link rel="stylesheet" href="../style.css">
+<title>Scrap Foto Studio</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="logo-container">
-  <img src="../img/logo.png" alt="Scrap Foto Studio Logo" class="logo">
+  <img src="img/logo.png" alt="Scrap Foto Studio Logo" class="logo">
 </div>
 
 <div class="centered-container">
-  <h2>1"x3" Photo Strip</h2>
-
-  <div class="video-container">
-    <video id="video" autoplay></video>
-  </div>
-
-  <!-- Filters -->
-  <div class="filters-container">
-    <button onclick="setFilter('none')">Color</button>
-    <button onclick="setFilter('grayscale(100%)')">Black & White</button>
-    <button onclick="setFilter('sepia(0.6) contrast(1.2) brightness(1.1)')">Vintage</button>
-  </div>
-
-  <div class="controls">
-    <button class="modern-btn" id="startBtn">Start Session</button>
-    <button class="modern-btn" id="takePhotoBtn">Take Photo</button>
-    <button class="modern-btn" id="resetBtn">Reset</button>
-    <button class="modern-btn" id="downloadBtn">Download (Payment Required)</button>
-  </div>
-
-  <div class="scrap-canvas" id="scrapCanvas" style="width:360px;height:1080px;">
-    <img id="templateImg" class="template" src="">
-    <div id="photoLayer"></div>
-    <div id="stickerLayer"></div>
-  </div>
-
-  <div class="frame-scroll" id="stickerBar"></div>
-
-  <div class="nav-btns">
-    <button class="modern-btn" onclick="window.history.back()">Back</button>
-    <button class="modern-btn" onclick="window.location.href='../index.html'">Home</button>
+  <h1>Scrap Foto Studio</h1>
+  <p>Select your session type:</p>
+  <div class="button-group">
+    <button class="modern-btn" onclick="window.location.href='frame-selection/index.html?type=strip'">1"x3" Photo Strip</button>
+    <button class="modern-btn" onclick="window.location.href='frame-selection/index.html?type=4x6'">4x6 Scrapbook</button>
   </div>
 </div>
 
-<script src="../js/html2canvas.min.js"></script>
-<script src="script.js"></script>
-<script>
-  function setFilter(value){
-    document.getElementById('video').style.filter = value;
-  }
-</script>
 </body>
 </html>
 
