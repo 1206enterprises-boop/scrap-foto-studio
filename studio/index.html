@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Studio</title>
-  <link rel="stylesheet" href="../css/style.css">
-</head>
 <body class="luxury-bg">
 
 <div class="studio-container">
@@ -12,6 +6,8 @@
   <button id="startBtn" class="luxury-btn">Start Session</button>
 
   <div id="photoStrip" class="photo-strip">
+    <div class="watermark">SCRAP FOTO STUDIO</div>
+
     <div class="photo-slot"></div>
     <div class="photo-slot"></div>
     <div class="photo-slot"></div>
@@ -23,6 +19,12 @@
     <img src="../img/stickers/sticker2.png" class="sticker-item">
   </div>
 
+  <select id="productType" class="luxury-select">
+    <option value="digital">Digital - $5</option>
+    <option value="print">4x6 Print - $10</option>
+    <option value="keychain">Keychain - $15</option>
+  </select>
+
   <button id="downloadBtn" class="luxury-btn">Download</button>
 
 </div>
@@ -31,7 +33,6 @@
 <script src="../js/studio.js"></script>
 
 </body>
-</html>
 
 
 
