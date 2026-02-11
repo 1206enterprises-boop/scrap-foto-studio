@@ -1,43 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Select Frame</title>
-  <link rel="stylesheet" href="../css/style.css">
+<title>Select Frame</title>
+<style>
+body{
+background:#000;
+color:#fff;
+font-family:Helvetica;
+text-align:center;
+padding-top:100px;
+}
+.frame{
+display:inline-block;
+margin:40px;
+cursor:pointer;
+transition:.3s;
+}
+.frame img{
+width:250px;
+border-radius:20px;
+}
+.frame:hover{
+transform:scale(1.05);
+}
+</style>
 </head>
-<body class="luxury-bg">
+<body>
 
-<div class="frame-container">
+<h2>Select Your Frame</h2>
 
-  <h1>Select Your Frame</h1>
+<div class="frame" onclick="choose('frame1')">
+<img src="https://your-canva-frame-1.png">
+<p>Luxury Gold</p>
+</div>
 
-  <div class="frame-grid">
-
-    <div class="frame-card" onclick="selectFrame('strip-template1.png')">
-      <img src="../img/strip-template1.png">
-    </div>
-
-    <div class="frame-card" onclick="selectFrame('portrait-template1.png')">
-      <img src="../img/portrait-template1.png">
-    </div>
-
-  </div>
-
+<div class="frame" onclick="choose('frame2')">
+<img src="https://your-canva-frame-2.png">
+<p>Minimal White</p>
 </div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-const mode = params.get("mode");
-
-if (mode) {
-  localStorage.setItem("boothMode", mode);
-}
-
-function selectFrame(frame) {
-  localStorage.setItem("selectedFrame", frame);
-  window.location.href = "../studio/";
+function choose(frame){
+localStorage.setItem("selectedFrame", frame);
+window.location.href="../studio/";
 }
 </script>
 
 </body>
 </html>
+
 
