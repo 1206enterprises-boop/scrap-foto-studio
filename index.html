@@ -1,62 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scrap Foto Studio</title>
-<link rel="stylesheet" href="style.css">
-<style>
-  body {
-    background-color: black;
-    color: white;
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; /* middle-left */
-    padding-left: 5%;
-    flex-direction: column;
-  }
-
-  h1 {
-    font-size: 3rem;
-    margin-bottom: 2rem;
-  }
-
-  .option-btn {
-    background-color: #FFD700; /* Gold */
-    color: black;
-    font-weight: bold;
-    font-size: 1.2rem;
-    padding: 1rem 2rem;
-    margin-bottom: 1rem;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.3s all;
-  }
-
-  .option-btn:hover {
-    transform: scale(1.05);
-    background-color: #ffc107;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrap Foto Studio</title>
+  <link rel="stylesheet" href="landing.css">
 </head>
 <body>
-
-<h1>Scrap Foto Studio</h1>
-
-<button class="option-btn" onclick="location.href='frame-selection/frame-selection.html?type=strip'">
-  1x3 Photo Strip
-</button>
-
-<button class="option-btn" onclick="location.href='frame-selection/frame-selection.html?type=4x6'">
-  4x6 Photo Scrap
-</button>
-
+  <div class="container">
+    <img src="img/logo.png" class="logo" alt="Studio Logo">
+    <h1>Scrap Foto Studio</h1>
+    <button class="button" onclick="location.href='frame-selection/index.html?type=1x3'">1"x3 Photo Strip</button>
+    <button class="button" onclick="location.href='frame-selection/index.html?type=4x6'">4x6 Scrapbook</button>
+  </div>
 </body>
 </html>
+
 
 
 
