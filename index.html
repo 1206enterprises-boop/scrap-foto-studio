@@ -3,22 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scrap Foto Studio</title>
-<link rel="stylesheet" href="css/style.css">
+<title>Scrap-Foto Studio</title>
+<link rel="stylesheet" href="landing.css">
 </head>
 <body>
-<div class="logo-container">
-  <img src="img/logo.png" alt="Logo" class="logo">
-</div>
+  <!-- Animated Background -->
+  <div class="animated-bg"></div>
 
-<h1 class="luxury-title">Welcome to Scrap Foto Studio</h1>
+  <!-- Logo -->
+  <div class="logo">
+    <img src="img/logo.png" alt="Scrap-Foto Studio Logo">
+  </div>
 
-<div class="landing-options">
-  <button class="modern-btn" onclick="location.href='frame-selection/index.html?type=1x3'">1"x3" Photo Strip</button>
-  <button class="modern-btn" onclick="location.href='frame-selection/index.html?type=4x6'">4x6 Scrapbook</button>
-</div>
-
+  <!-- Options -->
+  <div class="options">
+    <button class="option-btn" onclick="location.href='frame-selection.html?type=strip'">1x3 Photo Strip</button>
+    <button class="option-btn" onclick="location.href='frame-selection.html?type=4x6'">4x6 Photo Scrap</button>
+  </div>
 </body>
+<script src="landing.js"></script>
 </html>
 
 
