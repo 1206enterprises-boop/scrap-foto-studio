@@ -1,6 +1,7 @@
-/* Global Body - Consistent Black Background */
+/* Reset & Fonts */
+* { box-sizing:border-box; margin:0; padding:0; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; }
 body {
-  background: radial-gradient(circle at top left, #0c0c0c, #1a1a1a); /* Luxury dark gradient */
+  background: radial-gradient(circle at top left, #0c0c0c, #1a1a1a); /* Luxury black gradient */
   color:#fff;
   display:flex;
   justify-content:center;
@@ -8,44 +9,37 @@ body {
   flex-direction:column;
   padding:20px;
   min-height:100vh;
-  background-image: url('img/texture-overlay.png'); /* Optional texture for luxury feel */
-  background-repeat: repeat;
+  background-repeat: no-repeat;
   background-size: cover;
 }
 
-/* Containers */
-.centered-container {
-  max-width:1200px;
-  width:100%;
-  margin:0 auto;
-  text-align:center;
-  background-color: transparent; /* Ensure no white blocks show */
-}
+/* Logo */
+.logo-container { text-align:center; margin-bottom:20px; }
+.logo { width:150px; height:auto; display:block; margin:0 auto; }
 
-/* Video/Camera Containers */
-.video-container {
-  position: relative;
-  margin: 20px auto;
-  border: 6px solid gold;
-  border-radius:16px;
-  background-color:#000; /* Black background behind camera */
-  width:360px;
-  height:480px;
-  overflow:hidden;
-}
+/* Centered Container */
+.centered-container { max-width:1200px; width:100%; margin:0 auto; text-align:center; background:transparent; }
 
-/* Scrap Canvas */
-.scrap-canvas {
-  position:relative;
-  margin:20px auto;
-  border:3px solid gold;
+/* Headings */
+h1,h2 { font-weight:700; margin-bottom:20px; color:gold; }
+
+/* Buttons */
+.modern-btn {
+  background:linear-gradient(135deg,#ffd700,#ffcc33);
+  color:#000;
+  border:none;
   border-radius:12px;
-  background:#1a1a1a; /* Dark background */
-  overflow:hidden;
+  padding:12px 25px;
+  margin:10px;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all 0.3s ease;
 }
+.modern-btn:hover { transform:scale(1.05); box-shadow:0 6px 12px rgba(255,204,51,0.6); }
 
-/* Frame Selection Gallery */
-.frame-options-scroll {
+/* Scrollable Frame/Sticker Gallery */
+.frame-options-scroll, .frame-scroll {
   display:flex;
   overflow-x:auto;
   padding:20px;
@@ -53,8 +47,52 @@ body {
   scrollbar-width:thin;
   scrollbar-color:gold #0c0c0c;
   margin-bottom:30px;
-  background-color:transparent; /* Ensure black background behind scroll */
 }
+.frame-options-scroll::-webkit-scrollbar, .frame-scroll::-webkit-scrollbar { height:10px; }
+.frame-options-scroll::-webkit-scrollbar-thumb, .frame-scroll::-webkit-scrollbar-thumb { background:gold; border-radius:10px; }
+
+.frame-thumbnail { width:180px; height:240px; object-fit:cover; border:3px solid gold; border-radius:12px; cursor:pointer; transition:transform 0.3s, box-shadow 0.3s; }
+.frame-thumbnail:hover { transform:scale(1.05); box-shadow:0 6px 12px rgba(255,204,51,0.5); }
+
+/* Camera Container */
+.video-container {
+  position: relative;
+  margin: 20px auto;
+  border: 6px solid gold;
+  border-radius:16px;
+  background-color:#000;
+  width:360px;
+  height:480px;
+  overflow:hidden;
+}
+video { width:100%; height:100%; object-fit:cover; border-radius:12px; filter:none; }
+
+/* Filters Buttons */
+.filters-container { display:flex; justify-content:center; gap:10px; margin-top:10px; }
+.filters-container button { font-size:14px; padding:8px 12px; border-radius:8px; border:2px solid gold; background:#1a1a1a; color:#fff; cursor:pointer; }
+.filters-container button:hover { transform:scale(1.05); }
+
+/* Scrap Canvas */
+.scrap-canvas { position:relative; margin:20px auto; border:3px solid gold; border-radius:12px; background:#1a1a1a; overflow:hidden; }
+.scrap-canvas .template { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+#photoLayer img, #stickerLayer img { position:absolute; cursor:move; z-index:10; border-radius:6px; }
+
+/* Controls */
+.controls { margin-top:15px; display:flex; flex-wrap:wrap; justify-content:center; }
+
+/* Home & Back buttons */
+.nav-btns { margin-top:10px; display:flex; justify-content:center; gap:15px; }
+
+/* Mobile */
+@media screen and (max-width:768px){
+  .logo-container { margin-top:20px; margin-bottom:15px; }
+  .video-container { width:90%; max-height:350px; margin-top:20px; margin-left:auto; margin-right:auto; }
+  video { width:100%; height:100%; object-fit:cover; border-radius:12px; }
+  .scrap-canvas { width:90%; max-height:600px; margin:20px auto; }
+  .frame-scroll { width:90%; margin:10px auto; }
+  .modern-btn { padding:10px 15px; font-size:14px; margin:5px; }
+}
+
 
 
 
