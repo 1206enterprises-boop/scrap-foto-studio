@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>4x6 Scrapbook Studio</title>
 <link rel="stylesheet" href="style.css">
 <script src="../js/html2canvas.min.js"></script>
@@ -16,11 +17,10 @@
     <button id="resetBtn">Reset</button>
     <button onclick="downloadScrap()">Download / Pay</button>
   </div>
-  <div class="button-group">
-    <button onclick="addSticker('https://example.com/sticker1.png')">Sticker 1</button>
-    <button onclick="addSticker('https://example.com/sticker2.png')">Sticker 2</button>
+  <div class="frame-scroll">
+    <!-- Stickers loaded via JS -->
   </div>
-  <div id="scrapCanvas" class="scrap-canvas">
+  <div id="scrapCanvas" class="scrap-canvas" style="width:360px;height:540px;">
     <img id="templateImg" class="template">
     <div id="photoLayer"></div>
   </div>
@@ -28,5 +28,6 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
