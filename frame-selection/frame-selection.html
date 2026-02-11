@@ -3,24 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Frame Selection</title>
-<link rel="stylesheet" href="frame-selection.css">
+<title>Scrap Foto Studio</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    background-color: black;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* middle-left */
+    padding-left: 5%;
+    flex-direction: column;
+  }
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  .option-btn {
+    background-color: #FFD700; /* Gold */
+    color: black;
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    margin-bottom: 1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s all;
+  }
+
+  .option-btn:hover {
+    transform: scale(1.05);
+    background-color: #ffc107;
+  }
+</style>
 </head>
 <body>
-  <div class="animated-bg"></div>
 
-  <div class="logo">
-    <img src="img/logo.png" alt="Scrap-Foto Studio Logo">
-  </div>
+<h1>Scrap Foto Studio</h1>
 
-  <div class="frame-gallery" id="frameGallery"></div>
+<button class="option-btn" onclick="location.href='frame-selection/frame-selection.html?type=strip'">
+  1x3 Photo Strip
+</button>
 
-  <div class="nav-buttons">
-    <button class="nav-btn" onclick="goHome()">Home</button>
-    <button class="nav-btn" onclick="goBack()">Back</button>
-  </div>
+<button class="option-btn" onclick="location.href='frame-selection/frame-selection.html?type=4x6'">
+  4x6 Photo Scrap
+</button>
 
-<script src="frame-selection.js"></script>
 </body>
 </html>
 
