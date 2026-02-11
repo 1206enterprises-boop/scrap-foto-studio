@@ -1,3 +1,4 @@
+// Elements
 const video = document.getElementById("video");
 const startBtn = document.getElementById("startBtn");
 const takeBtn = document.getElementById("takeBtn");
@@ -22,7 +23,8 @@ takeBtn.onclick = () => {
   if(count >= 4) return;
 
   const canvas = document.createElement("canvas");
-  canvas.width = 1080; canvas.height = 1920;
+  canvas.width = 1080;
+  canvas.height = 1920;
   const ctx = canvas.getContext("2d");
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -35,15 +37,31 @@ takeBtn.onclick = () => {
   img.style.height = "350px";
   img.style.cursor = "move";
 
-  makeDraggable(img, scrapCanvas); // restrict to canvas
+  // Make draggable & restrict to canvas
+  makeDraggable(img, scrapCanvas);
   photoLayer.appendChild(img);
   count++;
 };
 
-// Dragging function WITH boundary restriction
+// Function to add a sticker from Canva URL
+function addSticker(url){
+  const sticker = document.createElement("img");
+  sticker.src = url;
+  sticker.style.position = "absolute";
+  sticker.style.left = "50px";
+  sticker.style.top = "50px";
+  sticker.style.width = "100px";
+  sticker.style.height = "100px";
+  sticker.style.cursor = "move";
+
+  makeDraggable(sticker, scrapCanvas);
+  makeResizable(sticker);
+  photoLayer.appendChild(sticker);
+}
+
+// Dragging function with boundary restriction
 function makeDraggable(el, container){
   let offsetX, offsetY;
-
   el.onmousedown = e => {
     e.preventDefault();
     offsetX = e.offsetX;
@@ -53,7 +71,7 @@ function makeDraggable(el, container){
       let x = ev.pageX - container.getBoundingClientRect().left - offsetX;
       let y = ev.pageY - container.getBoundingClientRect().top - offsetY;
 
-      // Boundary restrictions
+      // Restrict inside container
       x = Math.max(0, Math.min(x, container.clientWidth - el.offsetWidth));
       y = Math.max(0, Math.min(y, container.clientHeight - el.offsetHeight));
 
@@ -61,40 +79,45 @@ function makeDraggable(el, container){
       el.style.top = y + "px";
     };
 
-    document.onmouseup = () => {
-      document.onmousemove = null;
-    };
+    document.onmouseup = () => document.onmousemove = null;
   };
 }
 
-// Download with watermark & payment (example)
+// Simple resizable function
+function makeResizable(el){
+  el.style.resize = "both";
+  el.style.overflow = "hidden";
+}
+
+// Download with watermark & payment
 function downloadScrap(){
-  // Show payment popup / Stripe link first (optional)
-  const stripeUrl = "https://buy.stripe.com/test_abc123"; // Replace with your payment link
+  const stripeUrl = "https://buy.stripe.com/test_abc123"; // replace with your payment link
   const confirmed = confirm("You will be redirected to payment before download. Proceed?");
   if(!confirmed) return;
   window.open(stripeUrl, "_blank");
 
-  // Wait 3 seconds before capture (adjust as needed)
   setTimeout(()=>{
     html2canvas(scrapCanvas).then(canvas=>{
       const watermark = new Image();
-      watermark.src='../img/watermark.png';
+      watermark.src='../img/watermark.png'; // watermark image
       watermark.onload = ()=>{
         const finalCanvas = document.createElement("canvas");
         finalCanvas.width = canvas.width;
         finalCanvas.height = canvas.height;
         const ctx = finalCanvas.getContext("2d");
+
         ctx.drawImage(canvas,0,0);
         ctx.drawImage(watermark, finalCanvas.width-250, finalCanvas.height-100,200,50);
+
         const link = document.createElement("a");
         link.href = finalCanvas.toDataURL();
         link.download = "scrap.png";
         link.click();
       };
     });
-  },3000);
+  },1000);
 }
+
 
 
 
