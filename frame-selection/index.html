@@ -3,56 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Frame Selection</title>
-<link rel="stylesheet" href="../style.css">
+<title>Select Your Frame</title>
+<link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-
 <div class="logo-container">
-  <img src="../img/logo.png" alt="Scrap Foto Studio Logo" class="logo">
+  <img src="../img/logo.png" alt="Logo" class="logo">
 </div>
 
-<div class="centered-container">
-  <h2>Select a Frame</h2>
-  <div id="frameOptions" class="frame-options-scroll"></div>
+<h2>Select Your Frame</h2>
 
-  <div class="nav-btns">
-    <button class="modern-btn" onclick="window.history.back()">Back</button>
-    <button class="modern-btn" onclick="window.location.href='../index.html'">Home</button>
-  </div>
+<div class="frame-options-scroll" id="frameGallery">
+  <!-- Frame thumbnails will be loaded dynamically -->
+</div>
+
+<div class="nav-btns">
+  <button class="modern-btn" onclick="goBack()">Go Back</button>
+  <button class="modern-btn" onclick="goHome()">Home</button>
 </div>
 
 <script>
-  const urlParams = new URLSearchParams(window.location.search);
-  const typeParam = urlParams.get('type'); // strip or 4x6
+const frameType = new URLSearchParams(window.location.search).get('type'); // 1x3 or 4x6
+const gallery = document.getElementById('frameGallery');
 
-  const frames = [
-    {url:'../img/strip-template1.png', type:'strip'},
-    {url:'../img/strip-template2.png', type:'strip'},
-    {url:'../img/4x6-template1.png', type:'4x6'},
-    {url:'../img/4x6-template2.png', type:'4x6'}
-  ];
+// Example Canva frame URLs
+const frames1x3 = [
+  'https://i.imgur.com/1x3frame1.png',
+  'https://i.imgur.com/1x3frame2.png'
+];
+const frames4x6 = [
+  'https://i.imgur.com/4x6frame1.png',
+  'https://i.imgur.com/4x6frame2.png'
+];
 
-  const frameOptionsDiv = document.getElementById('frameOptions');
-  const filteredFrames = frames.filter(f => f.type === typeParam);
+const frames = frameType === '1x3' ? frames1x3 : frames4x6;
 
-  filteredFrames.forEach(frame => {
-    const img = document.createElement('img');
-    img.src = frame.url;
-    img.className = 'frame-thumbnail';
-    img.onclick = () => {
-      localStorage.setItem('frame', frame.url);
-      if(frame.type==='strip'){
-        window.location.href='../studio-strip/index.html';
-      } else {
-        window.location.href='../studio-4x6/index.html';
-      }
-    };
-    frameOptionsDiv.appendChild(img);
+frames.forEach(url => {
+  const img = document.createElement('img');
+  img.src = url;
+  img.classList.add('frame-thumbnail');
+  img.addEventListener('click', ()=>{
+    localStorage.setItem('frame', url);
+    const studioPage = frameType==='1x3'?'../studio-strip/index.html':'../studio-4x6/index.html';
+    window.location.href = studioPage;
   });
+  gallery.appendChild(img);
+});
+
+function goBack(){ window.history.back(); }
+function goHome(){ window.location.href='../index.html'; }
 </script>
 </body>
 </html>
+
 
 
 
