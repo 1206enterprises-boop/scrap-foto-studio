@@ -4,30 +4,52 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>4x6 Scrapbook Studio</title>
-<link rel="stylesheet" href="style.css">
-<script src="../js/html2canvas.min.js"></script>
+<link rel="stylesheet" href="../../style.css">
 </head>
 <body>
+
+<div class="logo-container">
+  <img src="../../img/logo.png" alt="Scrap Foto Studio Logo" class="logo">
+</div>
+
 <div class="centered-container">
-  <h2>4x6 Scrapbook Studio</h2>
-  <video id="video" autoplay></video>
+  <div class="video-container">
+    <video id="video" autoplay></video>
+  </div>
+  <div class="filters-container">
+    <button onclick="applyFilter('none')">Color</button>
+    <button onclick="applyFilter('grayscale(100%)')">B&W</button>
+    <button onclick="applyFilter('sepia(80%)')">Vintage</button>
+  </div>
   <div class="controls">
-    <button id="startBtn">Start Session</button>
-    <button id="takeBtn">Take Photo</button>
-    <button id="resetBtn">Reset</button>
-    <button onclick="downloadScrap()">Download / Pay</button>
+    <button id="startBtn" class="modern-btn">Start Session</button>
+    <button id="takePhotoBtn" class="modern-btn">Take Photo</button>
+    <button id="resetBtn" class="modern-btn">Reset</button>
+    <button id="downloadBtn" class="modern-btn">Download / Pay</button>
   </div>
-  <div class="frame-scroll">
-    <!-- Stickers loaded via JS -->
-  </div>
-  <div id="scrapCanvas" class="scrap-canvas" style="width:360px;height:540px;">
-    <img id="templateImg" class="template">
+  <div class="scrap-canvas" id="scrapCanvas">
+    <img id="templateImg" class="template" src="">
     <div id="photoLayer"></div>
+    <div id="stickerLayer"></div>
+  </div>
+  <div id="stickerBar"></div>
+
+  <div class="nav-btns">
+    <button class="modern-btn" onclick="window.history.back()">Back</button>
+    <button class="modern-btn" onclick="window.location.href='../../index.html'">Home</button>
   </div>
 </div>
-<script src="script.js"></script>
+
+<script src="../../script.js"></script>
+<script>
+function applyFilter(filter) {
+  document.getElementById('video').style.filter = filter;
+}
+</script>
 </body>
 </html>
+
+
 
 
 
