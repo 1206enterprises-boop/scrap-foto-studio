@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#000,#1a1a1a);
+  color: white;
+  text-align: center;
+}
+
+.logo {
+  width: 140px;
+  margin: 20px;
+}
+
+.container {
+  padding: 40px;
+}
+
+.frame-grid {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.frame-card {
+  background: #111;
+  padding: 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.frame-card:hover {
+  transform: scale(1.05);
+}
+
+.frame-card img {
+  width: 200px;
+  border-radius: 15px;
+}
