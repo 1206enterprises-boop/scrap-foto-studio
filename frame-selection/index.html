@@ -2,38 +2,43 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Frame Selection</title>
 <link rel="stylesheet" href="../studio-strip/style.css">
 </head>
 <body>
 <div class="centered-container">
   <h2>Select a Frame</h2>
-  <div id="frameOptions" class="frame-options"></div>
+  <div id="frameOptions" class="frame-options-scroll"></div>
 </div>
 
 <script>
-  // Array of frame options from Canva
-  // Each frame has: URL, type ('strip' or '4x6')
+  const urlParams = new URLSearchParams(window.location.search);
+  const typeParam = urlParams.get('type'); // strip or 4x6
+
+  // Example frames from Canva
   const frames = [
-    {url:'https://example.com/canva/strip1.png', type:'strip'},
-    {url:'https://example.com/canva/strip2.png', type:'strip'},
-    {url:'https://example.com/canva/4x6-1.png', type:'4x6'},
-    {url:'https://example.com/canva/4x6-2.png', type:'4x6'}
+    {url:'../img/strip-template1.png', type:'strip'},
+    {url:'../img/strip-template2.png', type:'strip'},
+    {url:'../img/4x6-template1.png', type:'4x6'},
+    {url:'../img/4x6-template2.png', type:'4x6'}
   ];
 
   const frameOptionsDiv = document.getElementById('frameOptions');
 
-  frames.forEach(frame=>{
+  // Filter by type
+  const filteredFrames = frames.filter(f => f.type === typeParam);
+
+  filteredFrames.forEach(frame => {
     const img = document.createElement('img');
     img.src = frame.url;
     img.className = 'frame-thumbnail';
-    img.title = frame.type + " frame";
-    img.onclick = ()=>{
-      localStorage.setItem('frame', frame.url); // save frame selection
-      if(frame.type==='strip'){
-        window.location.href='../studio-strip/index.html';
+    img.onclick = () => {
+      localStorage.setItem('frame', frame.url);
+      if(frame.type === 'strip'){
+        window.location.href = '../studio-strip/index.html';
       } else {
-        window.location.href='../studio-4x6/index.html';
+        window.location.href = '../studio-4x6/index.html';
       }
     };
     frameOptionsDiv.appendChild(img);
@@ -41,6 +46,7 @@
 </script>
 </body>
 </html>
+
 
 
 
