@@ -126,65 +126,6 @@ button.secondary { background: #aaa; color: #fff; }
   button.btn { padding: 6px 12px; font-size: 12px; }
 }
 
-button.btn:hover { opacity: 0.9; }
-button.primary { background: #2d9cdb; color: #fff; }
-button.secondary { background: #aaa; color: #fff; }
-
-/* Scrap Area */
-.scrap-container { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-
-#scrapArea {
-  width: 200px; /* taller photostrip */
-  height: 600px;
-  border: 2px dashed #bbb;
-  border-radius: 12px;
-  background-color: white;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-#photoStrip {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-#photoStrip img {
-  width: 100%;
-  height: 140px; /* all 4 photos visible */
-  object-fit: contain;
-  border-radius: 4px;
-}
-
-/* Stickers */
-.stickers-container { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-.stickers-container img { width: 50px; cursor: pointer; border: 2px solid #333; border-radius: 8px; transition: 0.2s; }
-.stickers-container img:hover { transform: scale(1.1); border-color: #2d9cdb; }
-
-.sticker-wrapper { position: absolute; }
-.sticker-wrapper img { display: block; }
-.delete-btn {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background: red;
-  color: white;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  text-align: center;
-  font-size: 14px;
-  line-height: 18px;
-  cursor: pointer;
-  z-index: 10;
-}
-
 
 
 
