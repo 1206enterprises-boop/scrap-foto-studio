@@ -1,38 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Select Your Frame</title>
-  <link rel="stylesheet" href="css/main.css">
+  <title>Scrap Foto Studio</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="luxury-bg">
 
-<header>
+<div class="landing-container">
+
   <img src="img/logo.png" class="logo">
-</header>
 
-<div class="container">
-  <h1>Select Your Frame</h1>
+  <h1 class="luxury-title">Scrap Foto Studio</h1>
+  <p class="luxury-sub">A modern digital photo experience</p>
 
-  <div class="frame-grid">
+  <div class="mode-selection">
 
-    <div class="frame-card" onclick="selectFrame('frame1')">
-      <img src="img/frames/frame1.png">
-      <p>Classic</p>
-    </div>
+    <a href="frame-selection/?mode=strip" class="mode-card">
+      <h2>1"x3" Classic Strip</h2>
+      <p>Luxury vertical 4-photo strip</p>
+    </a>
 
-    <div class="frame-card" onclick="selectFrame('frame2')">
-      <img src="img/frames/frame2.png">
-      <p>Modern</p>
-    </div>
-
-    <div class="frame-card" onclick="selectFrame('frame3')">
-      <img src="img/frames/frame3.png">
-      <p>Luxury</p>
-    </div>
+    <a href="frame-selection/?mode=portrait" class="mode-card">
+      <h2>4x6 Portrait</h2>
+      <p>Full portrait layout with 4 photos</p>
+    </a>
 
   </div>
+
 </div>
 
-<script src="js/frame.js"></script>
 </body>
 </html>
+
