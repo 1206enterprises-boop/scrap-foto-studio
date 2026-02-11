@@ -4,42 +4,47 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>1x3 Photo Strip Studio</title>
-<link rel="stylesheet" href="studio-strip.css">
+<link rel="stylesheet" href="../style.css">
+<style>
+  body { background-color: black; color: white; font-family: 'Arial', sans-serif; margin: 0; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  #scrapCanvas { position: relative; width: 300px; height: 900px; border: 2px solid #FFD700; margin-top: 20px; }
+  #video { width: 300px; border-radius: 10px; }
+  .btn { background-color: #FFD700; color: black; font-weight: bold; margin: 5px; padding: 0.8rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; }
+  .btn:hover { transform: scale(1.05); }
+  #stickerBar img { width: 50px; height: 50px; margin: 5px; cursor: pointer; }
+  #filters { margin-top: 10px; }
+</style>
 </head>
 <body>
-<div class="animated-bg"></div>
 
-<div class="logo"><img src="../img/logo.png" alt="Logo"></div>
+<img src="../img/logo.png" alt="Logo" style="width:120px; margin-bottom: 10px;">
 
-<div class="camera-container">
-  <video id="video" autoplay playsinline></video>
-  <div class="filter-bar" id="filterBar">
-    <button class="filter-btn" data-filter="none">Color</button>
-    <button class="filter-btn" data-filter="bw">B&W</button>
-    <button class="filter-btn" data-filter="vintage">Vintage</button>
-  </div>
-  <button id="startBtn">Start Session</button>
-  <button id="takePhotoBtn">Take Photo</button>
+<video id="video" autoplay></video>
+
+<div id="filters">
+  <button class="btn" onclick="applyFilter('none')">Color</button>
+  <button class="btn" onclick="applyFilter('grayscale(100%)')">Black & White</button>
+  <button class="btn" onclick="applyFilter('sepia(100%)')">Vintage</button>
 </div>
 
-<div class="scrap-container">
-  <canvas id="scrapCanvas" width="300" height="900"></canvas>
+<button class="btn" id="startBtn">Start Session</button>
+<button class="btn" id="takePhotoBtn">Take Photo</button>
+<button class="btn" id="resetBtn">Reset</button>
+<button class="btn" id="downloadBtn">Download / Pay</button>
+
+<div id="scrapCanvas">
+  <img id="templateImg">
   <div id="photoLayer"></div>
   <div id="stickerLayer"></div>
 </div>
 
-<div class="sticker-bar" id="stickerBar"></div>
+<div id="stickerBar"></div>
 
-<div class="action-buttons">
-  <button id="resetBtn">Reset</button>
-  <button id="downloadBtn">Download / Pay</button>
-  <button onclick="goHome()">Home</button>
-  <button onclick="goBack()">Back</button>
-</div>
+<script src="../js/script-strip.js"></script>
 
-<script src="studio-strip.js"></script>
 </body>
 </html>
+
 
 
 
