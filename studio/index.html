@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scrap Foto Studio</title>
 <link rel="stylesheet" href="css/style.css">
-
-<!-- Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/@interactjs/interactjs/dist/interact.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
@@ -17,34 +15,33 @@
   <h1>Scrap Foto Studio 📸</h1>
 </header>
 
-<!-- Camera -->
-<div class="camera-container">
-  <video id="video" autoplay muted playsinline></video>
-  <button id="captureBtn" class="btn primary">Take Photo</button>
-</div>
+<div class="studio-container">
+  <div class="camera-container">
+    <video id="video" autoplay muted playsinline></video>
+    <button id="captureBtn" class="btn primary">Take Photo</button>
+  </div>
 
-<!-- Controls -->
-<div class="controls">
-  <button id="resetBtn" class="btn secondary">Reset</button>
-  <button id="exportBtn" class="btn primary">Download Scrap</button>
-</div>
-
-<!-- Photostrip -->
-<div id="scrapArea">
-  <div id="photoStrip"></div>
-</div>
-
-<!-- Stickers -->
-<div class="stickers-container">
-  <span>Add Stickers:</span>
-  <img src="https://i.imgur.com/3Oe2Z7J.png" class="sticker" alt="Sticker 1">
-  <img src="https://i.imgur.com/o6Pz3Z5.png" class="sticker" alt="Sticker 2">
+  <div class="scrap-container">
+    <div class="controls">
+      <button id="resetBtn" class="btn secondary">Reset</button>
+      <button id="exportBtn" class="btn primary">Download Scrap</button>
+    </div>
+    <div id="scrapArea">
+      <div id="photoStrip"></div>
+    </div>
+    <div class="stickers-container">
+      <span>Add Stickers:</span>
+      <img src="https://i.imgur.com/3Oe2Z7J.png" class="sticker" alt="Sticker 1">
+      <img src="https://i.imgur.com/o6Pz3Z5.png" class="sticker" alt="Sticker 2">
+    </div>
+  </div>
 </div>
 
 <canvas id="canvas" style="display:none;"></canvas>
 <script src="js/camera.js"></script>
 </body>
 </html>
+
 
 
 
