@@ -76,10 +76,16 @@ function downloadStrip() {
   html2canvas(document.getElementById("photoStrip")).then(canvas=>{
     let link = document.createElement("a");
     link.download = "photostrip.png";
-    link.href = canvas.toDataURL();
+    link.href = canvas.toDataURL("image/png");
     link.click();
+
+    // EVENT MODE AUTO RESET
+    setTimeout(()=>{
+      resetSession();
+    }, 5000);
   });
 }
+
 
 function resetSession(){
   photoCount = 0;
