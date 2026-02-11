@@ -5,33 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scrap Foto Studio</title>
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- Interact.js for drag & resize -->
+  <script src="https://cdn.jsdelivr.net/npm/@interactjs/interactjs/dist/interact.min.js"></script>
+  <!-- html2canvas for export -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
 
   <h1>Scrap Foto Studio 📸</h1>
 
-  <div class="camera-container">
-    <video id="video" autoplay muted playsinline></video>
-    <button id="captureBtn">Take Photo</button>
-    <div id="thumbnails"></div>
-  </div>
-
-  <div class="scrap-container">
-    <h2>Your Scrap Page</h2>
-    <select id="backgroundSelect">
-      <option value="white">White</option>
-      <option value="pink">Pink</option>
-      <option value="blue">Blue</option>
-      <option value="pattern1">Pattern 1</option>
-    </select>
-
-    <div id="scrapArea" class="scrap-area"></div>
-    <div class="stickers">
-      <img src="https://i.imgur.com/3Oe2Z7J.png" class="sticker" alt="Star">
-      <img src="https://i.imgur.com/o6Pz3Z5.png" class="sticker" alt="Heart">
+  <div class="main-container">
+    <!-- Left Panel -->
+    <div class="left-panel">
+      <video id="video" autoplay muted playsinline></video>
+      <button id="captureBtn">Take Photo</button>
+      <div id="thumbnails"></div>
     </div>
 
-    <button id="exportBtn">Download Scrap</button>
+    <!-- Right Panel -->
+    <div class="right-panel">
+      <div>
+        Background:
+        <select id="backgroundSelect">
+          <option value="white">White</option>
+          <option value="pink">Pink</option>
+          <option value="blue">Blue</option>
+          <option value="pattern1">Pattern 1</option>
+          <option value="pattern2">Pattern 2</option>
+        </select>
+      </div>
+
+      <div id="scrapArea"></div>
+
+      <div class="stickers-container">
+        <img src="https://i.imgur.com/3Oe2Z7J.png" class="sticker">
+        <img src="https://i.imgur.com/o6Pz3Z5.png" class="sticker">
+      </div>
+
+      <button id="exportBtn">Download Scrap</button>
+    </div>
   </div>
 
   <canvas id="canvas" style="display:none;"></canvas>
@@ -39,4 +52,5 @@
   <script src="js/camera.js"></script>
 </body>
 </html>
+
 
