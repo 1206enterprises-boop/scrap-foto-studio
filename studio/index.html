@@ -1,36 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Studio</title>
+<title>Scrap Foto Studio</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
 <div class="logo">SCRAP FOTO STUDIO</div>
 
-<div class="camera-section">
-<video id="video" autoplay playsinline></video>
-<button id="startSession">Start Session</button>
-<button id="takePhoto">Take Photo</button>
-</div>
+<div class="camera-wrapper">
 
-<div class="studio-area">
+    <div class="camera-box">
+        <video id="video" autoplay playsinline></video>
+    </div>
 
-<div class="strip-container" id="stripContainer">
-<img id="frameBackground">
-<div id="photoLayer"></div>
-<div id="stickerLayer"></div>
-</div>
+    <div class="camera-buttons">
+        <button class="primary-btn" id="startSession">Start Session</button>
+        <button class="secondary-btn" id="takePhoto">Take Photo</button>
+    </div>
 
 </div>
 
-<div class="controls">
-<button onclick="addSticker()">Add Sticker</button>
-<button onclick="resetSession()">Reset</button>
-<button onclick="downloadStrip()">Download</button>
+<div class="studio-wrapper">
+
+    <div id="canvasContainer" class="canvas-container">
+        <img id="frameBackground">
+        <div id="photoLayer"></div>
+        <div id="stickerLayer"></div>
+    </div>
+
 </div>
 
-<script src="https://js.stripe.com/v3/"></script>
+<div class="bottom-controls">
+    <button class="secondary-btn" onclick="addSticker()">Add Sticker</button>
+    <button class="secondary-btn" onclick="resetSession()">Reset</button>
+    <button class="primary-btn" onclick="downloadStrip()">Download</button>
+</div>
+
 <script src="script.js"></script>
 </body>
 </html>
