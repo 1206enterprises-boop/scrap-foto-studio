@@ -1,52 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Select Frame</title>
-<style>
-body{
-background:#000;
-color:#fff;
-font-family:Helvetica;
-text-align:center;
-padding-top:100px;
-}
-.frame{
-display:inline-block;
-margin:40px;
-cursor:pointer;
-transition:.3s;
-}
-.frame img{
-width:250px;
-border-radius:20px;
-}
-.frame:hover{
-transform:scale(1.05);
-}
-</style>
+<meta charset="UTF-8">
+<title>Frame Selection</title>
+<link rel="stylesheet" href="../studio-strip/style.css">
 </head>
 <body>
-
-<h2>Select Your Frame</h2>
-
-<div class="frame" onclick="choose('frame1')">
-<img src="https://your-canva-frame-1.png">
-<p>Luxury Gold</p>
-</div>
-
-<div class="frame" onclick="choose('frame2')">
-<img src="https://your-canva-frame-2.png">
-<p>Minimal White</p>
+<div class="centered-container">
+  <h2>Select a Frame</h2>
+  <div class="button-group">
+    <button onclick="selectFrame('../img/strip-template.png')">1x3 Strip</button>
+    <button onclick="selectFrame('../img/4x6-template.png')">4x6 Scrapbook</button>
+  </div>
 </div>
 
 <script>
-function choose(frame){
-localStorage.setItem("selectedFrame", frame);
-window.location.href="../studio/";
-}
-</script>
+  // Get type from query string
+  const urlParams = new URLSearchParams(window.location.search);
+  const type = urlParams.get('type');
 
+  function selectFrame(frameUrl){
+    localStorage.setItem('frame', frameUrl);
+    if(type === 'strip'){
+      window.location.href = '../studio-strip/index.html';
+    } else {
+      window.location.href = '../studio-4x6/index.html';
+    }
+  }
+</script>
 </body>
 </html>
+
 
 
