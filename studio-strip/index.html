@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>1x3 Photo Strip Studio</title>
 <link rel="stylesheet" href="style.css">
 <script src="../js/html2canvas.min.js"></script>
@@ -16,7 +17,7 @@
     <button id="resetBtn">Reset</button>
     <button onclick="downloadStrip()">Download / Pay</button>
   </div>
-  <div id="stripCanvas" class="scrap-canvas">
+  <div id="stripCanvas" class="scrap-canvas" style="width:320px;height:960px;">
     <img id="templateImg" class="template">
     <div id="photoLayer"></div>
   </div>
