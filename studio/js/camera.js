@@ -46,11 +46,7 @@ captureBtn.addEventListener("click", () => {
   img.className = "thumbnail";
   img.draggable = true;
 
-  // Drag to scrap
-  img.addEventListener("dragstart", e => {
-    e.dataTransfer.setData("text/plain", e.target.src);
-  });
-
+  // drag logic handled in scrapArea drop
   thumbnails.appendChild(img);
 
   if (photos.length === MAX_PHOTOS) captureBtn.disabled = true;
@@ -61,16 +57,28 @@ scrapArea.addEventListener("dragover", e => e.preventDefault());
 scrapArea.addEventListener("drop", e => {
   e.preventDefault();
   const src = e.dataTransfer.getData("text/plain");
-  const img = document.createElement("img");
-  img.src = src;
 
-  // position where dropped
-  img.style.left = e.offsetX + "px";
-  img.style.top = e.offsetY + "px";
-  img.style.width = "60px"; // default width
-  img.style.position = "absolute";
+  // Check if it's a thumbnail in the top bar
+  const draggedImg = Array.from(thumbnails.querySelectorAll("img")).find(
+    img => img.src === src
+  );
 
-  scrapArea.appendChild(img);
+  if (draggedImg) {
+    // Move the thumbnail itself into scrap area
+    draggedImg.style.position = "absolute";
+    draggedImg.style.left = e.offsetX + "px";
+    draggedImg.style.top = e.offsetY + "px";
+    scrapArea.appendChild(draggedImg);
+  } else {
+    // It's a sticker → duplicate
+    const img = document.createElement("img");
+    img.src = src;
+    img.style.position = "absolute";
+    img.style.left = e.offsetX + "px";
+    img.style.top = e.offsetY + "px";
+    img.style.width = "50px"; // default sticker size
+    scrapArea.appendChild(img);
+  }
 });
 
 // ---------- 4️⃣ Stickers Drag ----------
@@ -85,19 +93,33 @@ const backgrounds = {
   "White": "#ffffff",
   "Pink": "#ffc0cb",
   "Blue": "#87ceeb",
-  "Pattern1": "https://YOUR-WIX-URL/pattern1.png", // upload from Canva/WIX
+  "Pattern1": "https://YOUR-WIX-URL/pattern1.png", // replace with uploaded Canva/WIX images
   "Pattern2": "https://YOUR-WIX-URL/pattern2.png"
 };
 
 backgroundSelect.addEventListener("change", () => {
   const value = backgroundSelect.value;
   if (value.startsWith("http")) {
-    scrapArea.style.backgroundImage = `url(${backgrounds[value]})`;
+    // Use a background <img> for patterns
+    let bgImg = scrapArea.querySelector(".background-img");
+    if (!bgImg) {
+      bgImg = document.createElement("img");
+      bgImg.className = "background-img";
+      bgImg.style.position = "absolute";
+      bgImg.style.top = 0;
+      bgImg.style.left = 0;
+      bgImg.style.width = "100%";
+      bgImg.style.height = "100%";
+      bgImg.style.zIndex = -1;
+      scrapArea.appendChild(bgImg);
+    }
+    bgImg.src = backgrounds[value];
     scrapArea.style.backgroundColor = "";
-    scrapArea.style.backgroundSize = "cover";
   } else {
+    // Color background
     scrapArea.style.backgroundColor = backgrounds[value];
-    scrapArea.style.backgroundImage = "";
+    const bgImg = scrapArea.querySelector(".background-img");
+    if (bgImg) bgImg.remove();
   }
 });
 
@@ -108,33 +130,28 @@ exportBtn.addEventListener("click", () => {
   exportCanvas.height = scrapArea.offsetHeight;
   const ctx = exportCanvas.getContext("2d");
 
-  // Draw background
-  if (scrapArea.style.backgroundImage) {
-    const bg = new Image();
-    bg.crossOrigin = "anonymous";
-    bg.src = scrapArea.style.backgroundImage.slice(5, -2);
-    bg.onload = () => {
-      ctx.drawImage(bg, 0, 0, exportCanvas.width, exportCanvas.height);
-      drawScrapImages();
-    };
-  } else {
-    ctx.fillStyle = scrapArea.style.backgroundColor || "#ffffff";
-    ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
-    drawScrapImages();
+  // Draw background color first
+  ctx.fillStyle = scrapArea.style.backgroundColor || "#ffffff";
+  ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+  // Draw background image if exists
+  const bgImg = scrapArea.querySelector(".background-img");
+  if (bgImg) {
+    ctx.drawImage(bgImg, 0, 0, exportCanvas.width, exportCanvas.height);
   }
 
-  function drawScrapImages() {
-    const images = scrapArea.querySelectorAll("img");
-    images.forEach(img => {
-      const x = parseInt(img.style.left) || 0;
-      const y = parseInt(img.style.top) || 0;
-      ctx.drawImage(img, x, y, img.width, img.height);
-    });
-    const link = document.createElement("a");
-    link.href = exportCanvas.toDataURL("image/png");
-    link.download = "scrap.png";
-    link.click();
-  }
+  // Draw all images (photos and stickers)
+  const images = scrapArea.querySelectorAll("img:not(.background-img)");
+  images.forEach(img => {
+    const x = parseInt(img.style.left) || 0;
+    const y = parseInt(img.style.top) || 0;
+    ctx.drawImage(img, x, y, img.width, img.height);
+  });
+
+  const link = document.createElement("a");
+  link.href = exportCanvas.toDataURL("image/png");
+  link.download = "scrap.png";
+  link.click();
 });
 
 // ---------- 7️⃣ Initialize ----------
