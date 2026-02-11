@@ -2,15 +2,14 @@ const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const captureBtn = document.getElementById("captureBtn");
 const scrapArea = document.getElementById("scrapArea");
-const photoStrip = document.getElementById("photoStrip");
+const slots = document.querySelectorAll(".photo-slot");
 const resetBtn = document.getElementById("resetBtn");
 const exportBtn = document.getElementById("exportBtn");
 const stickers = document.querySelectorAll(".sticker");
 
-let photosTaken = 0;
-const MAX_PHOTOS = 4;
+let photoIndex = 0;
 
-// ---- Camera Start ----
+// ---- Start Camera ----
 async function startCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -23,7 +22,7 @@ async function startCamera() {
   }
 }
 
-// ---- Load Frame ----
+// ---- Load Template Frame ----
 const selectedFrame = localStorage.getItem('selectedFrame');
 const templates = {
   template1: "../img/template1.png",
@@ -37,24 +36,23 @@ if (selectedFrame && templates[selectedFrame]) {
 
 // ---- Take Photo ----
 captureBtn.addEventListener("click", () => {
-  console.log("Take Photo clicked"); // debug
-  if (!video.videoWidth || !video.videoHeight) return alert("Camera not ready yet!");
-  if (photosTaken >= MAX_PHOTOS) return alert("Max 4 photos reached");
+  if (!video.videoWidth || !video.videoHeight) return alert("Camera not ready!");
+  if (photoIndex >= 4) return alert("Max 4 photos reached");
 
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
 
   const ctx = canvas.getContext("2d");
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
   const imgData = canvas.toDataURL("image/png");
+
   const img = document.createElement("img");
   img.src = imgData;
 
-  photoStrip.appendChild(img);
-  photosTaken++;
+  slots[photoIndex].appendChild(img);
+  photoIndex++;
 
-  if (photosTaken >= MAX_PHOTOS) captureBtn.disabled = true;
+  if (photoIndex >= 4) captureBtn.disabled = true;
 });
 
 // ---- Stickers ----
@@ -81,7 +79,7 @@ stickers.forEach(sticker => {
   });
 });
 
-// ---- Drag & Resize Stickers ----
+// ---- Draggable & Resizable Stickers ----
 function makeDraggableResizable(el) {
   interact(el)
     .draggable({
@@ -98,7 +96,7 @@ function makeDraggableResizable(el) {
       }
     })
     .resizable({
-      edges: { left: true, right: true, bottom: true, top: true },
+      edges: { left:true, right:true, top:true, bottom:true },
       listeners: {
         move(event) {
           const { width, height } = event.rect;
@@ -119,10 +117,10 @@ function makeDraggableResizable(el) {
 
 // ---- Reset ----
 resetBtn.addEventListener("click", () => {
-  photoStrip.innerHTML = "";
+  slots.forEach(slot => slot.innerHTML = "");
   scrapArea.querySelectorAll(".sticker-wrapper").forEach(el => el.remove());
   scrapArea.style.backgroundImage = selectedFrame ? `url(${templates[selectedFrame]})` : "";
-  photosTaken = 0;
+  photoIndex = 0;
   captureBtn.disabled = false;
 });
 
@@ -136,7 +134,9 @@ exportBtn.addEventListener("click", () => {
   });
 });
 
+// ---- Initialize ----
 startCamera();
+
 
 
 
