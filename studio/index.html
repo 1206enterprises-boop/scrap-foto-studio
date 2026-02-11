@@ -16,31 +16,44 @@
 </header>
 
 <div class="studio-container">
+
+  <!-- Camera -->
   <div class="camera-container">
     <video id="video" autoplay muted playsinline></video>
     <button id="captureBtn" class="btn primary">Take Photo</button>
   </div>
 
+  <!-- Photostrip & Controls -->
   <div class="scrap-container">
     <div class="controls">
       <button id="resetBtn" class="btn secondary">Reset</button>
       <button id="exportBtn" class="btn primary">Download Scrap</button>
     </div>
+
     <div id="scrapArea">
-      <div id="photoStrip"></div>
+      <div id="photoStrip">
+        <div class="photo-slot" id="slot1"></div>
+        <div class="photo-slot" id="slot2"></div>
+        <div class="photo-slot" id="slot3"></div>
+        <div class="photo-slot" id="slot4"></div>
+      </div>
     </div>
+
     <div class="stickers-container">
       <span>Add Stickers:</span>
+      <!-- Add sticker URLs from Canva here -->
       <img src="https://i.imgur.com/3Oe2Z7J.png" class="sticker" alt="Sticker 1">
       <img src="https://i.imgur.com/o6Pz3Z5.png" class="sticker" alt="Sticker 2">
     </div>
   </div>
+
 </div>
 
 <canvas id="canvas" style="display:none;"></canvas>
 <script src="js/camera.js"></script>
 </body>
 </html>
+
 
 
 
