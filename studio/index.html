@@ -1,46 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scrap Foto Studio</title>
 <link rel="stylesheet" href="style.css">
+
+<!-- html2canvas for download -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
-<div class="logo">SCRAP FOTO STUDIO</div>
-
-<div class="camera-wrapper">
-
-    <div class="camera-box">
-        <video id="video" autoplay playsinline></video>
-    </div>
-
-    <div class="camera-buttons">
-        <button class="primary-btn" id="startSession">Start Session</button>
-        <button class="secondary-btn" id="takePhoto">Take Photo</button>
-    </div>
-
+<div class="header">
+  <img src="../img/logo.png" class="logo" alt="Studio Logo">
+  <h1>SCRAP FOTO STUDIO</h1>
 </div>
 
-<div class="studio-wrapper">
-
-    <div id="canvasContainer" class="canvas-container">
-        <img id="frameBackground">
-        <div id="photoLayer"></div>
-        <div id="stickerLayer"></div>
-    </div>
-
+<div class="camera-section">
+  <div class="camera-frame">
+    <video id="video" autoplay playsinline></video>
+  </div>
+  <div class="camera-buttons">
+    <button id="startSession" class="btn gold">Start Session</button>
+    <button id="takePhoto" class="btn gold">Take Photo</button>
+  </div>
 </div>
 
-<div class="bottom-controls">
-    <button class="secondary-btn" onclick="addSticker()">Add Sticker</button>
-    <button class="secondary-btn" onclick="resetSession()">Reset</button>
-    <button class="primary-btn" onclick="downloadStrip()">Download</button>
+<div class="studio-section">
+  <div id="canvasContainer" class="canvas-container">
+    <img id="frameBackground" class="frame-bg" alt="Template">
+    <div id="photoLayer"></div>
+    <div id="stickerLayer"></div>
+    <img id="watermark" class="watermark" alt="Watermark">
+  </div>
+</div>
+
+<div class="controls">
+  <button class="btn outline" onclick="addSticker()">Add Sticker</button>
+  <button class="btn outline" onclick="resetSession()">Reset</button>
+  <button class="btn gold" onclick="handleDownload()">Download</button>
 </div>
 
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
