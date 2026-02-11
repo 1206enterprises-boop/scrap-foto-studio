@@ -8,58 +8,52 @@
 </head>
 <body>
 
-<header>
-  <img src="../img/logo.png" alt="Logo">
-</header>
-
-<div class="navigation">
-  <button class="nav-btn" onclick="goBack()">Back</button>
-  <button class="nav-btn" onclick="goHome()">Home</button>
+<div class="logo-container">
+  <img src="../img/logo.png" alt="Scrap Foto Studio Logo" class="logo">
 </div>
 
-<h2>Select Your Frame</h2>
-<div class="gallery" id="frameGallery"></div>
+<div class="centered-container">
+  <h2>Select a Frame</h2>
+  <div id="frameOptions" class="frame-options-scroll"></div>
+  
+  <div class="nav-btns">
+    <button class="modern-btn" onclick="window.history.back()">Back</button>
+    <button class="modern-btn" onclick="window.location.href='../index.html'">Home</button>
+  </div>
+</div>
 
 <script>
-const frameGallery = document.getElementById('frameGallery');
-const frameType = localStorage.getItem('frameType') || '1x3';
+  const urlParams = new URLSearchParams(window.location.search);
+  const typeParam = urlParams.get('type'); // strip or 4x6
 
-// Add Canva frame URLs
-const frames = {
-  '1x3': [
-    'https://i.imgur.com/frame1x3_1.png',
-    'https://i.imgur.com/frame1x3_2.png',
-    'https://i.imgur.com/frame1x3_3.png'
-  ],
-  '4x6': [
-    'https://i.imgur.com/frame4x6_1.png',
-    'https://i.imgur.com/frame4x6_2.png',
-    'https://i.imgur.com/frame4x6_3.png'
-  ]
-};
+  const frames = [
+    {url:'../img/strip-template1.png', type:'strip'},
+    {url:'../img/strip-template2.png', type:'strip'},
+    {url:'../img/4x6-template1.png', type:'4x6'},
+    {url:'../img/4x6-template2.png', type:'4x6'}
+  ];
 
-// Populate gallery
-frames[frameType].forEach(url => {
-  const img = document.createElement('img');
-  img.src = url;
-  img.addEventListener('click', () => {
-    localStorage.setItem('frame', url);
-    // Redirect based on frame type
-    if(frameType === '1x3'){
-      window.location.href = '../studio-strip/index.html';
-    } else {
-      window.location.href = '../studio-4x6/index.html';
-    }
+  const frameOptionsDiv = document.getElementById('frameOptions');
+  const filteredFrames = frames.filter(f => f.type === typeParam);
+
+  filteredFrames.forEach(frame => {
+    const img = document.createElement('img');
+    img.src = frame.url;
+    img.className = 'frame-thumbnail';
+    img.onclick = () => {
+      localStorage.setItem('frame', frame.url);
+      if(frame.type==='strip'){
+        window.location.href='../studio-strip/index.html';
+      } else {
+        window.location.href='../studio-4x6/index.html';
+      }
+    };
+    frameOptionsDiv.appendChild(img);
   });
-  frameGallery.appendChild(img);
-});
-
-function goBack(){ history.back(); }
-function goHome(){ window.location.href = '../index.html'; }
 </script>
-
 </body>
 </html>
+
 
 
 
