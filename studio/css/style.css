@@ -1,4 +1,3 @@
-/* --- Modern Layout --- */
 body {
   margin: 0;
   font-family: 'Inter', Arial, sans-serif;
@@ -13,52 +12,29 @@ h1 {
   margin-bottom: 16px;
 }
 
-.main-container {
-  display: flex;
-  gap: 16px;
-  max-width: 1000px;
-  width: 100%;
-}
-
-/* Left panel - camera & thumbnails */
-.left-panel {
-  flex: 1;
+/* Camera */
+.camera-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
 video {
-  width: 100%;
+  width: 320px;
+  height: 240px;
   border-radius: 12px;
   background: black;
 }
 
-#thumbnails {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.thumbnail {
-  width: 60px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 2px solid #333;
-  cursor: grab;
-}
-
 button {
-  padding: 10px 20px;
+  padding: 8px 16px;
   border: none;
   border-radius: 999px;
   background: black;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
 }
 
@@ -67,30 +43,46 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Right panel - scrap area */
-.right-panel {
-  flex: 1;
+/* Controls */
+.controls {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
+/* Scrap Area / Photo Strip */
 #scrapArea {
-  width: 100%;
-  height: 500px;
+  width: 360px; /* photostrip width */
+  height: 600px; /* photostrip height */
   border: 2px dashed #aaa;
   position: relative;
   background-color: white;
   border-radius: 12px;
   overflow: hidden;
+  margin-bottom: 16px;
 }
 
-#scrapArea img {
+#photoStrip {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   position: absolute;
-  cursor: grab;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
+#photoStrip img {
+  width: 320px; /* fixed width */
+  height: 140px; /* fixed height */
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Stickers Panel */
 .stickers-container {
   display: flex;
   gap: 8px;
@@ -99,12 +91,27 @@ button:disabled {
 
 .stickers-container img {
   width: 50px;
-  cursor: grab;
+  cursor: pointer;
+  border: 2px solid #333;
+  border-radius: 8px;
+}
+.sticker-in-strip {
+  position: absolute;
+}
+.delete-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 10;
 }
 
-select {
-  padding: 6px 12px;
-  font-size: 14px;
-}
 
 
