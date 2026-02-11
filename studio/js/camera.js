@@ -1,9 +1,9 @@
+// ---- DOM Elements ----
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const captureBtn = document.getElementById("captureBtn");
 const scrapArea = document.getElementById("scrapArea");
 const photoStrip = document.getElementById("photoStrip");
-const backgroundSelect = document.getElementById("backgroundSelect");
 const resetBtn = document.getElementById("resetBtn");
 const exportBtn = document.getElementById("exportBtn");
 const stickers = document.querySelectorAll(".sticker");
@@ -11,50 +11,55 @@ const stickers = document.querySelectorAll(".sticker");
 let photosTaken = 0;
 const MAX_PHOTOS = 4;
 
-// Start Camera
+// ---- Start Camera ----
 async function startCamera() {
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     video.srcObject = stream;
+    await video.play();
   } catch (err) {
     alert("Camera access is required!");
     console.error(err);
   }
 }
 
-// Take Photo
-captureBtn.addEventListener("click", () => {
-  if (photosTaken >= MAX_PHOTOS) return;
+// ---- Load Selected Frame ----
+const selectedFrame = localStorage.getItem('selectedFrame');
+const templates = {
+  template1: "../img/template1.png",
+  template2: "../img/template2.png"
+};
 
-  const ctx = canvas.getContext("2d");
+if (selectedFrame && templates[selectedFrame]) {
+  scrapArea.style.backgroundImage = `url(${templates[selectedFrame]})`;
+  scrapArea.style.backgroundSize = "cover";
+  scrapArea.style.backgroundPosition = "center";
+}
+
+// ---- Take Photo ----
+captureBtn.addEventListener("click", () => {
+  if (!video.videoWidth || !video.videoHeight) return alert("Camera not ready yet!");
+  if (photosTaken >= MAX_PHOTOS) return alert("Max 4 photos reached");
+
+  // Set canvas size
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
-  ctx.drawImage(video, 0, 0);
+
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
   const imgData = canvas.toDataURL("image/png");
-
   const img = document.createElement("img");
   img.src = imgData;
-  photoStrip.appendChild(img);
 
+  // Add to photostrip
+  photoStrip.appendChild(img);
   photosTaken++;
+
   if (photosTaken >= MAX_PHOTOS) captureBtn.disabled = true;
 });
 
-// Background Templates
-const templates = {
-  template1: "https://YOUR-WIX-URL/template1.png",
-  template2: "https://YOUR-WIX-URL/template2.png"
-};
-
-backgroundSelect.addEventListener("change", () => {
-  const val = backgroundSelect.value;
-  if (!val) return;
-  scrapArea.style.backgroundImage = `url(${templates[val]})`;
-  scrapArea.style.backgroundSize = "cover";
-});
-
-// Stickers
+// ---- Stickers ----
 stickers.forEach(sticker => {
   sticker.addEventListener("click", () => {
     const wrapper = document.createElement("div");
@@ -67,22 +72,19 @@ stickers.forEach(sticker => {
     img.style.width = "50px";
     wrapper.appendChild(img);
 
+    // Delete button
     const del = document.createElement("div");
     del.className = "delete-btn";
     del.innerText = "×";
     wrapper.appendChild(del);
-
-    del.addEventListener("click", () => {
-      wrapper.remove();
-    });
+    del.addEventListener("click", () => wrapper.remove());
 
     scrapArea.appendChild(wrapper);
-
     makeDraggableResizable(wrapper);
   });
 });
 
-// Draggable & Resizable
+// ---- Drag & Resize Stickers ----
 function makeDraggableResizable(el) {
   interact(el)
     .draggable({
@@ -118,16 +120,16 @@ function makeDraggableResizable(el) {
     });
 }
 
-// Reset
+// ---- Reset Scrap ----
 resetBtn.addEventListener("click", () => {
   photoStrip.innerHTML = "";
   scrapArea.querySelectorAll(".sticker-wrapper").forEach(el => el.remove());
-  scrapArea.style.backgroundImage = "";
+  scrapArea.style.backgroundImage = selectedFrame ? `url(${templates[selectedFrame]})` : "";
   photosTaken = 0;
   captureBtn.disabled = false;
 });
 
-// Export
+// ---- Export Scrap ----
 exportBtn.addEventListener("click", () => {
   html2canvas(scrapArea).then(canvas => {
     const link = document.createElement("a");
@@ -137,7 +139,9 @@ exportBtn.addEventListener("click", () => {
   });
 });
 
+// ---- Initialize ----
 startCamera();
+
 
 
 
