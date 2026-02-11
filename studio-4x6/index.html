@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>4x6 Photo Scrap</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+<h2>4x6 Portrait Scrap</h2>
+
+<div class="camera-box">
+  <video id="video" autoplay playsinline></video>
+</div>
+
+<div class="buttons">
+  <button id="startBtn">Start Session</button>
+  <button id="takeBtn">Take Photo</button>
+</div>
+
+<div id="scrapCanvas" class="scrap-canvas">
+  <img src="https://your-canva-4x6-template.png" class="template">
+  <div id="photoLayer"></div>
+</div>
+
+<div class="buttons">
+  <button onclick="downloadScrap()">Download</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
