@@ -1,4 +1,3 @@
-// ---- DOM Elements ----
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const captureBtn = document.getElementById("captureBtn");
@@ -11,25 +10,25 @@ const stickers = document.querySelectorAll(".sticker");
 let photosTaken = 0;
 const MAX_PHOTOS = 4;
 
-// ---- Start Camera ----
+// ---- Camera Start ----
 async function startCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     video.srcObject = stream;
     await video.play();
+    console.log("Camera ready ✅");
   } catch (err) {
     alert("Camera access is required!");
     console.error(err);
   }
 }
 
-// ---- Load Selected Frame ----
+// ---- Load Frame ----
 const selectedFrame = localStorage.getItem('selectedFrame');
 const templates = {
   template1: "../img/template1.png",
   template2: "../img/template2.png"
 };
-
 if (selectedFrame && templates[selectedFrame]) {
   scrapArea.style.backgroundImage = `url(${templates[selectedFrame]})`;
   scrapArea.style.backgroundSize = "cover";
@@ -38,10 +37,10 @@ if (selectedFrame && templates[selectedFrame]) {
 
 // ---- Take Photo ----
 captureBtn.addEventListener("click", () => {
+  console.log("Take Photo clicked"); // debug
   if (!video.videoWidth || !video.videoHeight) return alert("Camera not ready yet!");
   if (photosTaken >= MAX_PHOTOS) return alert("Max 4 photos reached");
 
-  // Set canvas size
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
 
@@ -52,7 +51,6 @@ captureBtn.addEventListener("click", () => {
   const img = document.createElement("img");
   img.src = imgData;
 
-  // Add to photostrip
   photoStrip.appendChild(img);
   photosTaken++;
 
@@ -72,7 +70,6 @@ stickers.forEach(sticker => {
     img.style.width = "50px";
     wrapper.appendChild(img);
 
-    // Delete button
     const del = document.createElement("div");
     del.className = "delete-btn";
     del.innerText = "×";
@@ -120,7 +117,7 @@ function makeDraggableResizable(el) {
     });
 }
 
-// ---- Reset Scrap ----
+// ---- Reset ----
 resetBtn.addEventListener("click", () => {
   photoStrip.innerHTML = "";
   scrapArea.querySelectorAll(".sticker-wrapper").forEach(el => el.remove());
@@ -129,7 +126,7 @@ resetBtn.addEventListener("click", () => {
   captureBtn.disabled = false;
 });
 
-// ---- Export Scrap ----
+// ---- Export ----
 exportBtn.addEventListener("click", () => {
   html2canvas(scrapArea).then(canvas => {
     const link = document.createElement("a");
@@ -139,8 +136,8 @@ exportBtn.addEventListener("click", () => {
   });
 });
 
-// ---- Initialize ----
 startCamera();
+
 
 
 
