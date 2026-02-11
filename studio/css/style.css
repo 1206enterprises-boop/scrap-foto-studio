@@ -57,24 +57,10 @@ button.btn:hover { opacity: 0.9; }
 button.primary { background: #2d9cdb; color: #fff; }
 button.secondary { background: #aaa; color: #fff; }
 
-.bg-btn {
-  background: #fff;
-  padding: 6px 14px;
-  border-radius: 8px;
-  border: 2px solid #ddd;
-  cursor: pointer;
-  transition: 0.2s;
-  margin-right: 6px;
-}
-
-.bg-btn:hover { border-color: #2d9cdb; background: #d0e7fb; }
-
-/* Controls layout */
-.controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
-
 /* Scrap Area */
 #scrapArea {
-  width: 120px; height: 360px;
+  width: 120px; /* 1"x3" vertical photostrip */
+  height: 360px;
   border: 2px dashed #bbb;
   position: relative;
   background-color: white;
@@ -84,24 +70,72 @@ button.secondary { background: #aaa; color: #fff; }
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-#photoStrip { display: flex; flex-direction: column; justify-content: space-between; align-items: center; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+#photoStrip {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 
 #photoStrip img {
   width: 100%;
-  height: 80px;
+  height: 80px; /* boxy, all fully visible */
   object-fit: contain;
   border-radius: 4px;
 }
 
 /* Stickers */
-.stickers-container { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
-.stickers-container img { width: 50px; cursor: pointer; border: 2px solid #333; border-radius: 8px; transition: 0.2s; }
-.stickers-container img:hover { transform: scale(1.1); border-color: #2d9cdb; }
+.stickers-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.stickers-container img {
+  width: 50px;
+  cursor: pointer;
+  border: 2px solid #333;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.stickers-container img:hover {
+  transform: scale(1.1);
+  border-color: #2d9cdb;
+}
 
 /* Sticker wrapper inside photostrip */
-.sticker-wrapper { position: absolute; }
-.sticker-wrapper img { display: block; }
-.delete-btn { position: absolute; top: -6px; right: -6px; background: red; color: white; border-radius: 50%; width: 18px; height: 18px; text-align: center; font-size: 14px; line-height: 18px; cursor: pointer; z-index: 10; }
+.sticker-wrapper {
+  position: absolute;
+}
+
+.sticker-wrapper img {
+  display: block;
+}
+
+.delete-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 18px;
+  cursor: pointer;
+  z-index: 10;
+}
+
 
 
 
