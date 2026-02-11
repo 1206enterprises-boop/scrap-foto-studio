@@ -2,40 +2,37 @@
 <html>
 <head>
   <title>Studio</title>
-  <link rel="stylesheet" href="../css/studio.css">
+  <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
+<body class="luxury-bg">
 
 <div class="studio-container">
 
-  <div class="camera-section">
-    <video id="video" autoplay></video>
-    <button id="snap">Take Photo</button>
+  <video id="video" autoplay playsinline></video>
+  <button id="startBtn" class="luxury-btn">Start Session</button>
+
+  <div id="photoStrip" class="photo-strip">
+    <div class="photo-slot"></div>
+    <div class="photo-slot"></div>
+    <div class="photo-slot"></div>
+    <div class="photo-slot"></div>
   </div>
 
-  <div class="strip-section">
-    <div id="photoStrip">
-      <img id="frameOverlay">
-      <div class="photo-slot" id="slot1"></div>
-      <div class="photo-slot" id="slot2"></div>
-      <div class="photo-slot" id="slot3"></div>
-      <div class="photo-slot" id="slot4"></div>
-    </div>
+  <div class="sticker-bar">
+    <img src="../img/stickers/sticker1.png" class="sticker-item">
+    <img src="../img/stickers/sticker2.png" class="sticker-item">
   </div>
 
-  <div class="controls">
-    <button onclick="addSticker()">Add Sticker</button>
-    <button onclick="applyFilter('grayscale')">B&W</button>
-    <button onclick="downloadStrip()">Download</button>
-    <button onclick="resetSession()">Reset</button>
-  </div>
+  <button id="downloadBtn" class="luxury-btn">Download</button>
 
 </div>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script src="../js/studio.js"></script>
+
 </body>
 </html>
+
 
 
 
