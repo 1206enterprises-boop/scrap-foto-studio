@@ -10,12 +10,12 @@ let count = 0;
 templateImg.src = localStorage.getItem('frame') || '../img/4x6-template1.png';
 
 startBtn.onclick = async () => {
-  const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+  const stream = await navigator.mediaDevices.getUserMedia({ video:true });
   video.srcObject = stream;
 };
 
 takeBtn.onclick = () => {
-  if(count >=4) return;
+  if(count >= 4) return;
   const canvas = document.createElement("canvas");
   canvas.width=1080; canvas.height=1920;
   canvas.getContext("2d").drawImage(video,0,0,canvas.width,canvas.height);
@@ -27,14 +27,14 @@ takeBtn.onclick = () => {
   img.style.top=`${20+count*120}px`;
   img.style.width="160px";
   img.style.height="210px";
-  makeDraggable(img, scrapCanvas);
+  makeDraggable(img,scrapCanvas);
   photoLayer.appendChild(img);
   count++;
 };
 
 resetBtn.onclick = () => { photoLayer.innerHTML=""; count=0; };
 
-// Add sticker from URL
+// Stickers from Canva
 const stickerUrls = [
   'https://example.com/sticker1.png',
   'https://example.com/sticker2.png'
@@ -59,7 +59,6 @@ function addSticker(url){
   photoLayer.appendChild(sticker);
 }
 
-// Drag & resize inside container
 function makeDraggable(el, container){
   el.style.resize="both"; el.style.overflow="hidden";
   let offsetX, offsetY;
@@ -78,7 +77,6 @@ function makeDraggable(el, container){
   };
 }
 
-// Download
 function downloadScrap(){
   const stripeUrl="https://buy.stripe.com/test_abc123";
   if(!confirm("Redirect to payment?")) return;
@@ -102,6 +100,7 @@ function downloadScrap(){
     });
   },1000);
 }
+
 
 
 
