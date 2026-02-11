@@ -1,35 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>1x3 Photo Strip Studio</title>
 <link rel="stylesheet" href="style.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="../js/html2canvas.min.js"></script>
 </head>
 <body>
-
-<h2>1x3 Photo Strip</h2>
-
-<div class="camera-box">
-  <video id="video" autoplay playsinline></video>
+<div class="centered-container">
+  <h2>1x3 Photo Strip Studio</h2>
+  <video id="video" autoplay></video>
+  <div class="controls">
+    <button id="startBtn">Start Session</button>
+    <button id="takeBtn">Take Photo</button>
+    <button id="resetBtn">Reset</button>
+    <button onclick="downloadStrip()">Download / Pay</button>
+  </div>
+  <div id="stripCanvas" class="scrap-canvas">
+    <img id="templateImg" class="template">
+    <div id="photoLayer"></div>
+  </div>
 </div>
-
-<div class="buttons">
-  <button id="startBtn">Start Session</button>
-  <button id="takeBtn">Take Photo</button>
-</div>
-
-<div id="stripCanvas" class="strip-canvas">
-  <img id="templateImg" src="" class="template">
-  <div id="photoLayer"></div>
-</div>
-
-<div class="buttons">
-  <button onclick="downloadStrip()">Download</button>
-</div>
-
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
