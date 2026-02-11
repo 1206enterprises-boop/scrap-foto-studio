@@ -1,85 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scrap Foto Studio</title>
-
-<link rel="stylesheet" href="css/style.css">
-<script src="https://cdn.jsdelivr.net/npm/@interactjs/interactjs/dist/interact.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <title>Studio</title>
+  <link rel="stylesheet" href="../css/studio.css">
 </head>
-
 <body>
 
-<div class="background-animation"></div>
+<div class="studio-container">
 
-<header class="fade-in">
-  <img src="../img/logo.png" class="logo">
-  <h1>Scrap Foto Studio</h1>
-</header>
+  <div class="camera-section">
+    <video id="video" autoplay></video>
+    <button id="snap">Take Photo</button>
+  </div>
 
-<div class="studio-container fade-in">
-
-  <!-- CAMERA SECTION -->
-  <div class="camera-container glass">
-    <video id="video" autoplay playsinline></video>
-    <div class="camera-controls">
-      <button id="captureBtn" class="btn primary">
-        📸 Take Photo
-      </button>
-      <div id="photoCounter">0 / 4</div>
+  <div class="strip-section">
+    <div id="photoStrip">
+      <img id="frameOverlay">
+      <div class="photo-slot" id="slot1"></div>
+      <div class="photo-slot" id="slot2"></div>
+      <div class="photo-slot" id="slot3"></div>
+      <div class="photo-slot" id="slot4"></div>
     </div>
   </div>
 
-  <!-- SCRAP SECTION -->
-  <div class="scrap-container glass">
-
-    <div class="controls">
-      <select id="productType" class="product-select">
-        <option value="digital">Digital Download - $5</option>
-        <option value="print">4x6 Print - $10</option>
-        <option value="keychain">Keychain - $15</option>
-      </select>
-
-      <button id="exportBtn" class="btn primary locked">
-        🔒 Unlock & Download
-      </button>
-
-      <button id="resetBtn" class="btn secondary">
-        Reset
-      </button>
-    </div>
-
-    <div id="scrapArea">
-      <div id="photoStrip">
-        <div class="photo-slot"></div>
-        <div class="photo-slot"></div>
-        <div class="photo-slot"></div>
-        <div class="photo-slot"></div>
-      </div>
-
-      <div class="watermark">
-        Scrap Foto Studio
-      </div>
-    </div>
-
-    <!-- STICKERS -->
-    <div class="stickers-container">
-      <span>Add Stickers</span>
-      <img src="../img/sticker1.png" class="sticker">
-      <img src="../img/sticker2.png" class="sticker">
-    </div>
-
+  <div class="controls">
+    <button onclick="addSticker()">Add Sticker</button>
+    <button onclick="applyFilter('grayscale')">B&W</button>
+    <button onclick="downloadStrip()">Download</button>
+    <button onclick="resetSession()">Reset</button>
   </div>
 
 </div>
 
-<canvas id="canvas" style="display:none;"></canvas>
-
-<script src="js/camera.js"></script>
+<script src="../js/studio.js"></script>
 </body>
 </html>
+
 
 
 
