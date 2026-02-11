@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Frame Selection</title>
-<link rel="stylesheet" href="../studio-strip/style.css">
+<link rel="stylesheet" href="../style.css">
 </head>
 <body>
 <div class="centered-container">
@@ -16,7 +16,7 @@
   const urlParams = new URLSearchParams(window.location.search);
   const typeParam = urlParams.get('type'); // strip or 4x6
 
-  // Example frames from Canva
+  // Example Canva frames
   const frames = [
     {url:'../img/strip-template1.png', type:'strip'},
     {url:'../img/strip-template2.png', type:'strip'},
@@ -26,7 +26,6 @@
 
   const frameOptionsDiv = document.getElementById('frameOptions');
 
-  // Filter by type
   const filteredFrames = frames.filter(f => f.type === typeParam);
 
   filteredFrames.forEach(frame => {
@@ -35,10 +34,10 @@
     img.className = 'frame-thumbnail';
     img.onclick = () => {
       localStorage.setItem('frame', frame.url);
-      if(frame.type === 'strip'){
-        window.location.href = '../studio-strip/index.html';
+      if(frame.type==='strip'){
+        window.location.href='../studio-strip/index.html';
       } else {
-        window.location.href = '../studio-4x6/index.html';
+        window.location.href='../studio-4x6/index.html';
       }
     };
     frameOptionsDiv.appendChild(img);
@@ -46,6 +45,7 @@
 </script>
 </body>
 </html>
+
 
 
 
