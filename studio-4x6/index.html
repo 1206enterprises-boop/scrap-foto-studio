@@ -1,33 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>4x6 Photo Scrap Studio</title>
+<title>4x6 Scrapbook Studio</title>
 <link rel="stylesheet" href="style.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="../js/html2canvas.min.js"></script>
 </head>
 <body>
-
-<h2>4x6 Photo Scrap</h2>
-
-<div class="camera-box">
-  <video id="video" autoplay playsinline></video>
+<div class="centered-container">
+  <h2>4x6 Scrapbook Studio</h2>
+  <video id="video" autoplay></video>
+  <div class="controls">
+    <button id="startBtn">Start Session</button>
+    <button id="takeBtn">Take Photo</button>
+    <button id="resetBtn">Reset</button>
+    <button onclick="downloadScrap()">Download / Pay</button>
+  </div>
+  <div class="button-group">
+    <button onclick="addSticker('https://example.com/sticker1.png')">Sticker 1</button>
+    <button onclick="addSticker('https://example.com/sticker2.png')">Sticker 2</button>
+  </div>
+  <div id="scrapCanvas" class="scrap-canvas">
+    <img id="templateImg" class="template">
+    <div id="photoLayer"></div>
+  </div>
 </div>
-
-<div class="buttons">
-  <button id="startBtn">Start Session</button>
-  <button id="takeBtn">Take Photo</button>
-</div>
-
-<div id="scrapCanvas" class="scrap-canvas">
-  <img id="templateImg" src="" class="template">
-  <div id="photoLayer"></div>
-</div>
-
-<div class="buttons">
-  <button onclick="downloadScrap()">Download</button>
-</div>
-
 <script src="script.js"></script>
 </body>
 </html>
