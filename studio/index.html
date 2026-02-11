@@ -1,56 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Photobooth Scrap Studio</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scrap Foto Studio</title>
+<link rel="stylesheet" href="css/style.css">
 
-  <!-- Interact.js for drag & resize -->
-  <script src="https://cdn.jsdelivr.net/npm/@interactjs/interactjs/dist/interact.min.js"></script>
-  <!-- html2canvas for exporting the scrap -->
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@interactjs/interactjs/dist/interact.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
-  <h1>Photobooth Scrap Studio 📸</h1>
 
-  <!-- Camera Section -->
-  <div class="camera-container">
-    <video id="video" autoplay muted playsinline></video>
-    <button id="captureBtn">Take Photo</button>
-  </div>
+<header>
+  <img src="https://i.imgur.com/YourLogo.png" alt="Logo" class="logo">
+  <h1>Scrap Foto Studio 📸</h1>
+</header>
 
-  <!-- Controls -->
-  <div class="controls">
-    Background Template:
-    <select id="backgroundSelect">
-      <option value="">Select Template</option>
-      <option value="template1">Template 1</option>
-      <option value="template2">Template 2</option>
-    </select>
-    <button id="resetBtn">Reset</button>
-    <button id="exportBtn">Download Scrap</button>
-  </div>
+<div class="camera-container">
+  <video id="video" autoplay muted playsinline></video>
+  <button id="captureBtn" class="btn primary">Take Photo</button>
+</div>
 
-  <!-- Scrap Area -->
-  <div id="scrapArea">
-    <div id="photoStrip"></div>
-  </div>
+<div class="controls">
+  <span>Select Background:</span>
+  <button class="bg-btn" data-bg="template1">Template 1</button>
+  <button class="bg-btn" data-bg="template2">Template 2</button>
+  <button id="resetBtn" class="btn secondary">Reset</button>
+  <button id="exportBtn" class="btn primary">Download Scrap</button>
+</div>
 
-  <!-- Stickers Panel -->
-  <div class="stickers-container">
-    <img src="https://i.imgur.com/3Oe2Z7J.png" class="sticker" alt="Sticker 1">
-    <img src="https://i.imgur.com/o6Pz3Z5.png" class="sticker" alt="Sticker 2">
-    <!-- Add your Canva sticker URLs here -->
-  </div>
+<div id="scrapArea">
+  <div id="photoStrip"></div>
+</div>
 
-  <!-- Hidden canvas for taking photos -->
-  <canvas id="canvas" style="display:none;"></canvas>
+<div class="stickers-container">
+  <span>Add Stickers:</span>
+  <img src="https://i.imgur.com/3Oe2Z7J.png" class="sticker" alt="Sticker 1">
+  <img src="https://i.imgur.com/o6Pz3Z5.png" class="sticker" alt="Sticker 2">
+</div>
 
-  <!-- Camera + Photobooth Script -->
-  <script src="js/camera.js"></script>
+<canvas id="canvas" style="display:none;"></canvas>
+<script src="js/camera.js"></script>
+
 </body>
 </html>
+
 
 
 
