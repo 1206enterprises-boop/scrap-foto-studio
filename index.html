@@ -1,34 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scrap Foto Studio</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scrap Foto Studio</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-  <img src="./img/logo.png" alt="Logo">
-</header>
+<div class="logo-container">
+  <img src="img/logo.png" alt="Scrap Foto Studio Logo" class="logo">
+</div>
 
-<main>
-  <h1>Welcome to Scrap Foto Studio</h1>
-  <div class="options">
-    <button class="modern-btn" onclick="selectFrameType('1x3')">1"x3" Photo Strip</button>
-    <button class="modern-btn" onclick="selectFrameType('4x6')">4x6 Scrapbook</button>
+<div class="centered-container">
+  <h1>Scrap Foto Studio</h1>
+  <p>Select your session type:</p>
+  <div class="button-group">
+    <button class="modern-btn" onclick="window.location.href='frame-selection/index.html?type=strip'">1"x3" Photo Strip</button>
+    <button class="modern-btn" onclick="window.location.href='frame-selection/index.html?type=4x6'">4x6 Scrapbook</button>
   </div>
-</main>
-
-<script>
-function selectFrameType(type){
-  localStorage.setItem('frameType', type);
-  window.location.href = './frameSelection/index.html';
-}
-</script>
+</div>
 
 </body>
 </html>
+
 
 
 
