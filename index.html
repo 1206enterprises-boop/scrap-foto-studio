@@ -1,46 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scrap Foto Studio</title>
 <style>
-body{
-background:#000;
-color:#fff;
-font-family:Helvetica, sans-serif;
-text-align:center;
-padding-top:150px;
+body {
+  background: #000;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  text-align: center;
 }
-button{
-padding:20px 40px;
-margin:20px;
-background:#fff;
-border:none;
-font-size:18px;
-cursor:pointer;
-transition:.3s;
+h1 { margin-top: 40px; color:#c9a227; }
+button {
+  margin: 20px;
+  padding: 16px 32px;
+  font-size: 16px;
+  border-radius: 30px;
+  border: 2px solid #c9a227;
+  background: transparent;
+  color: #c9a227;
+  cursor: pointer;
+  transition: 0.3s;
 }
-button:hover{
-background:#c9a227;
-color:#000;
+button:hover {
+  background: #c9a227;
+  color: #000;
 }
 </style>
 </head>
 <body>
 
-<h1>SCRAP FOTO STUDIO</h1>
-<p>Select Your Experience</p>
+<h1>Welcome to Scrap Foto Studio</h1>
 
-<button onclick="go('strip')">1x3 Luxury Photo Strip</button>
-<button onclick="go('4x6')">4x6 Portrait Scrap</button>
+<button onclick="location.href='studio-strip/'">
+  1x3 Photo Strip
+</button>
 
-<script>
-function go(mode){
-localStorage.setItem("templateMode", mode);
-window.location.href="frame-selection/";
-}
-</script>
+<button onclick="location.href='studio-4x6/'">
+  4x6 Photo Scrap
+</button>
 
 </body>
 </html>
+
 
 
