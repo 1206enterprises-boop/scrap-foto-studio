@@ -1,187 +1,162 @@
-document.addEventListener("DOMContentLoaded", function () {
+// ================== STRIPE + WATERMARK ==================
+const STRIPE_URL = "https://buy.stripe.com/YOUR_LINK_HERE";
 
+function addWatermark(canvas) {
+  const ctx = canvas.getContext("2d");
+  ctx.font = "bold 40px Arial";
+  ctx.fillStyle = "rgba(255,255,255,0.25)";
+  ctx.textAlign = "center";
+  ctx.fillText("VISURA HAUS", canvas.width/2, canvas.height/2);
+}
+
+// ================== CAMERA ==================
 const video = document.getElementById('video');
 const startBtn = document.getElementById('startBtn');
 const takePhotoBtn = document.getElementById('takePhotoBtn');
 const resetBtn = document.getElementById('resetBtn');
 const downloadBtn = document.getElementById('downloadBtn');
-
 const scrapCanvas = document.getElementById('scrapCanvas');
-const templateImg = document.getElementById('templateImg');
 const photoLayer = document.getElementById('photoLayer');
 const stickerLayer = document.getElementById('stickerLayer');
 const stickerBar = document.getElementById('stickerBar');
 
-const mode = document.body.dataset.mode; // strip or four
+let photos = [];
 
-// Load frame
-const frameUrl = localStorage.getItem('frame');
-if (templateImg && frameUrl) templateImg.src = frameUrl;
-
-// START CAMERA
 async function startCamera() {
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
     video.srcObject = stream;
-    video.play();
-  } catch (err) {
-    alert("Camera error: " + err);
+  } catch(err) {
+    alert("Camera not accessible: " + err);
   }
 }
 
-if (startBtn) {
-  startBtn.addEventListener("click", startCamera);
-}
+startBtn.addEventListener('click', startCamera);
 
-// AUTO START camera (optional — remove if you don’t want auto start)
-startCamera();
+// ================== TAKE PHOTO ==================
+takePhotoBtn.addEventListener('click', () => {
+  if(!video.videoWidth) return;
 
-let photos = [];
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.filter = "none"; // filters preview only
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-// TAKE PHOTO
-if (takePhotoBtn) {
-  takePhotoBtn.addEventListener("click", () => {
+  const img = document.createElement('img');
+  img.src = canvas.toDataURL('image/png');
 
-    if (!video.videoWidth) return;
+  // 1x3 autofit
+  const slotHeight = scrapCanvas.offsetHeight / 4;
+  img.style.width = "100%";
+  img.style.height = slotHeight + "px";
+  img.style.left = "0";
+  img.style.top = photos.length * slotHeight + "px";
 
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+  photos.push(img);
+  photoLayer.appendChild(img);
+});
 
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(video, 0, 0);
+// ================== RESET ==================
+resetBtn.addEventListener('click', () => {
+  photos = [];
+  photoLayer.innerHTML = '';
+  stickerLayer.innerHTML = '';
+});
 
-    const img = document.createElement("img");
-    img.src = canvas.toDataURL("image/png");
-    img.style.position = "absolute";
-
-    if (mode === "strip") {
-
-      // 1x3 layout (4 stacked)
-      const slotHeight = scrapCanvas.offsetHeight / 4;
-
-      img.style.width = "100%";
-      img.style.height = slotHeight + "px";
-      img.style.left = "0px";
-      img.style.top = (photos.length * slotHeight) + "px";
-
-    } else {
-
-      // 4x6 draggable
-      img.style.width = "180px";
-      img.style.left = "20px";
-      img.style.top = "20px";
-
-      makeDraggableResizable(img, scrapCanvas);
-    }
-
-    photos.push(img);
-    photoLayer.appendChild(img);
-
-  });
-}
-
-// RESET
-if (resetBtn) {
-  resetBtn.addEventListener("click", () => {
-    photos = [];
-    photoLayer.innerHTML = "";
-    stickerLayer.innerHTML = "";
-  });
-}
-
-// STICKERS
+// ================== STICKERS ==================
 const stickers = [
-  "YOUR_STICKER_1.png",
-  "YOUR_STICKER_2.png",
-  "YOUR_STICKER_3.png"
+  "https://i.imgur.com/Sticker1.png",
+  "https://i.imgur.com/Sticker2.png",
+  "https://i.imgur.com/Sticker3.png"
 ];
 
-if (stickerBar) {
-  stickers.forEach(url => {
-
-    const btn = document.createElement("button");
-    const preview = document.createElement("img");
-
-    preview.src = url;
-    preview.style.width = "50px";
-    preview.style.height = "50px";
-
-    btn.appendChild(preview);
-
-    btn.addEventListener("click", () => {
-
-      const sticker = document.createElement("img");
-      sticker.src = url;
-      sticker.style.position = "absolute";
-      sticker.style.width = "100px";
-      sticker.style.left = "30px";
-      sticker.style.top = "30px";
-
-      makeDraggableResizable(sticker, scrapCanvas);
-      stickerLayer.appendChild(sticker);
-
-    });
-
-    stickerBar.appendChild(btn);
+stickers.forEach(url => {
+  const btn = document.createElement('button');
+  const img = document.createElement('img');
+  img.src = url;
+  btn.appendChild(img);
+  btn.addEventListener('click', () => {
+    const sticker = document.createElement('img');
+    sticker.src = url;
+    sticker.style.width = "80px";
+    sticker.style.height = "80px";
+    sticker.style.top = "20px";
+    sticker.style.left = "20px";
+    makeDraggableResizable(sticker, scrapCanvas);
+    stickerLayer.appendChild(sticker);
   });
-}
+  stickerBar.appendChild(btn);
+});
 
-// DRAG FUNCTION
-function makeDraggableResizable(el, container) {
+// ================== DRAG & RESIZE ==================
+function makeDraggableResizable(el, container){
+  el.style.position = "absolute";
+  el.style.cursor = "move";
+  let isDragging = false, offsetX, offsetY;
 
-  let isDragging = false;
-  let offsetX, offsetY;
-
-  el.addEventListener("mousedown", (e) => {
+  el.addEventListener("mousedown", e => {
     isDragging = true;
-    const rect = el.getBoundingClientRect();
-    offsetX = e.clientX - rect.left;
-    offsetY = e.clientY - rect.top;
+    offsetX = e.offsetX;
+    offsetY = e.offsetY;
   });
 
-  document.addEventListener("mousemove", (e) => {
-    if (!isDragging) return;
-
-    const containerRect = container.getBoundingClientRect();
-
-    let x = e.clientX - offsetX - containerRect.left;
-    let y = e.clientY - offsetY - containerRect.top;
-
+  document.addEventListener("mousemove", e => {
+    if(!isDragging) return;
+    let rect = container.getBoundingClientRect();
+    let x = e.clientX - rect.left - offsetX;
+    let y = e.clientY - rect.top - offsetY;
     x = Math.max(0, Math.min(container.offsetWidth - el.offsetWidth, x));
     y = Math.max(0, Math.min(container.offsetHeight - el.offsetHeight, y));
-
     el.style.left = x + "px";
     el.style.top = y + "px";
   });
 
-  document.addEventListener("mouseup", () => {
-    isDragging = false;
-  });
+  document.addEventListener("mouseup", () => isDragging = false);
 
-  // Resize on double click
-  el.addEventListener("dblclick", () => {
-    const newWidth = prompt("Enter width in px:", el.offsetWidth);
-    if (newWidth) {
-      el.style.width = newWidth + "px";
-    }
+  el.addEventListener("wheel", e => {
+    e.preventDefault();
+    let newWidth = el.offsetWidth + (e.deltaY < 0 ? 10 : -10);
+    if(newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
   });
 }
 
-// DOWNLOAD (html2canvas required)
-if (downloadBtn) {
-  downloadBtn.addEventListener("click", () => {
+// ================== DOWNLOAD ==================
+downloadBtn.addEventListener('click', async () => {
+  window.open(STRIPE_URL, "_blank");
+  const confirmDownload = confirm("After completing payment, click OK to download your design.");
+  if(!confirmDownload) return;
 
-    html2canvas(scrapCanvas).then(canvas => {
-      const link = document.createElement("a");
-      link.download = "scrapfoto.png";
-      link.href = canvas.toDataURL();
-      link.click();
+  const canvas = document.createElement('canvas');
+  canvas.width = scrapCanvas.offsetWidth;
+  canvas.height = scrapCanvas.offsetHeight;
+  const ctx = canvas.getContext('2d');
+
+  const elements = scrapCanvas.querySelectorAll('img');
+  for(let el of elements){
+    const rect = el.getBoundingClientRect();
+    const parentRect = scrapCanvas.getBoundingClientRect();
+    const x = rect.left - parentRect.left;
+    const y = rect.top - parentRect.top;
+
+    await new Promise(resolve => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = el.src;
+      img.onload = () => {
+        ctx.drawImage(img, x, y, el.offsetWidth, el.offsetHeight);
+        resolve();
+      };
     });
+  }
 
-  });
-}
+  addWatermark(canvas);
 
+  const link = document.createElement('a');
+  link.href = canvas.toDataURL('image/png');
+  link.download = "visura-strip.png";
+  link.click();
 });
 
 
