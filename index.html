@@ -2,30 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scrap Foto Studio</title>
-<style>
-body{background:#000;color:#fff;font-family:'Inter',sans-serif;text-align:center;}
-h1{margin-top:50px;color:#c9a227;}
-button{
-  margin:20px;padding:16px 32px;font-size:16px;border-radius:30px;border:2px solid #c9a227;
-  background:transparent;color:#c9a227;cursor:pointer;transition:0.3s;
-}
-button:hover{background:#c9a227;color:#000;}
-</style>
+<link rel="stylesheet" href="studio-strip/style.css">
 </head>
 <body>
-
-<h1>Welcome to Scrap Foto Studio</h1>
-
-<button onclick="location.href='studio-strip/frame-selection.html'">
-  1x3 Photo Strip
-</button>
-
-<button onclick="location.href='studio-4x6/frame-selection.html'">
-  4x6 Photo Scrap
-</button>
-
+<div class="centered-container">
+  <h1>Welcome to Scrap Foto Studio</h1>
+  <p>Select your session type:</p>
+  <div class="button-group">
+    <button onclick="window.location.href='frame-selection/index.html?type=strip'">1"x3" Photo Strip</button>
+    <button onclick="window.location.href='frame-selection/index.html?type=4x6'">4x6 Scrapbook</button>
+  </div>
+</div>
 </body>
 </html>
 
