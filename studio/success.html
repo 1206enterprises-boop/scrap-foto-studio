@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment Successful</title>
+</head>
+<body>
+  <h2>Payment Successful 🎉</h2>
+  <p>Redirecting you back to your studio...</p>
+
+  <script>
+    localStorage.setItem("paid", "true");
+    setTimeout(() => {
+      window.location.href = "/studio/";
+    }, 2000);
+  </script>
+</body>
+</html>
