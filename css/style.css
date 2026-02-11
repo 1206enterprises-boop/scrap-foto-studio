@@ -1,149 +1,66 @@
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  color: white;
+body{
+margin:0;
+background:#000;
+color:#fff;
+font-family:Helvetica, sans-serif;
+text-align:center;
 }
 
-.luxury-bg {
-  background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
-  min-height: 100vh;
+.logo{
+font-size:24px;
+letter-spacing:4px;
+margin:20px;
 }
 
-.logo {
-  width: 150px;
-  margin-bottom: 20px;
+.camera-section{
+margin-bottom:20px;
 }
 
-.landing-container {
-  text-align: center;
-  padding-top: 100px;
+video{
+width:350px;
+border-radius:20px;
 }
 
-.mode-selection {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-top: 40px;
+button{
+padding:12px 25px;
+margin:10px;
+border:none;
+background:#fff;
+color:#000;
+cursor:pointer;
+transition:.3s;
 }
 
-.mode-card {
-  background: rgba(255,255,255,0.05);
-  padding: 30px;
-  border-radius: 20px;
-  text-decoration: none;
-  color: white;
-  width: 250px;
-  transition: 0.3s;
+button:hover{
+background:#c9a227;
 }
 
-.mode-card:hover {
-  background: rgba(255,255,255,0.1);
-  transform: translateY(-5px);
+.strip-container{
+position:relative;
+margin:auto;
+width:300px;
+height:900px;
+background:#111;
+overflow:hidden;
 }
 
-.frame-grid {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-top: 50px;
+#frameBackground{
+position:absolute;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:1;
 }
 
-.frame-card img {
-  width: 200px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: 0.3s;
+#photoLayer img{
+position:absolute;
+z-index:2;
+cursor:move;
 }
 
-.frame-card img:hover {
-  transform: scale(1.05);
-}
-
-.studio-container {
-  text-align: center;
-  padding: 30px;
-}
-
-video {
-  width: 300px;
-  border-radius: 20px;
-}
-
-.photo-strip {
-  position: relative;
-  width: 300px;
-  height: 900px;
-  margin: 20px auto;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.photo-slot {
-  width: 90%;
-  height: 20%;
-  margin: 15px auto;
-}
-
-.strip-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.luxury-btn {
-  padding: 12px 30px;
-  background: white;
-  color: black;
-  border-radius: 30px;
-  border: none;
-  cursor: pointer;
-  margin-top: 20px;
-}
-
-.sticker-bar {
-  margin-top: 20px;
-}
-
-.sticker-item {
-  width: 60px;
-  margin: 10px;
-  cursor: pointer;
-}
-
-.strip-mode {
-  width: 300px;
-  height: 900px;
-  position: relative;
-}
-
-.portrait-mode {
-  width: 600px;
-  height: 900px;
-  position: relative;
-}
-
-.photo-slot {
-  position: relative;
-  width: 90%;
-  height: 20%;
-  margin: 15px auto;
-  overflow: hidden;
-}
-
-.watermark {
-  position: absolute;
-  bottom: 10px;
-  width: 100%;
-  text-align: center;
-  color: rgba(255,255,255,0.5);
-  font-size: 20px;
-  z-index: 10;
-  pointer-events: none;
-}
-
-.luxury-select {
-  padding: 10px;
-  border-radius: 20px;
-  margin-top: 20px;
+#stickerLayer img{
+position:absolute;
+z-index:3;
+cursor:move;
 }
 
