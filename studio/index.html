@@ -5,17 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Photobooth Scrap Studio</title>
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- Interact.js for drag & resize -->
   <script src="https://cdn.jsdelivr.net/npm/@interactjs/interactjs/dist/interact.min.js"></script>
+  <!-- html2canvas for exporting the scrap -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
   <h1>Photobooth Scrap Studio 📸</h1>
 
+  <!-- Camera Section -->
   <div class="camera-container">
     <video id="video" autoplay muted playsinline></video>
     <button id="captureBtn">Take Photo</button>
   </div>
 
+  <!-- Controls -->
   <div class="controls">
     Background Template:
     <select id="backgroundSelect">
@@ -27,16 +32,22 @@
     <button id="exportBtn">Download Scrap</button>
   </div>
 
+  <!-- Scrap Area -->
   <div id="scrapArea">
     <div id="photoStrip"></div>
   </div>
 
+  <!-- Stickers Panel -->
   <div class="stickers-container">
-    <img src="https://i.imgur.com/3Oe2Z7J.png" class="sticker">
-    <img src="https://i.imgur.com/o6Pz3Z5.png" class="sticker">
+    <img src="https://i.imgur.com/3Oe2Z7J.png" class="sticker" alt="Sticker 1">
+    <img src="https://i.imgur.com/o6Pz3Z5.png" class="sticker" alt="Sticker 2">
+    <!-- Add your Canva sticker URLs here -->
   </div>
 
+  <!-- Hidden canvas for taking photos -->
   <canvas id="canvas" style="display:none;"></canvas>
+
+  <!-- Camera + Photobooth Script -->
   <script src="js/camera.js"></script>
 </body>
 </html>
