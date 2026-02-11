@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Select Your Frame</title>
+<link rel="stylesheet" href="css/frameSelection.css">
+</head>
+<body>
+
+<header>
+  <img src="../img/logo.png" alt="Logo" class="logo">
+  <h1>Select Your Photostrip Template</h1>
+</header>
+
+<div class="frames-grid">
+  <div class="frame-card" data-frame="template1">
+    <img src="../img/template1.png" alt="Template 1">
+    <p>Template 1</p>
+  </div>
+  <div class="frame-card" data-frame="template2">
+    <img src="../img/template2.png" alt="Template 2">
+    <p>Template 2</p>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.frame-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const frameKey = card.dataset.frame;
+    localStorage.setItem('selectedFrame', frameKey);
+    window.location.href = "../studio/index.html"; // Go to studio page
+  });
+});
+</script>
+
+</body>
+</html>
+
