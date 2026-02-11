@@ -1,34 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Scrap Foto Studio</title>
-  <link rel="stylesheet" href="css/style.css">
+<title>Scrap Foto Studio</title>
+<style>
+body{
+background:#000;
+color:#fff;
+font-family:Helvetica, sans-serif;
+text-align:center;
+padding-top:150px;
+}
+button{
+padding:20px 40px;
+margin:20px;
+background:#fff;
+border:none;
+font-size:18px;
+cursor:pointer;
+transition:.3s;
+}
+button:hover{
+background:#c9a227;
+color:#000;
+}
+</style>
 </head>
-<body class="luxury-bg">
+<body>
 
-<div class="landing-container">
+<h1>SCRAP FOTO STUDIO</h1>
+<p>Select Your Experience</p>
 
-  <img src="img/logo.png" class="logo">
+<button onclick="go('strip')">1x3 Luxury Photo Strip</button>
+<button onclick="go('4x6')">4x6 Portrait Scrap</button>
 
-  <h1 class="luxury-title">Scrap Foto Studio</h1>
-  <p class="luxury-sub">A modern digital photo experience</p>
-
-  <div class="mode-selection">
-
-    <a href="frame-selection/?mode=strip" class="mode-card">
-      <h2>1"x3" Classic Strip</h2>
-      <p>Luxury vertical 4-photo strip</p>
-    </a>
-
-    <a href="frame-selection/?mode=portrait" class="mode-card">
-      <h2>4x6 Portrait</h2>
-      <p>Full portrait layout with 4 photos</p>
-    </a>
-
-  </div>
-
-</div>
+<script>
+function go(mode){
+localStorage.setItem("templateMode", mode);
+window.location.href="frame-selection/";
+}
+</script>
 
 </body>
 </html>
+
 
