@@ -1,49 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>4x6 Photo Scrap Studio</title>
-<link rel="stylesheet" href="../style.css">
-<style>
-  body { background-color: black; color: white; font-family: 'Arial', sans-serif; margin: 0; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  #scrapCanvas { position: relative; width: 600px; height: 900px; border: 2px solid #FFD700; margin-top: 20px; }
-  #video { width: 300px; border-radius: 10px; }
-  .btn { background-color: #FFD700; color: black; font-weight: bold; margin: 5px; padding: 0.8rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; }
-  .btn:hover { transform: scale(1.05); }
-  #stickerBar img { width: 50px; height: 50px; margin: 5px; cursor: pointer; }
-  #filters { margin-top: 10px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4x6 Scrapbook Studio</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<img src="../img/logo.png" alt="Logo" style="width:120px; margin-bottom: 10px;">
+<header>
+  <img src="../img/logo.png" alt="Logo">
+</header>
 
 <video id="video" autoplay></video>
-
-<div id="filters">
-  <button class="btn" onclick="applyFilter('none')">Color</button>
-  <button class="btn" onclick="applyFilter('grayscale(100%)')">Black & White</button>
-  <button class="btn" onclick="applyFilter('sepia(100%)')">Vintage</button>
+<div>
+  <button id="startBtn" class="modern-btn">Start Session</button>
+  <button id="takePhotoBtn" class="modern-btn">Take Photo</button>
+  <button id="resetBtn" class="modern-btn">Reset</button>
+  <button id="downloadBtn" class="modern-btn">Download / Pay</button>
 </div>
 
-<button class="btn" id="startBtn">Start Session</button>
-<button class="btn" id="takePhotoBtn">Take Photo</button>
-<button class="btn" id="resetBtn">Reset</button>
-<button class="btn" id="downloadBtn">Download / Pay</button>
-
 <div id="scrapCanvas">
-  <img id="templateImg">
   <div id="photoLayer"></div>
   <div id="stickerLayer"></div>
 </div>
 
 <div id="stickerBar"></div>
 
-<script src="../js/script-4x6.js"></script>
-
+<script src="script.js"></script>
 </body>
 </html>
+
 
 
 
