@@ -1,45 +1,159 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>4x6 Scrapbook Studio</title>
-<link rel="stylesheet" href="../css/style.css">
+<title>4x6 Studio</title>
+
+<style>
+body{
+margin:0;
+background:#000;
+font-family:sans-serif;
+color:white;
+text-align:center;
+}
+
+.logo{
+position:fixed;
+top:15px;
+left:50%;
+transform:translateX(-50%);
+width:160px;
+z-index:1000;
+}
+
+.nav-btn{
+position:fixed;
+top:20px;
+background:#111;
+border:1px solid #333;
+color:white;
+padding:8px 14px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.back{left:15px;}
+.home{right:15px;}
+
+.container{
+margin-top:120px;
+padding-bottom:40px;
+}
+
+video{
+width:90%;
+max-width:400px;
+border-radius:20px;
+border:4px solid #222;
+background:black;
+}
+
+.photo-preview{
+margin-top:20px;
+width:360px;
+height:540px;
+background:white;
+margin-left:auto;
+margin-right:auto;
+border-radius:20px;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.photo-preview img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.controls{
+margin-top:20px;
+}
+
+button{
+padding:10px 20px;
+margin:5px;
+border:none;
+border-radius:10px;
+background:#222;
+color:white;
+cursor:pointer;
+}
+
+.filter-btn.active{
+background:white;
+color:black;
+}
+</style>
 </head>
+
 <body>
-<div class="logo-container">
-  <img src="../img/logo.png" class="logo">
+
+<img src="../logo.png" class="logo">
+
+<button class="nav-btn back" onclick="history.back()">Back</button>
+<button class="nav-btn home" onclick="window.location.href='../index.html'">Home</button>
+
+<div class="container">
+
+<video id="video" autoplay playsinline></video>
+
+<div class="controls">
+<button onclick="takePhoto()">Take Photo</button>
+<br>
+<button class="filter-btn active" onclick="setFilter('none',this)">Color</button>
+<button class="filter-btn" onclick="setFilter('grayscale(100%)',this)">B&W</button>
+<button class="filter-btn" onclick="setFilter('sepia(80%)',this)">Vintage</button>
 </div>
 
-<div class="video-container">
-  <video id="video" autoplay muted></video>
+<div class="photo-preview" id="photoPreview"></div>
+
 </div>
 
-<div class="filters-container">
-  <button onclick="video.style.filter='none'">Color</button>
-  <button onclick="video.style.filter='grayscale(100%)'">B&W</button>
-  <button onclick="video.style.filter='sepia(80%)'">Vintage</button>
-</div>
+<script>
+let video=document.getElementById("video");
+let photoPreview=document.getElementById("photoPreview");
+let currentFilter="none";
 
-<div class="nav-btns">
-  <button class="modern-btn" id="startBtn">Start Session</button>
-  <button class="modern-btn" id="takePhotoBtn">Take Photo</button>
-  <button class="modern-btn" id="resetBtn">Reset</button>
-  <button class="modern-btn" id="downloadBtn">Download</button>
-  <button class="modern-btn" onclick="location.href='../index.html'">Home</button>
-</div>
+navigator.mediaDevices.getUserMedia({video:true})
+.then(stream=>{
+video.srcObject=stream;
+})
+.catch(err=>{
+alert("Camera error: "+err);
+});
 
-<div class="scrap-canvas" id="scrapCanvas">
-  <img id="templateImg" class="template">
-  <div id="photoLayer"></div>
-  <div id="stickerLayer"></div>
-</div>
+function setFilter(filter,btn){
+currentFilter=filter;
+video.style.filter=filter;
 
-<div id="stickerBar"></div>
+document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+btn.classList.add("active");
+}
 
-<script src="../js/script-4x6.js"></script>
+function takePhoto(){
+photoPreview.innerHTML="";
+
+let canvas=document.createElement("canvas");
+canvas.width=video.videoWidth;
+canvas.height=video.videoHeight;
+let ctx=canvas.getContext("2d");
+
+ctx.filter=currentFilter;
+ctx.drawImage(video,0,0);
+
+let img=document.createElement("img");
+img.src=canvas.toDataURL("image/png");
+photoPreview.appendChild(img);
+}
+</script>
+
 </body>
 </html>
+
 
 
 
