@@ -1,105 +1,156 @@
-const video = document.getElementById("video");
-const startBtn = document.getElementById("startBtn");
-const takeBtn = document.getElementById("takeBtn");
-const resetBtn = document.getElementById("resetBtn");
-const photoLayer = document.getElementById("photoLayer");
-const templateImg = document.getElementById("templateImg");
-const scrapCanvas = document.getElementById("scrapCanvas");
-let count = 0;
+// Get elements
+const video = document.getElementById('video');
+const startBtn = document.getElementById('startBtn');
+const takePhotoBtn = document.getElementById('takePhotoBtn');
+const resetBtn = document.getElementById('resetBtn');
+const downloadBtn = document.getElementById('downloadBtn');
 
-templateImg.src = localStorage.getItem('frame') || '../img/4x6-template1.png';
+const scrapCanvas = document.getElementById('scrapCanvas');
+const templateImg = document.getElementById('templateImg');
+const photoLayer = document.getElementById('photoLayer');
+const stickerLayer = document.getElementById('stickerLayer');
+const stickerBar = document.getElementById('stickerBar');
 
-startBtn.onclick = async () => {
-  const stream = await navigator.mediaDevices.getUserMedia({ video:true });
-  video.srcObject = stream;
-};
+// Load selected frame
+const frameUrl = localStorage.getItem('frame');
+if(templateImg && frameUrl) templateImg.src = frameUrl;
 
-takeBtn.onclick = () => {
-  if(count >= 4) return;
-  const canvas = document.createElement("canvas");
-  canvas.width=1080; canvas.height=1920;
-  canvas.getContext("2d").drawImage(video,0,0,canvas.width,canvas.height);
+// Initialize camera
+async function startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+    video.srcObject = stream;
+  } catch(err) {
+    alert("Camera not accessible: " + err);
+  }
+}
 
-  const img=document.createElement("img");
-  img.src=canvas.toDataURL();
-  img.style.position="absolute";
-  img.style.left="20px";
-  img.style.top=`${20+count*120}px`;
-  img.style.width="160px";
-  img.style.height="210px";
-  makeDraggable(img,scrapCanvas);
-  photoLayer.appendChild(img);
-  count++;
-};
+// Photo storage
+let photos = [];
 
-resetBtn.onclick = () => { photoLayer.innerHTML=""; count=0; };
-
-// Stickers from Canva
-const stickerUrls = [
-  'https://example.com/sticker1.png',
-  'https://example.com/sticker2.png'
-];
-stickerUrls.forEach(url=>{
-  const btn=document.createElement("button");
-  btn.textContent="Sticker";
-  btn.className="modern-btn";
-  btn.onclick=()=>addSticker(url);
-  document.querySelector('.frame-scroll').appendChild(btn);
+// Start session
+startBtn && startBtn.addEventListener('click', () => {
+  startCamera();
 });
 
-function addSticker(url){
-  const sticker=document.createElement("img");
-  sticker.src=url;
-  sticker.style.position="absolute";
-  sticker.style.left="50px";
-  sticker.style.top="50px";
-  sticker.style.width="100px";
-  sticker.style.height="100px";
-  makeDraggable(sticker,scrapCanvas);
-  photoLayer.appendChild(sticker);
-}
+// Take photo
+takePhotoBtn && takePhotoBtn.addEventListener('click', () => {
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const img = document.createElement('img');
+  img.src = canvas.toDataURL('image/png');
 
-function makeDraggable(el, container){
-  el.style.resize="both"; el.style.overflow="hidden";
+  // Check if 1x3 or 4x6
+  if(scrapCanvas.offsetHeight > scrapCanvas.offsetWidth){
+    // 1x3 vertical autofit
+    const slotHeight = scrapCanvas.offsetHeight / 4;
+    img.style.width = '100%';
+    img.style.height = `${slotHeight}px`;
+    img.style.top = `${photos.length * slotHeight}px`;
+    img.style.left = '0';
+  } else {
+    // 4x6: draggable/resizable
+    img.style.width = '150px';
+    img.style.height = 'auto';
+    img.style.top = '10px';
+    img.style.left = '10px';
+    makeDraggableResizable(img, scrapCanvas);
+  }
+
+  photos.push(img);
+  photoLayer.appendChild(img);
+});
+
+// Reset
+resetBtn && resetBtn.addEventListener('click', () => {
+  photos = [];
+  photoLayer.innerHTML = '';
+  stickerLayer.innerHTML = '';
+});
+
+// Stickers - add your Canva URLs here
+const stickers = [
+  'https://i.imgur.com/Sticker1.png',
+  'https://i.imgur.com/Sticker2.png',
+  'https://i.imgur.com/Sticker3.png'
+];
+
+// Populate sticker bar
+stickers.forEach(url => {
+  const btn = document.createElement('button');
+  const img = document.createElement('img');
+  img.src = url;
+  img.style.width = '50px';
+  img.style.height = '50px';
+  btn.appendChild(img);
+  btn.addEventListener('click', () => {
+    const sticker = document.createElement('img');
+    sticker.src = url;
+    sticker.style.width = '80px';
+    sticker.style.height = '80px';
+    sticker.style.top = '20px';
+    sticker.style.left = '20px';
+    makeDraggableResizable(sticker, scrapCanvas);
+    stickerLayer.appendChild(sticker);
+  });
+  stickerBar.appendChild(btn);
+});
+
+// Draggable & Resizable Function
+function makeDraggableResizable(el, container){
+  el.style.position = 'absolute';
+  el.style.cursor = 'move';
+
+  let isDragging = false;
   let offsetX, offsetY;
-  el.onmousedown = e=>{
-    e.preventDefault();
-    offsetX = e.offsetX; offsetY = e.offsetY;
-    document.onmousemove = ev=>{
-      let x = ev.pageX-container.getBoundingClientRect().left-offsetX;
-      let y = ev.pageY-container.getBoundingClientRect().top-offsetY;
-      x=Math.max(0,Math.min(x,container.clientWidth-el.offsetWidth));
-      y=Math.max(0,Math.min(y,container.clientHeight-el.offsetHeight));
-      el.style.left=x+"px";
-      el.style.top=y+"px";
-    };
-    document.onmouseup=()=>{document.onmousemove=null;}
-  };
+
+  el.addEventListener('mousedown', e => {
+    isDragging = true;
+    const rect = el.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+    el.style.zIndex = 20;
+  });
+
+  document.addEventListener('mousemove', e => {
+    if(!isDragging) return;
+    let x = e.clientX - offsetX - container.getBoundingClientRect().left;
+    let y = e.clientY - offsetY - container.getBoundingClientRect().top;
+
+    // constrain within container
+    x = Math.max(0, Math.min(container.offsetWidth - el.offsetWidth, x));
+    y = Math.max(0, Math.min(container.offsetHeight - el.offsetHeight, y));
+
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+  });
+
+  document.addEventListener('mouseup', e => {
+    isDragging = false;
+  });
+
+  // Simple resizable with corner drag
+  el.addEventListener('dblclick', () => {
+    const newWidth = prompt('Enter width in px:', el.offsetWidth);
+    if(newWidth) el.style.width = newWidth + 'px';
+  });
 }
 
-function downloadScrap(){
-  const stripeUrl="https://buy.stripe.com/test_abc123";
-  if(!confirm("Redirect to payment?")) return;
-  window.open(stripeUrl,"_blank");
+// Download placeholder
+downloadBtn && downloadBtn.addEventListener('click', () => {
+  alert("Payment integration goes here. After payment, download the final image with watermark.");
+  // Example for html2canvas:
+  // html2canvas(scrapCanvas).then(canvas => {
+  //   const link = document.createElement('a');
+  //   link.href = canvas.toDataURL('image/png');
+  //   link.download = 'scrap.png';
+  //   link.click();
+  // });
+});
 
-  setTimeout(()=>{
-    html2canvas(scrapCanvas).then(canvas=>{
-      const watermark=new Image();
-      watermark.src='../img/watermark.png';
-      watermark.onload=()=>{
-        const finalCanvas=document.createElement("canvas");
-        finalCanvas.width=canvas.width; finalCanvas.height=canvas.height;
-        const ctx=finalCanvas.getContext("2d");
-        ctx.drawImage(canvas,0,0);
-        ctx.drawImage(watermark,finalCanvas.width-250,finalCanvas.height-100,200,50);
-        const link=document.createElement("a");
-        link.href=finalCanvas.toDataURL();
-        link.download="scrap.png";
-        link.click();
-      };
-    });
-  },1000);
-}
 
 
 
