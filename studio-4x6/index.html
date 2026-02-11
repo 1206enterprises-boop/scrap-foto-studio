@@ -1,35 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>4x6 Scrapbook Studio</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4x6 Scrapbook Studio</title>
+<link rel="stylesheet" href="../style.css">
 </head>
 <body>
 
-<header>
-  <img src="../img/logo.png" alt="Logo">
-</header>
-
-<video id="video" autoplay></video>
-<div>
-  <button id="startBtn" class="modern-btn">Start Session</button>
-  <button id="takePhotoBtn" class="modern-btn">Take Photo</button>
-  <button id="resetBtn" class="modern-btn">Reset</button>
-  <button id="downloadBtn" class="modern-btn">Download / Pay</button>
+<div class="logo-container">
+  <img src="../img/logo.png" alt="Scrap Foto Studio Logo" class="logo">
 </div>
 
-<div id="scrapCanvas">
-  <div id="photoLayer"></div>
-  <div id="stickerLayer"></div>
+<div class="centered-container">
+  <h2>4x6 Scrapbook</h2>
+
+  <div class="video-container">
+    <video id="video" autoplay></video>
+  </div>
+
+  <div class="controls">
+    <button class="modern-btn" id="startBtn">Start Session</button>
+    <button class="modern-btn" id="takePhotoBtn">Take Photo</button>
+    <button class="modern-btn" id="resetBtn">Reset</button>
+    <button class="modern-btn" id="downloadBtn">Download (Payment Required)</button>
+  </div>
+
+  <div class="scrap-canvas" id="scrapCanvas" style="width:720px;height:1080px;">
+    <img id="templateImg" class="template" src="">
+    <div id="photoLayer"></div>
+    <div id="stickerLayer"></div>
+  </div>
+
+  <div class="frame-scroll" id="stickerBar"></div>
+
+  <div class="nav-btns">
+    <button class="modern-btn" onclick="window.history.back()">Back</button>
+    <button class="modern-btn" onclick="window.location.href='../index.html'">Home</button>
+  </div>
 </div>
 
-<div id="stickerBar"></div>
-
+<script src="../js/html2canvas.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
