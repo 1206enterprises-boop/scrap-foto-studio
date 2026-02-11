@@ -10,24 +10,24 @@ let count = 0;
 templateImg.src = localStorage.getItem('frame') || '../img/strip-template1.png';
 
 startBtn.onclick = async () => {
-  const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+  const stream = await navigator.mediaDevices.getUserMedia({ video:true });
   video.srcObject = stream;
 };
 
 takeBtn.onclick = () => {
   if(count >= 4) return;
   const canvas = document.createElement("canvas");
-  canvas.width = 1080; canvas.height = 1920;
+  canvas.width=1080; canvas.height=1920;
   canvas.getContext("2d").drawImage(video,0,0,canvas.width,canvas.height);
 
-  const img = document.createElement("img");
-  img.src = canvas.toDataURL();
+  const img=document.createElement("img");
+  img.src=canvas.toDataURL();
   const slotHeight = stripCanvas.clientHeight/4;
-  img.style.position = "absolute";
-  img.style.top = `${count*slotHeight}px`;
-  img.style.left = "0px";
-  img.style.width = "100%";
-  img.style.height = `${slotHeight}px`;
+  img.style.position="absolute";
+  img.style.top=`${count*slotHeight}px`;
+  img.style.left="0px";
+  img.style.width="100%";
+  img.style.height=`${slotHeight}px`;
 
   makeDraggable(img, stripCanvas);
   photoLayer.appendChild(img);
@@ -76,6 +76,7 @@ function downloadStrip(){
     });
   },1000);
 }
+
 
 
 
