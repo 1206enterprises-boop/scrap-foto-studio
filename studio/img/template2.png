@@ -1,0 +1,4 @@
+const templates = {
+  template1: "../img/template1.png",
+  template2: "../img/template2.png"
+};
