@@ -114,28 +114,6 @@ header img {
   border-radius: 8px;
 }
 
-/* === MOBILE OPTIMIZATIONS === */
-@media screen and (max-width: 768px){
-  #video {
-    width: 95%;
-    max-height: 300px;
-  }
-  #scrapCanvas {
-    width: 95%;
-    max-height: 500px;
-  }
-  .modern-btn {
-    width: 80%;
-    text-align: center;
-    padding: 10px 0;
-    font-size: 14px;
-  }
-  #stickerBar {
-    width: 95%;
-    padding: 5px;
-  }
-}
-
 
 
 
