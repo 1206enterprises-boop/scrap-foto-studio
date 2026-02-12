@@ -52,8 +52,9 @@ header img {
 
 #scrapCanvas {
   position: relative;
-  width: 320px;
-  height: 480px; /* 4x6 portrait ratio */
+  width: 100%;
+  max-width: 400px;   /* max size on desktop */
+  aspect-ratio: 2 / 3; /* TRUE 4x6 portrait ratio */
   border: 3px solid #444;
   margin-bottom: 15px;
   background-color: #111;
@@ -104,9 +105,10 @@ header img {
     width: 95%;
     max-height: 300px;
   }
-  #scrapCanvas {
-    width: 95%;
-    max-height: 500px;
+#scrapCanvas {
+  width: 95%;
+  max-width: none;
+  aspect-ratio: 2 / 3;
   }
   .modern-btn {
     width: 80%;
