@@ -65,11 +65,9 @@ img.style.position = "absolute";
 
 // Maintain natural aspect ratio
 img.style.width = "100%";
-img.style.height = "auto";
-img.style.objectFit = "cover";
-
-// Force crop inside slot without distortion
-img.style.maxHeight = slotHeight + "px";
+img.style.height = slotHeight + "px";
+img.style.objectFit = "contain";
+img.style.backgroundColor = "#000"; // clean strip background
 
 // Center image vertically inside slot
 img.style.top = (topMargin + photos.length * (slotHeight + gap)) + "px";
