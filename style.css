@@ -156,7 +156,7 @@ video {
     max-height: 350px; 
     margin-top: 50px; /* Bring camera lower for mobile */
   }
-  .scrap-canvas { width: 90%; max-height: 600px; }
-  .sticker-bar { width: 90%; }
+  .scrap-canvas { width: 80%; max-height: 600px; }
+  .sticker-bar { width: 80%; }
   .modern-btn { padding: 10px 15px; font-size: 14px; margin: 5px; }
 }
