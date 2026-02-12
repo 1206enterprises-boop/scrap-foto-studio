@@ -137,35 +137,119 @@ stickers.forEach(url => {
   stickerBar.appendChild(btn);
 });
 
-// ================== DRAG & RESIZE ==================
+// ================== DRAG, RESIZE HANDLE & DELETE ==================
 function makeDraggableResizable(el, container){
-  el.style.position = "absolute";
-  el.style.cursor = "move";
-  let isDragging = false, offsetX, offsetY;
+  // Wrap element in a container to hold handles and X button
+  const wrapper = document.createElement("div");
+  wrapper.style.position = "absolute";
+  wrapper.style.top = el.style.top;
+  wrapper.style.left = el.style.left;
+  wrapper.style.width = el.style.width;
+  wrapper.style.height = el.style.height;
+  wrapper.style.cursor = "move";
+  wrapper.style.zIndex = 20;
 
-  el.addEventListener("mousedown", e => {
+  // Add photo/sticker to wrapper
+  el.style.position = "absolute";
+  el.style.top = "0";
+  el.style.left = "0";
+  el.style.width = "100%";
+  el.style.height = "100%";
+  wrapper.appendChild(el);
+  container.appendChild(wrapper);
+
+  // === DELETE BUTTON ===
+  const deleteBtn = document.createElement("div");
+  deleteBtn.innerHTML = "✖";
+  deleteBtn.style.position = "absolute";
+  deleteBtn.style.top = "-10px";
+  deleteBtn.style.right = "-10px";
+  deleteBtn.style.width = "20px";
+  deleteBtn.style.height = "20px";
+  deleteBtn.style.background = "red";
+  deleteBtn.style.color = "#fff";
+  deleteBtn.style.borderRadius = "50%";
+  deleteBtn.style.display = "flex";
+  deleteBtn.style.alignItems = "center";
+  deleteBtn.style.justifyContent = "center";
+  deleteBtn.style.fontSize = "14px";
+  deleteBtn.style.cursor = "pointer";
+  deleteBtn.style.zIndex = "30";
+  deleteBtn.addEventListener("click", () => {
+    wrapper.remove();
+    photos = photos.filter(p => p !== el);
+  });
+  wrapper.appendChild(deleteBtn);
+
+  // === RESIZE HANDLE ===
+  const resizeHandle = document.createElement("div");
+  resizeHandle.style.position = "absolute";
+  resizeHandle.style.width = "15px";
+  resizeHandle.style.height = "15px";
+  resizeHandle.style.background = "gold";
+  resizeHandle.style.right = "-5px";
+  resizeHandle.style.bottom = "-5px";
+  resizeHandle.style.cursor = "nwse-resize";
+  resizeHandle.style.zIndex = "30";
+  wrapper.appendChild(resizeHandle);
+
+  let isDragging = false, dragOffsetX, dragOffsetY;
+  let isResizing = false, startWidth, startHeight, startX, startY;
+
+  // === DRAGGING ===
+  wrapper.addEventListener("mousedown", e => {
+    if(e.target === resizeHandle || e.target === deleteBtn) return;
     isDragging = true;
-    offsetX = e.offsetX;
-    offsetY = e.offsetY;
+    dragOffsetX = e.offsetX;
+    dragOffsetY = e.offsetY;
   });
 
   document.addEventListener("mousemove", e => {
-    if(!isDragging) return;
-    let rect = container.getBoundingClientRect();
-    let x = e.clientX - rect.left - offsetX;
-    let y = e.clientY - rect.top - offsetY;
-    x = Math.max(0, Math.min(container.offsetWidth - el.offsetWidth, x));
-    y = Math.max(0, Math.min(container.offsetHeight - el.offsetHeight, y));
-    el.style.left = x + "px";
-    el.style.top = y + "px";
+    if(isDragging){
+      const rect = container.getBoundingClientRect();
+      let x = e.clientX - rect.left - dragOffsetX;
+      let y = e.clientY - rect.top - dragOffsetY;
+      x = Math.max(0, Math.min(container.offsetWidth - wrapper.offsetWidth, x));
+      y = Math.max(0, Math.min(container.offsetHeight - wrapper.offsetHeight, y));
+      wrapper.style.left = x + "px";
+      wrapper.style.top = y + "px";
+    }
+
+    if(isResizing){
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      let newWidth = startWidth + dx;
+      let newHeight = startHeight + dy;
+      const aspectRatio = startWidth / startHeight;
+
+      // maintain aspect ratio
+      if(newWidth / newHeight > aspectRatio) newHeight = newWidth / aspectRatio;
+      else newWidth = newHeight * aspectRatio;
+
+      // bounds check
+      newWidth = Math.min(newWidth, container.offsetWidth - wrapper.offsetLeft);
+      newHeight = Math.min(newHeight, container.offsetHeight - wrapper.offsetTop);
+      newWidth = Math.max(newWidth, 50);
+      newHeight = Math.max(newHeight, 50);
+
+      wrapper.style.width = newWidth + "px";
+      wrapper.style.height = newHeight + "px";
+    }
   });
 
-  document.addEventListener("mouseup", () => isDragging = false);
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+    isResizing = false;
+  });
 
-  el.addEventListener("wheel", e => {
-    e.preventDefault();
-    let newWidth = el.offsetWidth + (e.deltaY < 0 ? 10 : -10);
-    if(newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
+  // === RESIZING ===
+  resizeHandle.addEventListener("mousedown", e => {
+    e.stopPropagation();
+    isResizing = true;
+    startWidth = wrapper.offsetWidth;
+    startHeight = wrapper.offsetHeight;
+    startX = e.clientX;
+    startY = e.clientY;
   });
 }
 
