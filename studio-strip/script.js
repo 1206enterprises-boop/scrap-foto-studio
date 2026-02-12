@@ -30,7 +30,6 @@ lockOverlay.style.top = "0";
 lockOverlay.style.left = "0";
 lockOverlay.style.width = "100%";
 lockOverlay.style.height = "100%";
-lockOverlay.style.backdropFilter = "blur(8px)";
 lockOverlay.style.background = "rgba(0,0,0,0.4)";
 lockOverlay.style.display = "flex";
 lockOverlay.style.alignItems = "center";
