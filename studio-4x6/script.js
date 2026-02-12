@@ -56,6 +56,26 @@ takePhotoBtn.addEventListener('click', () => {
 
   photos.push(img);
   photoLayer.appendChild(img);
+
+  // ✅ Add rotate button
+const rotateBtn = document.createElement('button');
+rotateBtn.innerHTML = '⟳'; // rotate icon
+rotateBtn.style.position = 'absolute';
+rotateBtn.style.top = '5px';
+rotateBtn.style.right = '5px';
+rotateBtn.style.zIndex = 20;
+rotateBtn.style.background = '#FFD700';
+rotateBtn.style.border = 'none';
+rotateBtn.style.borderRadius = '50%';
+rotateBtn.style.width = '30px';
+rotateBtn.style.height = '30px';
+rotateBtn.style.cursor = 'pointer';
+rotateBtn.addEventListener('click', () => {
+  img.rotate(90); // rotate 90 degrees per click
+});
+
+img.parentElement.appendChild(rotateBtn);
+
 });
 
 // ================== RESET ==================
@@ -94,13 +114,11 @@ stickers.forEach(url => {
 function makeDraggableResizable(el, container) {
   el.style.position = "absolute";
   el.style.cursor = "move";
-  el.style.transformOrigin = "center center"; // important for rotation
-  let isDragging = false, offsetX = 0, offsetY = 0;
+  el.style.transform = "rotate(0deg)"; // start with 0 rotation
+  let isDragging = false, offsetX, offsetY;
+  let currentRotation = 0; // track rotation
 
-  let rotation = 0;        // rotation in degrees
-  let scale = 1;           // current scale
-
-  // --- MOUSE EVENTS ---
+  // 🖱 Drag / Mouse events
   el.addEventListener("mousedown", e => {
     isDragging = true;
     offsetX = e.offsetX;
@@ -109,84 +127,58 @@ function makeDraggableResizable(el, container) {
 
   document.addEventListener("mousemove", e => {
     if (!isDragging) return;
-    moveElement(e.clientX, e.clientY);
+    let rect = container.getBoundingClientRect();
+    let x = e.clientX - rect.left - offsetX;
+    let y = e.clientY - rect.top - offsetY;
+    x = Math.max(0, Math.min(container.offsetWidth - el.offsetWidth, x));
+    y = Math.max(0, Math.min(container.offsetHeight - el.offsetHeight, y));
+    el.style.left = x + "px";
+    el.style.top = y + "px";
   });
 
   document.addEventListener("mouseup", () => isDragging = false);
 
-  // --- TOUCH EVENTS ---
-  let initialDistance = 0;
-  let initialRotation = 0;
-  el.addEventListener("touchstart", e => {
-    if (e.touches.length === 1) {
-      isDragging = true;
-      const touch = e.touches[0];
-      const rect = el.getBoundingClientRect();
-      offsetX = touch.clientX - rect.left;
-      offsetY = touch.clientY - rect.top;
-    } else if (e.touches.length === 2) {
-      isDragging = false;
-      initialDistance = getDistance(e.touches[0], e.touches[1]) / scale;
-      initialRotation = getAngle(e.touches[0], e.touches[1]) - rotation;
-    }
-    e.preventDefault();
-  }, { passive: false });
-
-  document.addEventListener("touchmove", e => {
-    if (e.touches.length === 1 && isDragging) {
-      const touch = e.touches[0];
-      moveElement(touch.clientX, touch.clientY);
-    } else if (e.touches.length === 2) {
-      // pinch to scale
-      const newDistance = getDistance(e.touches[0], e.touches[1]);
-      scale = newDistance / initialDistance;
-      // rotate
-      rotation = getAngle(e.touches[0], e.touches[1]) - initialRotation;
-      updateTransform();
-    }
-    e.preventDefault();
-  }, { passive: false });
-
-  document.addEventListener("touchend", () => {
-    isDragging = false;
-  });
-
-  // --- WHEEL (RESIZE & ROTATE) ---
+  // 🖱 Mouse wheel resize
   el.addEventListener("wheel", e => {
     e.preventDefault();
-    if (e.shiftKey) {
-      // Rotate if shift is held
-      rotation += e.deltaY < 0 ? 5 : -5;
-    } else {
-      // Resize
-      scale += e.deltaY < 0 ? 0.05 : -0.05;
-      scale = Math.max(0.1, Math.min(5, scale));
-    }
-    updateTransform();
+    let newWidth = el.offsetWidth + (e.deltaY < 0 ? 10 : -10);
+    if (newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
   });
 
-  // --- HELPER FUNCTIONS ---
-  function moveElement(clientX, clientY) {
-    const rect = container.getBoundingClientRect();
-    let x = clientX - rect.left - offsetX;
-    let y = clientY - rect.top - offsetY;
-    x = Math.max(0, Math.min(container.offsetWidth - el.offsetWidth * scale, x));
-    y = Math.max(0, Math.min(container.offsetHeight - el.offsetHeight * scale, y));
-    el.style.left = x + "px";
-    el.style.top = y + "px";
-  }
+  // 📱 Touch pinch zoom (mobile) — prevent rotation
+  let initialDistance = null;
+  el.addEventListener("touchstart", e => {
+    if (e.touches.length === 2) {
+      initialDistance = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+    }
+  });
 
-  function updateTransform() {
-    el.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
-  }
+  el.addEventListener("touchmove", e => {
+    if (e.touches.length === 2 && initialDistance) {
+      e.preventDefault(); // prevent rotation/scroll
+      let currentDistance = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      let scale = currentDistance / initialDistance;
+      let newWidth = el.offsetWidth * scale;
+      if (newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
+      initialDistance = currentDistance;
+    }
+  });
 
-  function getDistance(touch1, touch2) {
-    return Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
-  }
+  el.addEventListener("touchend", e => {
+    if (e.touches.length < 2) initialDistance = null;
+  });
 
-  function getAngle(touch1, touch2) {
-    return Math.atan2(touch2.clientY - touch1.clientY, touch2.clientX - touch1.clientX) * 180 / Math.PI;
-  }
+  // 🔄 Add rotation function (for desktop button)
+  el.rotate = function(deg) {
+    currentRotation += deg;
+    el.style.transform = `rotate(${currentRotation}deg)`;
+  };
 }
 
 // ================== DOWNLOAD / STRIPE FIX ==================
