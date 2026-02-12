@@ -37,6 +37,12 @@ startBtn.addEventListener('click', startCamera);
 takePhotoBtn.addEventListener('click', () => {
   if(!video.videoWidth) return;
 
+  // ✅ LIMIT TO 4 PHOTOS
+  if (photos.length >= 4) {
+    alert("You can only add up to 4 photos on a 4x6 layout.");
+    return;
+  }
+
   const canvas = document.createElement('canvas');
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
