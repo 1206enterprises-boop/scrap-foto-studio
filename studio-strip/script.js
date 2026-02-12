@@ -20,29 +20,6 @@ const photoLayer = document.getElementById('photoLayer');
 const stickerLayer = document.getElementById('stickerLayer');
 const stickerBar = document.getElementById('stickerBar');
 
-// ================== PRE-PAYMENT LOCK OVERLAY ==================
-let isPaid = false;
-
-// Create overlay
-const lockOverlay = document.createElement("div");
-lockOverlay.style.position = "absolute";
-lockOverlay.style.top = "0";
-lockOverlay.style.left = "0";
-lockOverlay.style.width = "100%";
-lockOverlay.style.height = "100%";
-lockOverlay.style.background = "rgba(0,0,0,0.4)";
-lockOverlay.style.display = "flex";
-lockOverlay.style.alignItems = "center";
-lockOverlay.style.justifyContent = "center";
-lockOverlay.style.color = "white";
-lockOverlay.style.fontSize = "20px";
-lockOverlay.style.fontWeight = "bold";
-lockOverlay.style.zIndex = "999";
-lockOverlay.innerHTML = "🔒 Complete Payment to Download";
-
-scrapCanvas.style.position = "relative";
-scrapCanvas.appendChild(lockOverlay);
-
 let photos = [];
 
 async function startCamera() {
