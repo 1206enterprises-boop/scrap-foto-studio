@@ -55,18 +55,25 @@ header img {
   object-fit: cover;
 }
 
-/* === SCRAP CANVAS === */
+/* === SCRAP CANVAS (4x6 frame) === */
 #scrapCanvas {
   position: relative;
-  width: 90%;
-  max-width: 360px;
-  height: 540px; /* 4x6 portrait ratio */
+  width: 360px;       /* wider to resemble 4x6 */
+  height: 540px;      /* maintain 4x6 portrait ratio */
   border: 3px solid #FFD700;
   border-radius: 12px;
   margin-bottom: 15px;
   background-color: #111;
   overflow: hidden;
   z-index: 1;
+}
+
+/* Mobile adjustments */
+@media screen and (max-width: 768px){
+  #scrapCanvas {
+    width: 95%;        /* responsive for mobile */
+    max-height: 540px; /* maintain aspect ratio */
+  }
 }
 
 /* === LAYERS === */
