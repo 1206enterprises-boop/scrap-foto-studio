@@ -20,6 +20,14 @@ const photoLayer = document.getElementById('photoLayer');
 const stickerLayer = document.getElementById('stickerLayer');
 const stickerBar = document.getElementById('stickerBar');
 
+let currentFilter = "none"; // Track the currently selected filter
+let isPaid = false;          // Track if payment is completed
+
+function setFilter(value) {
+  currentFilter = value;
+  video.style.filter = value;
+}
+
 let photos = [];
 
 async function startCamera() {
