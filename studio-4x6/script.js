@@ -148,51 +148,53 @@ function makeDraggableResizable(el, container) {
   
   // 📱 Touch pinch zoom (mobile) — prevent rotation/scroll
 let initialDistance = null;
+
 el.addEventListener("touchstart", e => {
-  if (e.touches.length === 2) {
-    initialDistance = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
-  }
+if (e.touches.length === 2) {
+// Pinch zoom start
+initialDistance = Math.hypot(
+e.touches[0].clientX - e.touches[1].clientX,
+e.touches[0].clientY - e.touches[1].clientY
+);
+} else if (e.touches.length === 1) {
+// Single finger drag start
+isDragging = true;
+const touch = e.touches[0];
+const rect = el.getBoundingClientRect();
+offsetX = touch.clientX - rect.left;
+offsetY = touch.clientY - rect.top;
+}
 });
 
 el.addEventListener("touchmove", e => {
-  if (e.touches.length === 2 && initialDistance) {
-    e.preventDefault(); // prevent rotation/scroll
-    let currentDistance = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
-    let scale = currentDistance / initialDistance;
-    let newWidth = el.offsetWidth * scale;
-    if (newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
-    initialDistance = currentDistance;
-  }
+if (e.touches.length === 2 && initialDistance) {
+// Pinch zoom
+e.preventDefault(); // only block pinch zoom
+let currentDistance = Math.hypot(
+e.touches[0].clientX - e.touches[1].clientX,
+e.touches[0].clientY - e.touches[1].clientY
+);
+let scale = currentDistance / initialDistance;
+let newWidth = el.offsetWidth * scale;
+if (newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
+initialDistance = currentDistance;
+} else if (e.touches.length === 1 && isDragging) {
+// Single-finger drag
+const touch = e.touches[0];
+const rect = container.getBoundingClientRect();
+let x = touch.clientX - rect.left - offsetX;
+let y = touch.clientY - rect.top - offsetY;
+x = Math.max(0, Math.min(container.offsetWidth - el.offsetWidth, x));
+y = Math.max(0, Math.min(container.offsetHeight - el.offsetHeight, y));
+el.style.left = x + "px";
+el.style.top = y + "px";
+}
 });
 
 el.addEventListener("touchend", e => {
-  if (e.touches.length < 2) initialDistance = null;
+if (e.touches.length < 2) initialDistance = null;
+if (e.touches.length === 0) isDragging = false;
 });
-
-
-  el.addEventListener("touchmove", e => {
-    if (e.touches.length === 2 && initialDistance) {
-      e.preventDefault(); // prevent rotation/scroll
-      let currentDistance = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-      let scale = currentDistance / initialDistance;
-      let newWidth = el.offsetWidth * scale;
-      if (newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
-      initialDistance = currentDistance;
-    }
-  });
-
-  el.addEventListener("touchend", e => {
-    if (e.touches.length < 2) initialDistance = null;
-  });
 
   // 🔄 Add rotation function (for desktop button)
   el.rotate = function(deg) {
