@@ -60,31 +60,28 @@ startBtn.addEventListener('click', startCamera);
 takePhotoBtn.addEventListener('click', () => {
   if(!video.videoWidth) return;
 
-  // ✅ LIMIT TO 4 PHOTOS
   if (photos.length >= 4) {
     alert("You can only add up to 4 photos on a 4x6 layout.");
     return;
   }
 
-  const canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  const ctx = canvas.getContext('2d');
-  ctx.filter = "none"; // filters preview only
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const canvasTmp = document.createElement('canvas');
+  canvasTmp.width = video.videoWidth;
+  canvasTmp.height = video.videoHeight;
+  const ctx = canvasTmp.getContext('2d');
+  ctx.drawImage(video, 0, 0, canvasTmp.width, canvasTmp.height);
 
   const img = document.createElement('img');
-  img.src = canvas.toDataURL('image/png');
+  img.src = canvasTmp.toDataURL('image/png');
 
-  // ✅ 4x6: free draggable/resizable
-  const padding = 10; // keep photo inside canvas
-  const maxWidth = scrapCanvas.offsetWidth - padding * 2;
-  const maxHeight = scrapCanvas.offsetHeight - padding * 2;
+  // ==== 4x6 photo sizing ====
+  const padding = 10;
+  const maxWidth = scrapCanvas.offsetWidth - padding*2;
+  const maxHeight = scrapCanvas.offsetHeight - padding*2;
+  const aspectRatio = canvasTmp.width / canvasTmp.height;
 
-  const aspectRatio = canvas.width / canvas.height;
   let photoWidth = maxWidth;
   let photoHeight = photoWidth / aspectRatio;
-
   if(photoHeight > maxHeight){
     photoHeight = maxHeight;
     photoWidth = photoHeight * aspectRatio;
@@ -95,11 +92,11 @@ takePhotoBtn.addEventListener('click', () => {
   img.style.position = "absolute";
 
   // Start in center
-  img.style.left = (scrapCanvas.offsetWidth - photoWidth) / 2 + "px";
-  img.style.top = (scrapCanvas.offsetHeight - photoHeight) / 2 + "px";
+  const startLeft = (scrapCanvas.offsetWidth - photoWidth)/2;
+  const startTop = (scrapCanvas.offsetHeight - photoHeight)/2;
 
-  // Allow free dragging/resizing
-  makeDraggableResizable(img, scrapCanvas);
+  // Free dragging/resizing
+  makeDraggableResizable(img, scrapCanvas, startLeft, startTop);
 
   photos.push(img);
   photoLayer.appendChild(img);
