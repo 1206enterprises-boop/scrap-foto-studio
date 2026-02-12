@@ -66,7 +66,7 @@ img.style.position = "absolute";
 // Maintain natural aspect ratio
 img.style.width = "100%";
 img.style.height = slotHeight + "px";
-img.style.objectFit = "contain";
+img.style.objectFit = "cover";
 
 // Center image vertically inside slot
 img.style.top = (topMargin + photos.length * (slotHeight + gap)) + "px";
