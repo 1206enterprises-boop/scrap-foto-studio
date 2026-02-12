@@ -76,11 +76,29 @@ takePhotoBtn.addEventListener('click', () => {
   const img = document.createElement('img');
   img.src = canvas.toDataURL('image/png');
 
-  // 4x6: draggable/resizable
-  img.style.width = "150px";
-  img.style.height = "auto";
-  img.style.top = "10px";
-  img.style.left = "10px";
+  // ✅ 4x6: free draggable/resizable
+  const padding = 10; // keep photo inside canvas
+  const maxWidth = scrapCanvas.offsetWidth - padding * 2;
+  const maxHeight = scrapCanvas.offsetHeight - padding * 2;
+
+  const aspectRatio = canvas.width / canvas.height;
+  let photoWidth = maxWidth;
+  let photoHeight = photoWidth / aspectRatio;
+
+  if(photoHeight > maxHeight){
+    photoHeight = maxHeight;
+    photoWidth = photoHeight * aspectRatio;
+  }
+
+  img.style.width = photoWidth + "px";
+  img.style.height = photoHeight + "px";
+  img.style.position = "absolute";
+
+  // Start in center
+  img.style.left = (scrapCanvas.offsetWidth - photoWidth) / 2 + "px";
+  img.style.top = (scrapCanvas.offsetHeight - photoHeight) / 2 + "px";
+
+  // Allow free dragging/resizing
   makeDraggableResizable(img, scrapCanvas);
 
   photos.push(img);
