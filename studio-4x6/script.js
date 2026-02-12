@@ -240,6 +240,30 @@ downloadBtn.addEventListener('click', async () => {
   link.click();
 });
 
+// ================== DOWNLOAD PROTECTION ==================
+
+// Disable right-click inside the studio
+scrapCanvas.addEventListener("contextmenu", function(e) {
+  e.preventDefault();
+});
+
+// Prevent image drag-to-desktop download
+scrapCanvas.addEventListener("dragstart", function(e) {
+  e.preventDefault();
+});
+
+// Disable right-click on entire page (optional but stronger)
+document.addEventListener("contextmenu", function(e) {
+  e.preventDefault();
+});
+
+// Prevent selecting images
+document.addEventListener("selectstart", function(e) {
+  if (e.target.tagName === "IMG") {
+    e.preventDefault();
+  }
+});
+
 
 
 
