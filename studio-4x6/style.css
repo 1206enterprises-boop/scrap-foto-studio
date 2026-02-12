@@ -58,22 +58,17 @@ header img {
 /* === SCRAP CANVAS (4x6 frame) === */
 #scrapCanvas {
   position: relative;
-  width: 400px;       /* wider to resemble 4x6 */
-  height: 600px;      /* maintain 4x6 portrait ratio */
-  border: 3px solid #FFD700;
-  border-radius: 12px;
+  width: 320px;
+  height: 480px; /* 4x6 portrait ratio */
+  border: 3px solid #444;
   margin-bottom: 15px;
   background-color: #111;
-  overflow: hidden;
-  z-index: 1;
 }
 
-/* Mobile adjustments */
-@media screen and (max-width: 768px){
-  #scrapCanvas {
-    width: 90%;        /* responsive for mobile */
-    max-height: 540px; /* maintain aspect ratio */
-  }
+/* === LAYERS === */
+#photoLayer img,
+#stickerLayer img {
+  position: absolute;
 }
 
 /* === LAYERS === */
