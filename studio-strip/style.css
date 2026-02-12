@@ -55,6 +55,11 @@ header img {
   object-fit: contain;
 }
 
+/* 🔹 Add these lines to make filters work on mobile */
+  -webkit-filter: none;  /* Safari / iOS */
+  filter: none;
+}
+
 /* === SCRAP CANVAS === */
 #scrapCanvas {
   position: relative;
