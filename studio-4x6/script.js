@@ -158,3 +158,11 @@ downloadBtn.addEventListener('click', async () => {
   link.download = "visura-4x6.png";
   link.click();
 });
+
+// ===== Disable Right Click on Images =====
+document.addEventListener('contextmenu', function(e) {
+  if (e.target.tagName === 'IMG') {
+    e.preventDefault();
+  }
+});
+
