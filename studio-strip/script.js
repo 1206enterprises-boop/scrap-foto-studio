@@ -67,7 +67,6 @@ img.style.position = "absolute";
 img.style.width = "100%";
 img.style.height = slotHeight + "px";
 img.style.objectFit = "contain";
-img.style.backgroundColor = "#000"; // clean strip background
 
 // Center image vertically inside slot
 img.style.top = (topMargin + photos.length * (slotHeight + gap)) + "px";
