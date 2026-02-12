@@ -20,6 +20,33 @@ const photoLayer = document.getElementById('photoLayer');
 const stickerLayer = document.getElementById('stickerLayer');
 const stickerBar = document.getElementById('stickerBar');
 
+// ================== FRAMES ==================
+const frames = [
+"https://i.imgur.com/frame1.png",
+"https://i.imgur.com/frame2.png",
+"https://i.imgur.com/frame3.png"
+];
+
+const frameLayer = document.getElementById('frameLayer');
+
+// Example: create frame buttons (can style as you like)
+frames.forEach(url => {
+const btn = document.createElement('button');
+btn.innerText = "Frame"; // Replace with thumbnail if you want
+btn.addEventListener('click', () => {
+// Clear previous frame
+frameLayer.innerHTML = "";
+
+// Add selected frame
+const frameImg = document.createElement('img');
+frameImg.src = url;
+frameLayer.appendChild(frameImg);
+});
+
+// Append button to your existing frame selector container
+document.body.appendChild(btn); // Replace 'document.body' with your actual container
+});
+
 let photos = [];
 
 async function startCamera() {
