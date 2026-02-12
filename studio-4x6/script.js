@@ -91,11 +91,14 @@ stickers.forEach(url => {
 });
 
 // ================== DRAG & RESIZE ==================
-function makeDraggableResizable(el, container){
+function makeDraggableResizable(el, container) {
   el.style.position = "absolute";
   el.style.cursor = "move";
-
+  el.style.transformOrigin = "center center"; // important for rotation
   let isDragging = false, offsetX = 0, offsetY = 0;
+
+  let rotation = 0;        // rotation in degrees
+  let scale = 1;           // current scale
 
   // --- MOUSE EVENTS ---
   el.addEventListener("mousedown", e => {
@@ -105,47 +108,84 @@ function makeDraggableResizable(el, container){
   });
 
   document.addEventListener("mousemove", e => {
-    if(!isDragging) return;
+    if (!isDragging) return;
     moveElement(e.clientX, e.clientY);
   });
 
   document.addEventListener("mouseup", () => isDragging = false);
 
   // --- TOUCH EVENTS ---
+  let initialDistance = 0;
+  let initialRotation = 0;
   el.addEventListener("touchstart", e => {
-    isDragging = true;
-    const touch = e.touches[0];
-    const rect = el.getBoundingClientRect();
-    offsetX = touch.clientX - rect.left;
-    offsetY = touch.clientY - rect.top;
-    e.preventDefault();
-  });
-
-  document.addEventListener("touchmove", e => {
-    if(!isDragging) return;
-    const touch = e.touches[0];
-    moveElement(touch.clientX, touch.clientY);
+    if (e.touches.length === 1) {
+      isDragging = true;
+      const touch = e.touches[0];
+      const rect = el.getBoundingClientRect();
+      offsetX = touch.clientX - rect.left;
+      offsetY = touch.clientY - rect.top;
+    } else if (e.touches.length === 2) {
+      isDragging = false;
+      initialDistance = getDistance(e.touches[0], e.touches[1]) / scale;
+      initialRotation = getAngle(e.touches[0], e.touches[1]) - rotation;
+    }
     e.preventDefault();
   }, { passive: false });
 
-  document.addEventListener("touchend", () => isDragging = false);
-
-  // --- WHEEL (RESIZE) ---
-  el.addEventListener("wheel", e => {
+  document.addEventListener("touchmove", e => {
+    if (e.touches.length === 1 && isDragging) {
+      const touch = e.touches[0];
+      moveElement(touch.clientX, touch.clientY);
+    } else if (e.touches.length === 2) {
+      // pinch to scale
+      const newDistance = getDistance(e.touches[0], e.touches[1]);
+      scale = newDistance / initialDistance;
+      // rotate
+      rotation = getAngle(e.touches[0], e.touches[1]) - initialRotation;
+      updateTransform();
+    }
     e.preventDefault();
-    let newWidth = el.offsetWidth + (e.deltaY < 0 ? 10 : -10);
-    if(newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
+  }, { passive: false });
+
+  document.addEventListener("touchend", () => {
+    isDragging = false;
   });
 
-  // --- MOVE HELPER FUNCTION ---
-  function moveElement(clientX, clientY){
+  // --- WHEEL (RESIZE & ROTATE) ---
+  el.addEventListener("wheel", e => {
+    e.preventDefault();
+    if (e.shiftKey) {
+      // Rotate if shift is held
+      rotation += e.deltaY < 0 ? 5 : -5;
+    } else {
+      // Resize
+      scale += e.deltaY < 0 ? 0.05 : -0.05;
+      scale = Math.max(0.1, Math.min(5, scale));
+    }
+    updateTransform();
+  });
+
+  // --- HELPER FUNCTIONS ---
+  function moveElement(clientX, clientY) {
     const rect = container.getBoundingClientRect();
     let x = clientX - rect.left - offsetX;
     let y = clientY - rect.top - offsetY;
-    x = Math.max(0, Math.min(container.offsetWidth - el.offsetWidth, x));
-    y = Math.max(0, Math.min(container.offsetHeight - el.offsetHeight, y));
+    x = Math.max(0, Math.min(container.offsetWidth - el.offsetWidth * scale, x));
+    y = Math.max(0, Math.min(container.offsetHeight - el.offsetHeight * scale, y));
     el.style.left = x + "px";
     el.style.top = y + "px";
+  }
+
+  function updateTransform() {
+    el.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
+  }
+
+  function getDistance(touch1, touch2) {
+    return Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+  }
+
+  function getAngle(touch1, touch2) {
+    return Math.atan2(touch2.clientY - touch1.clientY, touch2.clientX - touch1.clientX) * 180 / Math.PI;
   }
 }
 
