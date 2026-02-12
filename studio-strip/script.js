@@ -84,11 +84,20 @@ takePhotoBtn.addEventListener('click', () => {
   const usableHeight = scrapCanvas.offsetHeight - topMargin - bottomMargin - (gap * 2);
   const slotHeight = usableHeight / 3;
 
-  img.style.position = "absolute";
-  img.style.width = "100%";
-  img.style.height = slotHeight + "px";
-  img.style.left = "0px";
-  img.style.top = (topMargin + photos.length * (slotHeight + gap)) + "px";
+img.style.position = "absolute";
+
+// Maintain natural aspect ratio
+img.style.width = "100%";
+img.style.height = "auto";
+img.style.objectFit = "cover";
+
+// Force crop inside slot without distortion
+img.style.maxHeight = slotHeight + "px";
+
+// Center image vertically inside slot
+img.style.top = (topMargin + photos.length * (slotHeight + gap)) + "px";
+img.style.left = "0px";
+img.style.overflow = "hidden";
 
   photos.push(img);
   photoLayer.appendChild(img);
