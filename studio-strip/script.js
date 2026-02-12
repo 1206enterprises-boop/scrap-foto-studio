@@ -37,6 +37,12 @@ startBtn.addEventListener('click', startCamera);
 takePhotoBtn.addEventListener('click', () => {
   if(!video.videoWidth) return;
 
+  // ✅ Limit to 3 photos only
+  if(photos.length >= 3) {
+    alert("This strip allows only 3 photos.");
+    return;
+  }
+
   const canvas = document.createElement('canvas');
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
@@ -47,12 +53,19 @@ takePhotoBtn.addEventListener('click', () => {
   const img = document.createElement('img');
   img.src = canvas.toDataURL('image/png');
 
-  // 1x3 autofit
-  const slotHeight = scrapCanvas.offsetHeight / 4;
+  // ✅ REAL PHOTO BOOTH SPACING SETTINGS
+  const topMargin = 20;          // space at top
+  const bottomMargin = 60;       // extra space at bottom (booth look)
+  const gap = 20;                // space between photos
+
+  const usableHeight = scrapCanvas.offsetHeight - topMargin - bottomMargin - (gap * 2);
+  const slotHeight = usableHeight / 3;
+
+  img.style.position = "absolute";
   img.style.width = "100%";
   img.style.height = slotHeight + "px";
-  img.style.left = "0";
-  img.style.top = photos.length * slotHeight + "px";
+  img.style.left = "0px";
+  img.style.top = (topMargin + photos.length * (slotHeight + gap)) + "px";
 
   photos.push(img);
   photoLayer.appendChild(img);
