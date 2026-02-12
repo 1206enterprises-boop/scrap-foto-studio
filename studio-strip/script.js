@@ -188,6 +188,14 @@ downloadBtn.addEventListener('click', async () => {
   link.click();
 });
 
+// ===== Disable Right Click on Images =====
+document.addEventListener('contextmenu', function(e) {
+  if (e.target.tagName === 'IMG') {
+    e.preventDefault();
+  }
+});
+
+
 
 
 
