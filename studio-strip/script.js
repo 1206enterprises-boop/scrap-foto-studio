@@ -142,32 +142,28 @@ function makeDraggableResizable(el, container){
   });
 }
 
-// ================== DOWNLOAD / STRIPE FIX ==================
-let isPaid = false; // make sure this exists at the top of your JS if not already
-
+// ================== DOWNLOAD / STRIPE ==================
 downloadBtn.addEventListener('click', async () => {
-  
+
+  // ✅ Open Stripe and confirm payment
   if (!isPaid) {
-    // Open Stripe in a new tab
     window.open(STRIPE_URL, "_blank");
-    
-    // Ask user to confirm payment
+
     const confirmDownload = confirm("After completing payment, click OK to unlock and download your design.");
     if (!confirmDownload) return;
 
-    // Mark as paid
     isPaid = true;
-    // Remove lock overlay only if you have one, otherwise comment it out
-    // lockOverlay.remove();
   }
 
+  // ✅ Create canvas for photostrip
   const canvas = document.createElement('canvas');
   canvas.width = scrapCanvas.offsetWidth;
   canvas.height = scrapCanvas.offsetHeight;
   const ctx = canvas.getContext('2d');
 
+  // ✅ Draw all images from scrapCanvas
   const elements = scrapCanvas.querySelectorAll('img');
-  for(let el of elements){
+  for (let el of elements) {
     const rect = el.getBoundingClientRect();
     const parentRect = scrapCanvas.getBoundingClientRect();
     const x = rect.left - parentRect.left;
@@ -186,9 +182,10 @@ downloadBtn.addEventListener('click', async () => {
 
   addWatermark(canvas);
 
+  // ✅ Trigger download
   const link = document.createElement('a');
   link.href = canvas.toDataURL('image/png');
-  link.download = "visura-4x6.png";
+  link.download = "visura-strip.png";
   link.click();
 });
 
