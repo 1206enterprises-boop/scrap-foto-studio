@@ -94,8 +94,10 @@ stickers.forEach(url => {
 function makeDraggableResizable(el, container){
   el.style.position = "absolute";
   el.style.cursor = "move";
-  let isDragging = false, offsetX, offsetY;
 
+  let isDragging = false, offsetX = 0, offsetY = 0;
+
+  // --- MOUSE EVENTS ---
   el.addEventListener("mousedown", e => {
     isDragging = true;
     offsetX = e.offsetX;
@@ -104,22 +106,47 @@ function makeDraggableResizable(el, container){
 
   document.addEventListener("mousemove", e => {
     if(!isDragging) return;
-    let rect = container.getBoundingClientRect();
-    let x = e.clientX - rect.left - offsetX;
-    let y = e.clientY - rect.top - offsetY;
-    x = Math.max(0, Math.min(container.offsetWidth - el.offsetWidth, x));
-    y = Math.max(0, Math.min(container.offsetHeight - el.offsetHeight, y));
-    el.style.left = x + "px";
-    el.style.top = y + "px";
+    moveElement(e.clientX, e.clientY);
   });
 
   document.addEventListener("mouseup", () => isDragging = false);
 
+  // --- TOUCH EVENTS ---
+  el.addEventListener("touchstart", e => {
+    isDragging = true;
+    const touch = e.touches[0];
+    const rect = el.getBoundingClientRect();
+    offsetX = touch.clientX - rect.left;
+    offsetY = touch.clientY - rect.top;
+    e.preventDefault();
+  });
+
+  document.addEventListener("touchmove", e => {
+    if(!isDragging) return;
+    const touch = e.touches[0];
+    moveElement(touch.clientX, touch.clientY);
+    e.preventDefault();
+  }, { passive: false });
+
+  document.addEventListener("touchend", () => isDragging = false);
+
+  // --- WHEEL (RESIZE) ---
   el.addEventListener("wheel", e => {
     e.preventDefault();
     let newWidth = el.offsetWidth + (e.deltaY < 0 ? 10 : -10);
     if(newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
   });
+
+  // --- MOVE HELPER FUNCTION ---
+  function moveElement(clientX, clientY){
+    const rect = container.getBoundingClientRect();
+    let x = clientX - rect.left - offsetX;
+    let y = clientY - rect.top - offsetY;
+    x = Math.max(0, Math.min(container.offsetWidth - el.offsetWidth, x));
+    y = Math.max(0, Math.min(container.offsetHeight - el.offsetHeight, y));
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+  }
 }
 
 // ================== DOWNLOAD / STRIPE FIX ==================
