@@ -125,23 +125,23 @@ function makeDraggableResizable(el, container){
   el.style.position = "absolute";
   el.style.cursor = "move";
 
-  // Wrap element so we can attach controls
+  // --- Wrapper ---
   const wrapper = document.createElement("div");
   wrapper.style.position = "absolute";
   wrapper.style.top = el.style.top;
   wrapper.style.left = el.style.left;
-  wrapper.style.width = el.style.width;
-  wrapper.style.height = el.style.height;
+  wrapper.style.width = el.offsetWidth + "px";
+  wrapper.style.height = el.offsetHeight + "px";
   wrapper.style.cursor = "move";
 
   container.appendChild(wrapper);
   wrapper.appendChild(el);
 
-  el.style.position = "absolute";
+  // Reset element positioning INSIDE wrapper
   el.style.top = "0";
   el.style.left = "0";
   el.style.width = "100%";
-  el.style.height = "100%";
+  el.style.height = "auto";   // ✅ FIXED (no stretching)
 
   // ---------- DELETE BUTTON ----------
   const deleteBtn = document.createElement("div");
@@ -204,7 +204,7 @@ function makeDraggableResizable(el, container){
 
   document.addEventListener("mouseup", () => isDragging = false);
 
-  // ---------- RESIZE (DRAG HANDLE) ----------
+  // ---------- RESIZE ----------
   let isResizing = false;
 
   resizeHandle.addEventListener("mousedown", e => {
@@ -220,11 +220,14 @@ function makeDraggableResizable(el, container){
 
     if(newWidth > 50 && newWidth < 800){
       wrapper.style.width = newWidth + "px";
+      el.style.width = "100%";
+      el.style.height = "auto"; // maintain aspect ratio
     }
   });
 
   document.addEventListener("mouseup", () => isResizing = false);
 }
+
 
 // ================== DOWNLOAD ==================
 downloadBtn.addEventListener('click', async () => {
