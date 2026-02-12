@@ -122,11 +122,24 @@ function makeDraggableResizable(el, container){
   });
 }
 
-// ================== DOWNLOAD ==================
+// ================== DOWNLOAD / STRIPE FIX ==================
+let isPaid = false; // make sure this exists at the top of your JS if not already
+
 downloadBtn.addEventListener('click', async () => {
-  window.open(STRIPE_URL, "_blank");
-  const confirmDownload = confirm("After completing payment, click OK to download your design.");
-  if(!confirmDownload) return;
+  
+  if (!isPaid) {
+    // Open Stripe in a new tab
+    window.open(STRIPE_URL, "_blank");
+    
+    // Ask user to confirm payment
+    const confirmDownload = confirm("After completing payment, click OK to unlock and download your design.");
+    if (!confirmDownload) return;
+
+    // Mark as paid
+    isPaid = true;
+    // Remove lock overlay only if you have one, otherwise comment it out
+    // lockOverlay.remove();
+  }
 
   const canvas = document.createElement('canvas');
   canvas.width = scrapCanvas.offsetWidth;
