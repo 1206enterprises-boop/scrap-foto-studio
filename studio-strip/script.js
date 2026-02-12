@@ -142,17 +142,23 @@ function makeDraggableResizable(el, container){
   });
 }
 
-// ================== DOWNLOAD ==================
+// ================== DOWNLOAD / STRIPE FIX ==================
+let isPaid = false; // make sure this exists at the top of your JS if not already
+
 downloadBtn.addEventListener('click', async () => {
   
   if (!isPaid) {
+    // Open Stripe in a new tab
     window.open(STRIPE_URL, "_blank");
-
+    
+    // Ask user to confirm payment
     const confirmDownload = confirm("After completing payment, click OK to unlock and download your design.");
     if (!confirmDownload) return;
 
+    // Mark as paid
     isPaid = true;
-    lockOverlay.remove(); // 🔓 Unlock after payment
+    // Remove lock overlay only if you have one, otherwise comment it out
+    // lockOverlay.remove();
   }
 
   const canvas = document.createElement('canvas');
@@ -182,7 +188,7 @@ downloadBtn.addEventListener('click', async () => {
 
   const link = document.createElement('a');
   link.href = canvas.toDataURL('image/png');
-  link.download = "visura-strip.png";
+  link.download = "visura-4x6.png";
   link.click();
 });
 
