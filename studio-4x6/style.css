@@ -58,8 +58,8 @@ header img {
 /* === SCRAP CANVAS (4x6 frame) === */
 #scrapCanvas {
   position: relative;
-  width: 480px;       /* wider to resemble 4x6 */
-  height: 320px;      /* maintain 4x6 portrait ratio */
+  width: 400px;       /* wider to resemble 4x6 */
+  height: 600px;      /* maintain 4x6 portrait ratio */
   border: 3px solid #FFD700;
   border-radius: 12px;
   margin-bottom: 15px;
