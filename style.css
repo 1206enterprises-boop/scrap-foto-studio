@@ -1,5 +1,3 @@
-/* ================== LANDING PAGE: MOBILE APP STYLE ================== */
-
 /* Body & Global */
 body {
   background: radial-gradient(circle at top left, #0c0c0c, #1a1a1a);
@@ -10,31 +8,16 @@ body {
   justify-content: flex-start;
   align-items: center;
   min-height: 100vh;
-  padding: 0;
-  margin: 0;
-}
-
-/* Centered container for app-like view */
-.app-container {
-  width: 100%;
-  max-width: 420px; /* typical phone width */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 5px;
-  margin: 0 auto;
-
-  /* Move slightly to the right */
-  transform: translateX(10px); /* adjust value as needed */
+  padding: 10px;
 }
 
 /* Logo */
 .logo-container {
   text-align: center;
-  margin: 20px 0 10px 0;
+  margin-bottom: 15px;
 }
 .logo {
-  width: 120px;
+  width: 150px;
   height: auto;
   display: block;
   margin: 0 auto;
@@ -47,13 +30,10 @@ body {
   border: none;
   border-radius: 12px;
   padding: 12px 25px;
-  margin: 10px 0;
+  margin: 10px;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  width: 90%;
-  max-width: 300px;
-  text-align: center;
   transition: all 0.3s ease;
 }
 .modern-btn:hover {
@@ -64,12 +44,11 @@ body {
 /* Camera container */
 .video-container {
   position: relative;
-  margin: 20px 0 10px 0;
-  border: 4px solid gold;
+  margin: 20px auto 10px auto;
+  border: 6px solid gold;
   border-radius: 16px;
   background-color: #000;
-  width: 100%;
-  max-width: 360px;
+  width: 360px;
   height: 480px;
   overflow: hidden;
 }
@@ -78,40 +57,35 @@ video {
   height: 100%;
   object-fit: cover;
   border-radius: 12px;
+  filter: none;
 }
 
 /* Filters */
 .filters-container {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin: 10px 0;
+  gap: 10px;
+  margin-top: 10px;
 }
 .filters-container button {
   font-size: 14px;
-  padding: 6px 10px;
+  padding: 8px 12px;
   border-radius: 8px;
   border: 2px solid gold;
   background: #1a1a1a;
   color: #fff;
   cursor: pointer;
 }
-.filters-container button:hover {
-  transform: scale(1.05);
-}
+.filters-container button:hover { transform: scale(1.05); }
 
 /* Scrap Canvas */
 .scrap-canvas {
   position: relative;
-  margin: 15px 0;
+  margin: 20px auto;
   border: 3px solid gold;
   border-radius: 12px;
   background: #1a1a1a;
   overflow: hidden;
-  width: 100%;
-  max-width: 360px;
-  height: 480px;
 }
 .scrap-canvas .template {
   position: absolute;
@@ -135,50 +109,35 @@ video {
   overflow-x: auto;
   padding: 10px;
   gap: 10px;
-  width: 100%;
-  margin: 10px 0;
+  width: 90%;
+  margin: 10px auto;
   border-top: 2px solid gold;
   border-bottom: 2px solid gold;
 }
 #stickerBar::-webkit-scrollbar {
   height: 8px;
 }
-#stickerBar::-webkit-scrollbar-thumb {
-  background: gold;
-  border-radius: 10px;
-}
+#stickerBar::-webkit-scrollbar-thumb { background: gold; border-radius: 10px; }
 
 /* Navigation buttons */
-.nav-btns {
-  margin: 10px 0;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+.nav-btns { margin-top: 10px; display: flex; justify-content: center; gap: 15px; }
 
 /* Frame/Sticker galleries */
 .frame-options-scroll, .frame-scroll {
   display: flex;
   overflow-x: auto;
-  padding: 15px;
-  gap: 15px;
+  padding: 20px;
+  gap: 20px;
   scrollbar-width: thin;
   scrollbar-color: gold #0c0c0c;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
-.frame-options-scroll::-webkit-scrollbar,
-.frame-scroll::-webkit-scrollbar {
-  height: 8px;
-}
-.frame-options-scroll::-webkit-scrollbar-thumb,
-.frame-scroll::-webkit-scrollbar-thumb {
-  background: gold;
-  border-radius: 10px;
-}
+.frame-options-scroll::-webkit-scrollbar, .frame-scroll::-webkit-scrollbar { height: 10px; }
+.frame-options-scroll::-webkit-scrollbar-thumb, .frame-scroll::-webkit-scrollbar-thumb { background: gold; border-radius: 10px; }
+
 .frame-thumbnail {
-  width: 120px;
-  height: 160px;
+  width: 180px;
+  height: 240px;
   object-fit: cover;
   border: 3px solid gold;
   border-radius: 12px;
@@ -190,26 +149,14 @@ video {
   box-shadow: 0 6px 12px rgba(255, 204, 51, 0.5);
 }
 
-/* ================== MOBILE RESPONSIVE ================== */
-@media screen and (max-width: 480px) {
-  .video-container { height: 400px; }
-  .scrap-canvas { height: 400px; }
-  .modern-btn { font-size: 14px; padding: 10px 15px; }
-  .frame-thumbnail { width: 100px; height: 140px; }
-  #stickerBar { padding: 8px; gap: 8px; }
-  .filters-container { gap: 6px; }
+/* Mobile adjustments */
+@media screen and (max-width:768px){
+  .video-container { 
+    width: 90%; 
+    max-height: 350px; 
+    margin-top: 50px; /* Bring camera lower for mobile */
+  }
+  .scrap-canvas { width: 90%; max-height: 600px; }
+  .sticker-bar { width: 90%; }
+  .modern-btn { padding: 10px 15px; font-size: 14px; margin: 5px; }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
