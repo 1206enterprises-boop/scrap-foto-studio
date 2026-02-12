@@ -47,8 +47,9 @@ takePhotoBtn.addEventListener('click', () => {
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   const ctx = canvas.getContext('2d');
-  ctx.filter = "none"; // filters preview only
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+// ✅ Apply the current video filter to the captured photo
+ctx.filter = video.style.filter || "none";
+ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
   const img = document.createElement('img');
   img.src = canvas.toDataURL('image/png');
