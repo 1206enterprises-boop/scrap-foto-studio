@@ -145,16 +145,36 @@ function makeDraggableResizable(el, container) {
     if (newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
   });
 
-  // 📱 Touch pinch zoom (mobile) — prevent rotation
-  let initialDistance = null;
-  el.addEventListener("touchstart", e => {
-    if (e.touches.length === 2) {
-      initialDistance = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-    }
-  });
+  
+  // 📱 Touch pinch zoom (mobile) — prevent rotation/scroll
+let initialDistance = null;
+el.addEventListener("touchstart", e => {
+  if (e.touches.length === 2) {
+    initialDistance = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+  }
+});
+
+el.addEventListener("touchmove", e => {
+  if (e.touches.length === 2 && initialDistance) {
+    e.preventDefault(); // prevent rotation/scroll
+    let currentDistance = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    let scale = currentDistance / initialDistance;
+    let newWidth = el.offsetWidth * scale;
+    if (newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
+    initialDistance = currentDistance;
+  }
+});
+
+el.addEventListener("touchend", e => {
+  if (e.touches.length < 2) initialDistance = null;
+});
+
 
   el.addEventListener("touchmove", e => {
     if (e.touches.length === 2 && initialDistance) {
