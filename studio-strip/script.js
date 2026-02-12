@@ -153,7 +153,6 @@ function makeDraggableResizable(el, container){
 // ================== DOWNLOAD / STRIPE ==================
 downloadBtn.addEventListener('click', async () => {
 
-  // ✅ Open Stripe and confirm payment
   if (!isPaid) {
     window.open(STRIPE_URL, "_blank");
 
@@ -163,13 +162,13 @@ downloadBtn.addEventListener('click', async () => {
     isPaid = true;
   }
 
-  // ✅ Create canvas for photostrip
+  // Create canvas for photostrip
   const canvas = document.createElement('canvas');
   canvas.width = scrapCanvas.offsetWidth;
   canvas.height = scrapCanvas.offsetHeight;
   const ctx = canvas.getContext('2d');
 
-  // ✅ Draw all images from scrapCanvas
+  // Draw all images from scrapCanvas
   const elements = scrapCanvas.querySelectorAll('img');
   for (let el of elements) {
     const rect = el.getBoundingClientRect();
@@ -182,6 +181,8 @@ downloadBtn.addEventListener('click', async () => {
       img.crossOrigin = "anonymous";
       img.src = el.src;
       img.onload = () => {
+        // ✅ Apply the current filter to the canvas context
+        ctx.filter = currentFilter || "none";
         ctx.drawImage(img, x, y, el.offsetWidth, el.offsetHeight);
         resolve();
       };
@@ -190,7 +191,7 @@ downloadBtn.addEventListener('click', async () => {
 
   addWatermark(canvas);
 
-  // ✅ Trigger download
+  // Trigger download
   const link = document.createElement('a');
   link.href = canvas.toDataURL('image/png');
   link.download = "visura-strip.png";
