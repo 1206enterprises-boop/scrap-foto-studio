@@ -90,13 +90,70 @@ stickers.forEach(url => {
   stickerBar.appendChild(btn);
 });
 
-// ================== DRAG & RESIZE ==================
+// ================== DRAG, RESIZE HANDLE & DELETE ==================
 function makeDraggableResizable(el, container){
+
   el.style.position = "absolute";
   el.style.cursor = "move";
+
+  // Wrap element so we can attach controls
+  const wrapper = document.createElement("div");
+  wrapper.style.position = "absolute";
+  wrapper.style.top = el.style.top;
+  wrapper.style.left = el.style.left;
+  wrapper.style.width = el.style.width;
+  wrapper.style.height = el.style.height;
+  wrapper.style.cursor = "move";
+
+  container.appendChild(wrapper);
+  wrapper.appendChild(el);
+
+  el.style.position = "absolute";
+  el.style.top = "0";
+  el.style.left = "0";
+  el.style.width = "100%";
+  el.style.height = "100%";
+
+  // ---------- DELETE BUTTON ----------
+  const deleteBtn = document.createElement("div");
+  deleteBtn.innerHTML = "✕";
+  deleteBtn.style.position = "absolute";
+  deleteBtn.style.top = "-10px";
+  deleteBtn.style.right = "-10px";
+  deleteBtn.style.width = "22px";
+  deleteBtn.style.height = "22px";
+  deleteBtn.style.background = "black";
+  deleteBtn.style.color = "white";
+  deleteBtn.style.fontSize = "14px";
+  deleteBtn.style.display = "flex";
+  deleteBtn.style.alignItems = "center";
+  deleteBtn.style.justifyContent = "center";
+  deleteBtn.style.borderRadius = "50%";
+  deleteBtn.style.cursor = "pointer";
+  deleteBtn.style.zIndex = "20";
+
+  deleteBtn.onclick = () => wrapper.remove();
+  wrapper.appendChild(deleteBtn);
+
+  // ---------- RESIZE HANDLE ----------
+  const resizeHandle = document.createElement("div");
+  resizeHandle.style.position = "absolute";
+  resizeHandle.style.width = "15px";
+  resizeHandle.style.height = "15px";
+  resizeHandle.style.right = "0";
+  resizeHandle.style.bottom = "0";
+  resizeHandle.style.background = "white";
+  resizeHandle.style.border = "2px solid black";
+  resizeHandle.style.cursor = "se-resize";
+  resizeHandle.style.zIndex = "20";
+
+  wrapper.appendChild(resizeHandle);
+
+  // ---------- DRAG ----------
   let isDragging = false, offsetX, offsetY;
 
-  el.addEventListener("mousedown", e => {
+  wrapper.addEventListener("mousedown", e => {
+    if(e.target === resizeHandle || e.target === deleteBtn) return;
     isDragging = true;
     offsetX = e.offsetX;
     offsetY = e.offsetY;
@@ -104,22 +161,40 @@ function makeDraggableResizable(el, container){
 
   document.addEventListener("mousemove", e => {
     if(!isDragging) return;
+
     let rect = container.getBoundingClientRect();
     let x = e.clientX - rect.left - offsetX;
     let y = e.clientY - rect.top - offsetY;
-    x = Math.max(0, Math.min(container.offsetWidth - el.offsetWidth, x));
-    y = Math.max(0, Math.min(container.offsetHeight - el.offsetHeight, y));
-    el.style.left = x + "px";
-    el.style.top = y + "px";
+
+    x = Math.max(0, Math.min(container.offsetWidth - wrapper.offsetWidth, x));
+    y = Math.max(0, Math.min(container.offsetHeight - wrapper.offsetHeight, y));
+
+    wrapper.style.left = x + "px";
+    wrapper.style.top = y + "px";
   });
 
   document.addEventListener("mouseup", () => isDragging = false);
 
-  el.addEventListener("wheel", e => {
-    e.preventDefault();
-    let newWidth = el.offsetWidth + (e.deltaY < 0 ? 10 : -10);
-    if(newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
+  // ---------- RESIZE (DRAG HANDLE) ----------
+  let isResizing = false;
+
+  resizeHandle.addEventListener("mousedown", e => {
+    e.stopPropagation();
+    isResizing = true;
   });
+
+  document.addEventListener("mousemove", e => {
+    if(!isResizing) return;
+
+    let rect = container.getBoundingClientRect();
+    let newWidth = e.clientX - rect.left - wrapper.offsetLeft;
+
+    if(newWidth > 50 && newWidth < 800){
+      wrapper.style.width = newWidth + "px";
+    }
+  });
+
+  document.addEventListener("mouseup", () => isResizing = false);
 }
 
 // ================== DOWNLOAD ==================
