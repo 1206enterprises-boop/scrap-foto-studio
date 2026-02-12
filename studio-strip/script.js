@@ -25,7 +25,10 @@ let isPaid = false;          // Track if payment is completed
 
 function setFilter(value) {
   currentFilter = value;
+
+  // Apply filter on video element
   video.style.filter = value;
+  video.style.webkitFilter = value; // ✅ ensures Safari / iOS applies it
 }
 
 let photos = [];
