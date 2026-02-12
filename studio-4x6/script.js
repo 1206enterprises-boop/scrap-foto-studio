@@ -135,18 +135,16 @@ stickers.forEach(url => {
 });
 
 // ================== DRAG, RESIZE HANDLE & DELETE ==================
-function makeDraggableResizable(el, container){
-  // Wrap element in a container to hold handles and X button
+function makeDraggableResizable(el, container, startLeft=0, startTop=0){
   const wrapper = document.createElement("div");
   wrapper.style.position = "absolute";
-  wrapper.style.top = el.style.top;
-  wrapper.style.left = el.style.left;
+  wrapper.style.top = startTop + "px";
+  wrapper.style.left = startLeft + "px";
   wrapper.style.width = el.style.width;
   wrapper.style.height = el.style.height;
   wrapper.style.cursor = "move";
   wrapper.style.zIndex = 20;
 
-  // Add photo/sticker to wrapper
   el.style.position = "absolute";
   el.style.top = "0";
   el.style.left = "0";
@@ -154,6 +152,9 @@ function makeDraggableResizable(el, container){
   el.style.height = "100%";
   wrapper.appendChild(el);
   container.appendChild(wrapper);
+
+  // DELETE & RESIZE handle code stays the same...
+}
 
   // === DELETE BUTTON ===
   const deleteBtn = document.createElement("div");
