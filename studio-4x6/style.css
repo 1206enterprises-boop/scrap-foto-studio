@@ -9,8 +9,11 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
 }
 
+/* Animated background */
 body::before {
   content: "";
   position: fixed;
@@ -32,6 +35,7 @@ header {
   width: 100%;
   text-align: center;
   margin: 15px 0;
+  z-index: 2;
 }
 
 header img {
@@ -39,49 +43,58 @@ header img {
   object-fit: contain;
 }
 
-/* === VIDEO & CANVAS === */
+/* === VIDEO === */
 #video {
-  border: 4px solid #222;
-  border-radius: 10px;
+  border: 4px solid #FFD700;
+  border-radius: 16px;
   max-width: 360px;
   width: 90%;
   height: auto;
   display: block;
-  margin-bottom: 15px;
+  margin: 0 auto 15px auto;
+  object-fit: cover;
 }
 
+/* === SCRAP CANVAS === */
 #scrapCanvas {
   position: relative;
-  width: 320px;
-  height: 480px; /* 4x6 portrait ratio */
-  border: 3px solid #444;
+  width: 90%;
+  max-width: 360px;
+  height: 540px; /* 4x6 portrait ratio */
+  border: 3px solid #FFD700;
+  border-radius: 12px;
   margin-bottom: 15px;
   background-color: #111;
+  overflow: hidden;
+  z-index: 1;
 }
 
 /* === LAYERS === */
 #photoLayer img,
 #stickerLayer img {
   position: absolute;
+  cursor: move;
+  border-radius: 6px;
+  z-index: 10;
 }
 
 /* === BUTTONS === */
 .modern-btn {
-  background: linear-gradient(135deg,#111,#333);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.15);
-  padding: 12px 22px;
-  border-radius: 40px;
-  font-weight: 500;
-  letter-spacing: .5px;
+  background: linear-gradient(135deg,#FFD700,#FFCC33);
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 25px;
+  margin: 8px 5px;
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
-  margin: 5px;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 
 .modern-btn:hover {
-  background: linear-gradient(135deg,#222,#444);
-  transform: translateY(-2px);
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(255, 204, 51, 0.5);
 }
 
 /* === STICKER BAR === */
@@ -90,13 +103,39 @@ header img {
   gap: 10px;
   overflow-x: auto;
   margin-bottom: 15px;
-  padding: 5px;
+  padding: 5px 10px;
   width: 90%;
+  justify-content: flex-start;
 }
+
 #stickerBar button img {
   width: 50px;
   height: 50px;
+  border-radius: 8px;
 }
+
+/* === MOBILE OPTIMIZATIONS === */
+@media screen and (max-width: 768px){
+  #video {
+    width: 95%;
+    max-height: 350px;
+  }
+  #scrapCanvas {
+    width: 95%;
+    max-height: 600px;
+  }
+  .modern-btn {
+    width: 80%;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+  }
+  #stickerBar {
+    width: 95%;
+    padding: 5px;
+  }
+}
+
 
 
 
