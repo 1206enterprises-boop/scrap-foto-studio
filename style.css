@@ -23,6 +23,9 @@ body {
   align-items: center;
   padding: 15px;
   margin: 0 auto;
+
+  /* Move slightly to the right */
+  transform: translateX(15px); /* adjust value as needed */
 }
 
 /* Logo */
