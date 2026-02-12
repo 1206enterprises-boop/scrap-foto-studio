@@ -193,19 +193,16 @@ function makeDraggableResizable(el, container) {
 let isPaid = false; // make sure this exists at the top of your JS if not already
 
 downloadBtn.addEventListener('click', async () => {
-  
+
   if (!isPaid) {
-    // Open Stripe in a new tab
+    // Open Stripe
     window.open(STRIPE_URL, "_blank");
-    
-    // Ask user to confirm payment
+
+    // Confirm payment
     const confirmDownload = confirm("After completing payment, click OK to unlock and download your design.");
     if (!confirmDownload) return;
 
-    // Mark as paid
     isPaid = true;
-    // Remove lock overlay only if you have one, otherwise comment it out
-    // lockOverlay.remove();
   }
 
   const canvas = document.createElement('canvas');
@@ -214,7 +211,8 @@ downloadBtn.addEventListener('click', async () => {
   const ctx = canvas.getContext('2d');
 
   const elements = scrapCanvas.querySelectorAll('img');
-  for(let el of elements){
+
+  for (let el of elements) {
     const rect = el.getBoundingClientRect();
     const parentRect = scrapCanvas.getBoundingClientRect();
     const x = rect.left - parentRect.left;
@@ -225,7 +223,34 @@ downloadBtn.addEventListener('click', async () => {
       img.crossOrigin = "anonymous";
       img.src = el.src;
       img.onload = () => {
-        ctx.drawImage(img, x, y, el.offsetWidth, el.offsetHeight);
+
+        // Get current transform
+        const style = window.getComputedStyle(el);
+        const transform = style.transform;
+
+        ctx.save(); // save current context
+
+        // Move to element center
+        ctx.translate(x + (el.offsetWidth / 2), y + (el.offsetHeight / 2));
+
+        if (transform && transform !== "none") {
+          // Parse scale and rotation from matrix
+          const values = transform.match(/matrix\(([^)]+)\)/);
+          if (values) {
+            const parts = values[1].split(',').map(parseFloat);
+            const a = parts[0]; // scaleX * cosθ
+            const b = parts[1]; // scaleX * sinθ
+            const scaleX = Math.sqrt(a*a + b*b);
+            const angle = Math.atan2(b, a);
+            ctx.rotate(angle);
+            ctx.scale(scaleX, scaleX);
+          }
+        }
+
+        // Draw the image centered
+        ctx.drawImage(img, -el.offsetWidth/2, -el.offsetHeight/2, el.offsetWidth, el.offsetHeight);
+
+        ctx.restore(); // restore context
         resolve();
       };
     });
