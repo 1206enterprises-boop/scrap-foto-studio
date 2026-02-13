@@ -60,6 +60,21 @@ header img {
   border-radius: 8px; /* slightly smaller to fit inside container */
 }
 
+/* === Countdown Overlay === */
+#countdownOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 100px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 20px gold;
+  display: none;
+  z-index: 50;
+  pointer-events: none;
+}
+
 /* === FRAME LAYER === */
 #frameLayer {
 position: absolute;
