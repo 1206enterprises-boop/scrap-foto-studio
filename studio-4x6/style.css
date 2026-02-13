@@ -135,14 +135,17 @@ left: 0;
 
 /* === FRAME GALLERY (Above Camera) === */
 .frames-container {
-display: flex;
-overflow-x: auto;
-gap: 15px;
-width: 90%;
-margin: 20px auto;
-padding: 10px 0;
-border-bottom: 2px solid gold;
-border-top: 2px solid gold;
+  display: flex;
+  flex-direction: column;   /* 👈 makes it vertical */
+  gap: 15px;
+  width: 90%;
+  max-height: 300px;        /* 👈 controls visible height */
+  overflow-y: auto;         /* 👈 vertical scroll */
+  overflow-x: hidden;       /* 👈 prevent horizontal scroll */
+  margin: 15px auto;
+  padding: 10px 0;
+  border-top: 2px solid gold;
+  border-bottom: 2px solid gold;
 }
 
 .frames-container::-webkit-scrollbar {
@@ -154,13 +157,12 @@ border-radius: 10px;
 }
 
 .frame-thumbnail {
-width: 120px; /* larger than sticker thumbnails */
-height: 160px;
-object-fit: cover;
-border: 3px solid gold;
-border-radius: 12px;
-cursor: pointer;
-transition: transform 0.3s, box-shadow 0.3s;
+  width: 100%;        /* fill container width */
+  height: auto;
+  border: 3px solid gold;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .frame-thumbnail:hover {
