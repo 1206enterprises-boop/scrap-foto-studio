@@ -173,7 +173,6 @@ video {
   box-shadow: 0 6px 12px rgba(255, 204, 51, 0.5);
 }
 
-/* Mobile adjustments */
 @media screen and (max-width:768px){
   .video-container { 
     width: 90%; 
@@ -183,4 +182,10 @@ video {
   .scrap-canvas { width: 80%; max-height: 600px; }
   .sticker-bar { width: 80%; }
   .modern-btn { padding: 10px 15px; font-size: 14px; margin: 5px; }
+
+  /* Mobile landing page button adjustment */
+  .button-group {
+    flex-direction: column;  /* stack buttons vertically on mobile */
+    gap: 15px;
+  }
 }
