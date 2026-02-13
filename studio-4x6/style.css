@@ -91,6 +91,12 @@ left: 0;
   align-items: center;
 }
 
+.frames-wrapper {
+  display: flex;           /* enable flex */
+  justify-content: center; /* center horizontally */
+  width: 100%;             /* full page width */
+}
+
 /* Force visual order */
 .frames-container { order: 1; }
 .video-container { order: 2; }
