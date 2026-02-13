@@ -85,6 +85,20 @@ left: 0;
   position: absolute;
 }
 
+.centered-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Force visual order */
+.frames-container { order: 1; }
+.video-container { order: 2; }
+.controls { order: 3; }
+.scrap-canvas { order: 4; }
+#stickerBar { order: 5; }
+.download-container { order: 6; }
+.nav-btns { order: 7; }
+
 /* === BUTTONS === */
 .modern-btn {
   background: linear-gradient(135deg,#111,#333);
