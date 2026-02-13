@@ -64,19 +64,58 @@ async function startCamera() {
 startBtn.addEventListener('click', startCamera);
 
 // ================== TAKE PHOTO ==================
-takePhotoBtn.addEventListener('click', () => {
+function takePhoto() {
   if(!video.videoWidth) return;
 
   const canvas = document.createElement('canvas');
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   const ctx = canvas.getContext('2d');
-  ctx.filter = "none"; // filters preview only
+  ctx.filter = "none";
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
   const img = document.createElement('img');
   img.src = canvas.toDataURL('image/png');
 
+  // ================== BUTTON CLICK ==================
+takePhotoBtn.addEventListener('click', () => {
+  startCountdown(3); // change to 5 if you want 5 seconds
+});
+
+  function startCountdown(seconds) {
+  const overlay = document.getElementById("countdownOverlay");
+  let count = seconds;
+
+  overlay.style.display = "block";
+  overlay.textContent = count;
+
+  const interval = setInterval(() => {
+    count--;
+
+    if (count > 0) {
+      overlay.textContent = count;
+    } else {
+      clearInterval(interval);
+      overlay.style.display = "none";
+      takePhoto(); // calls your original photo logic
+    }
+  }, 1000);
+    
+}
+#countdownOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 100px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 20px gold;
+  display: none;
+  z-index: 50;
+  pointer-events: none;
+}
+  
   // 4x6: draggable/resizable
   img.style.width = "150px";
   img.style.height = "auto";
