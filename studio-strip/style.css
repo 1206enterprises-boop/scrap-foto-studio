@@ -141,6 +141,47 @@ header img {
   border-radius: 8px;
 }
 
+/* === FRAME GALLERY === */
+.frames-container {
+  display: flex;
+  flex-direction: column; /* vertical scrolling */
+  gap: 15px;
+  width: 90%;
+  max-height: 300px;      /* height of the visible gallery */
+  overflow-y: auto;       /* vertical scroll */
+  overflow-x: hidden;     /* prevent horizontal scroll */
+  margin: 10px auto;      /* center container */
+  padding: 10px;
+  border-top: 2px solid gold;
+  border-bottom: 2px solid gold;
+}
+
+.frames-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.frames-container::-webkit-scrollbar-thumb {
+  background: gold;
+  border-radius: 5px;
+}
+
+/* Frame thumbnails */
+.frame-thumbnail {
+  width: 100%;             /* full width of gallery container */
+  height: auto;
+  max-height: 120px;       /* optional: limit thumbnail height */
+  object-fit: cover;
+  border: 2px solid gold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.frame-thumbnail:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 8px rgba(255, 204, 51, 0.5);
+}
+
 
 
 
