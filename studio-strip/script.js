@@ -73,50 +73,88 @@ async function startCamera() {
 
 startBtn.addEventListener('click', startCamera);
 
-// ================== TAKE PHOTO ==================
+// ================== TAKE PHOTO WITH COUNTDOWN ==================
 takePhotoBtn.addEventListener('click', () => {
-  if(!video.videoWidth) return;
+  if (!video.videoWidth) return;
 
   // ✅ Limit to 3 photos only
-  if(photos.length >= 3) {
+  if (photos.length >= 3) {
     alert("This strip allows only 3 photos.");
     return;
   }
 
-  const canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  const ctx = canvas.getContext('2d');
-// ✅ Apply the current video filter to the captured photo
-ctx.filter = currentFilter || "none";
-ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  // Start countdown for 3 seconds, then take the photo
+  startCountdown(3, () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
 
-  const img = document.createElement('img');
-  img.src = canvas.toDataURL('image/png');
+    // ✅ Apply the current video filter
+    ctx.filter = currentFilter || "none";
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  // ✅ REAL PHOTO BOOTH SPACING SETTINGS
-  const topMargin = 20;          // space at top
-  const bottomMargin = 60;       // extra space at bottom (booth look)
-  const gap = 20;                // space between photos
+    const img = document.createElement('img');
+    img.src = canvas.toDataURL('image/png');
 
-  const usableHeight = scrapCanvas.offsetHeight - topMargin - bottomMargin - (gap * 2);
-  const slotHeight = usableHeight / 3;
+    // ✅ REAL PHOTO BOOTH SPACING SETTINGS
+    const topMargin = 20;          // space at top
+    const bottomMargin = 60;       // extra space at bottom (booth look)
+    const gap = 20;                // space between photos
 
-img.style.position = "absolute";
+    const usableHeight = scrapCanvas.offsetHeight - topMargin - bottomMargin - (gap * 2);
+    const slotHeight = usableHeight / 3;
 
-// Maintain natural aspect ratio
-img.style.width = "100%";
-img.style.height = slotHeight + "px";
-img.style.objectFit = "cover";
+    img.style.position = "absolute";
+    img.style.width = "100%";
+    img.style.height = slotHeight + "px";
+    img.style.objectFit = "cover";
+    img.style.top = (topMargin + photos.length * (slotHeight + gap)) + "px";
+    img.style.left = "0px";
+    img.style.overflow = "hidden";
 
-// Center image vertically inside slot
-img.style.top = (topMargin + photos.length * (slotHeight + gap)) + "px";
-img.style.left = "0px";
-img.style.overflow = "hidden";
-
-  photos.push(img);
-  photoLayer.appendChild(img);
+    // ✅ Add photo to array and layer
+    photos.push(img);
+    photoLayer.appendChild(img);
+  });
 });
+
+// ================== COUNTDOWN FUNCTION ==================
+function startCountdown(seconds, callback) {
+  const overlay = document.getElementById("countdownOverlay");
+  if (!overlay) return;
+
+  let count = seconds;
+  overlay.style.display = "flex"; // show overlay
+  overlay.textContent = count;
+  overlay.classList.add("countdown-scale"); // animate
+
+  const interval = setInterval(() => {
+    count--;
+
+    if (count > 0) {
+      overlay.textContent = count;
+      overlay.classList.remove("countdown-scale");
+      void overlay.offsetWidth; // restart animation
+      overlay.classList.add("countdown-scale");
+    } else {
+      clearInterval(interval);
+
+      // FLASH effect
+      overlay.textContent = "";
+      overlay.style.backgroundColor = "white";
+      overlay.style.opacity = "0.8";
+      overlay.style.borderRadius = "0";
+      setTimeout(() => {
+        overlay.style.display = "none";
+        overlay.style.backgroundColor = "";
+        overlay.style.opacity = "";
+      }, 200);
+
+      callback(); // call the photo capture after countdown
+    }
+  }, 1000);
+}
 
 // ================== RESET ==================
 resetBtn.addEventListener('click', () => {
