@@ -44,17 +44,24 @@ header img {
 }
 
 /* === VIDEO === */
-#video {
-  border: 20px solid #FFD700;
-  border-radius: 16px;
-  border-image: url('https://i.imgur.com/wood-frame.png') 30 round;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); 
+/* Video container with thick frame */
+.video-container {
+  position: relative;
   max-width: 360px;
   width: 90%;
+  margin: 0 auto 15px auto;
+  border: 25px solid #FFD700;        /* thick gold border */
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(255,215,0,0.7);
+  background: url('https://i.imgur.com/wood-frame.png') center/cover no-repeat; /* optional wood texture */
+}
+
+/* Video inside container */
+#video {
+  width: 100%;
   height: auto;
   display: block;
-  margin: 0 auto 15px auto;
-  object-fit: contain;
+  border-radius: 8px; /* slightly smaller to fit inside container */
 }
 
 /* 🔹 Add these lines to make filters work on mobile */
