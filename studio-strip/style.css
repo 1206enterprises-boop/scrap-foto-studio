@@ -131,6 +131,23 @@ header img {
   box-shadow: 0 6px 12px rgba(255, 204, 51, 0.5);
 }
 
+/* === CENTER CONTROLS === */
+.controls {
+  display: flex;
+  justify-content: center;  /* horizontal centering */
+  align-items: center;      /* vertical alignment if container has height */
+  gap: 15px;                /* space between buttons */
+  margin: 20px auto;        /* vertical spacing and center horizontally */
+  flex-wrap: wrap;          /* wrap buttons on small screens */
+}
+
+.controls-wrapper {
+  display: flex;
+  justify-content: center; /* horizontal centering */
+  align-items: center;     /* vertical centering */
+  height: 100vh;           /* full viewport height */
+}
+
 /* === STICKER BAR === */
 #stickerBar {
   display: flex;
