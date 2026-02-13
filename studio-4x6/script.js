@@ -63,7 +63,51 @@ async function startCamera() {
 
 startBtn.addEventListener('click', startCamera);
 
-// ================== COUNTDOWN ==================
+// ================== TAKE PHOTO + COUNTDOWN ==================
+function takePhoto() {
+  if (!video.videoWidth) return;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  const ctx = canvas.getContext('2d');
+  ctx.filter = "none"; // apply video filter if needed
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  const img = document.createElement('img');
+  img.src = canvas.toDataURL('image/png');
+
+  // 4x6: draggable/resizable
+  img.style.width = "150px";
+  img.style.height = "auto";
+  img.style.top = "10px";
+  img.style.left = "10px";
+  makeDraggableResizable(img, scrapCanvas);
+
+  photos.push(img);
+  photoLayer.appendChild(img);
+
+  // ✅ Add rotate button
+  const rotateBtn = document.createElement('button');
+  rotateBtn.innerHTML = '⟳';
+  rotateBtn.style.position = 'absolute';
+  rotateBtn.style.top = '5px';
+  rotateBtn.style.right = '5px';
+  rotateBtn.style.zIndex = 20;
+  rotateBtn.style.background = '#FFD700';
+  rotateBtn.style.border = 'none';
+  rotateBtn.style.borderRadius = '50%';
+  rotateBtn.style.width = '30px';
+  rotateBtn.style.height = '30px';
+  rotateBtn.style.cursor = 'pointer';
+  rotateBtn.addEventListener('click', () => {
+    img.rotate(90); // rotate 90 degrees per click
+  });
+
+  img.parentElement.appendChild(rotateBtn);
+}
+
 function startCountdown(seconds) {
   const overlay = document.getElementById("countdownOverlay");
   if (!overlay) return;
@@ -80,70 +124,15 @@ function startCountdown(seconds) {
     } else {
       clearInterval(interval);
       overlay.style.display = "none";
-      takePhoto(); // ONLY take photo AFTER countdown
+      takePhoto(); // only take photo after countdown
     }
   }, 1000);
 }
 
-
-// ================== TAKE PHOTO ==================
-function takePhoto() {
-  if (!video.videoWidth) return;
-
-  const canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-
-  const ctx = canvas.getContext('2d');
-  ctx.filter = "none";
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-  const img = document.createElement('img');
-  img.src = canvas.toDataURL('image/png');
-  img.classList.add("captured-photo");
-
-  const photoContainer = document.getElementById("photoContainer");
-  if (photoContainer) {
-    photoContainer.innerHTML = "";
-    photoContainer.appendChild(img);
-  }
-}
-
-
 // ================== BUTTON CLICK ==================
 takePhotoBtn.addEventListener('click', () => {
-  startCountdown(3); // change to 5 if you want longer
+  startCountdown(3); // 3-second countdown
 });
-  
-  // 4x6: draggable/resizable
-  img.style.width = "150px";
-  img.style.height = "auto";
-  img.style.top = "10px";
-  img.style.left = "10px";
-  makeDraggableResizable(img, scrapCanvas);
-
-  photos.push(img);
-  photoLayer.appendChild(img);
-
-  // ✅ Add rotate button
-const rotateBtn = document.createElement('button');
-rotateBtn.innerHTML = '⟳'; // rotate icon
-rotateBtn.style.position = 'absolute';
-rotateBtn.style.top = '5px';
-rotateBtn.style.right = '5px';
-rotateBtn.style.zIndex = 20;
-rotateBtn.style.background = '#FFD700';
-rotateBtn.style.border = 'none';
-rotateBtn.style.borderRadius = '50%';
-rotateBtn.style.width = '30px';
-rotateBtn.style.height = '30px';
-rotateBtn.style.cursor = 'pointer';
-rotateBtn.addEventListener('click', () => {
-  img.rotate(90); // rotate 90 degrees per click
-});
-
-img.parentElement.appendChild(rotateBtn);
-}
 
 // ================== RESET ==================
 resetBtn.addEventListener('click', () => {
