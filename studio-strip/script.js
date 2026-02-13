@@ -155,6 +155,34 @@ stickers.forEach(url => {
   stickerBar.appendChild(btn);
 });
 
+// ================== FRAMES ==================
+const frames = [
+  "https://i.imgur.com/frame1.png",
+  "https://i.imgur.com/frame2.png",
+  "https://i.imgur.com/frame3.png"
+];
+
+const frameLayer = document.getElementById('frameLayer');
+const framesGallery = document.getElementById('framesGallery');
+
+// Create vertical frame thumbnails
+frames.forEach(url => {
+  const img = document.createElement('img');
+  img.src = url;
+  img.className = 'frame-thumbnail';
+  img.addEventListener('click', () => {
+    frameLayer.innerHTML = ''; // remove previous frame
+    const frameImg = document.createElement('img');
+    frameImg.src = url;
+    frameImg.style.width = '100%';
+    frameImg.style.height = '100%';
+    frameImg.style.objectFit = 'cover';
+    frameImg.style.position = 'absolute';
+    frameLayer.appendChild(frameImg);
+  });
+  framesGallery.appendChild(img);
+});
+
 // ================== DRAG & RESIZE ==================
 function makeDraggableResizable(el, container){
   el.style.position = "absolute";
