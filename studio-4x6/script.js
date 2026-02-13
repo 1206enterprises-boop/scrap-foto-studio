@@ -114,17 +114,45 @@ function startCountdown(seconds) {
 
   let count = seconds;
   overlay.style.display = "flex";
+  overlay.style.alignItems = "center";
+  overlay.style.justifyContent = "center";
+  overlay.style.fontSize = "120px";
+  overlay.style.fontWeight = "bold";
+  overlay.style.color = "#fff";
+  overlay.style.textShadow = "0 0 20px gold";
+  overlay.style.background = "rgba(0,0,0,0.5)";
   overlay.textContent = count;
+
+  // Add CSS animation class
+  overlay.classList.add("countdown-scale");
 
   const interval = setInterval(() => {
     count--;
 
     if (count > 0) {
       overlay.textContent = count;
+
+      // Restart the scale animation
+      overlay.classList.remove("countdown-scale");
+      void overlay.offsetWidth; // trigger reflow
+      overlay.classList.add("countdown-scale");
+
     } else {
       clearInterval(interval);
-      overlay.style.display = "none";
-      takePhoto(); // only take photo after countdown
+
+      // Flash effect
+      overlay.style.background = "#fff";
+      overlay.style.color = "#000";
+      overlay.style.textShadow = "none";
+      overlay.textContent = "";
+
+      setTimeout(() => {
+        overlay.style.display = "none";
+        overlay.style.background = "rgba(0,0,0,0.5)";
+        overlay.style.color = "#fff";
+        overlay.style.textShadow = "0 0 20px gold";
+        takePhoto(); // take photo after flash
+      }, 200); // flash duration: 200ms
     }
   }, 1000);
 }
