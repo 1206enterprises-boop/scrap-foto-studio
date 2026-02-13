@@ -76,14 +76,34 @@ header img {
   z-index: 1;
 }
 
-/* === LAYERS === */
-#photoLayer img,
-#stickerLayer img {
-  position: absolute;
-  cursor: move;
-  border-radius: 6px;
-  z-index: 10;
+#photoLayer { 
+  position: relative;   /* keep photos inside canvas */
+  z-index: 1;           /* bottom layer */
 }
+
+#frameLayer { 
+  position: absolute;   /* overlay on top of photos */
+  top: 0; 
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;           /* above photos, below stickers */
+  pointer-events: none; /* allow stickers to be dragged over frames */
+}
+
+#stickerLayer { 
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;          /* top layer */
+}
+
+/* === LAYERS === */
+#photoLayer { z-index: 1; }
+#frameLayer { z-index: 5; pointer-events: none; }
+#stickerLayer { z-index: 10; }
 
 /* === BUTTONS === */
 .modern-btn {
