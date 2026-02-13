@@ -19,6 +19,40 @@ const scrapCanvas = document.getElementById('scrapCanvas');
 const photoLayer = document.getElementById('photoLayer');
 const stickerLayer = document.getElementById('stickerLayer');
 const stickerBar = document.getElementById('stickerBar');
+const frameLayer = document.getElementById('frameLayer');       // overlay frames on photos
+const framesGallery = document.getElementById('framesGallery'); // container for vertical gallery
+
+const frames = [
+  "https://i.imgur.com/frame1.png"",
+  "https://i.imgur.com/frame2.png",
+  "https://i.imgur.com/frame3.png"
+];
+
+frames.forEach(url => {
+  const btn = document.createElement('button');
+  const img = document.createElement('img');
+  img.src = url;
+  img.className = "frame-thumbnail";  // use the CSS thumbnail style
+  btn.appendChild(img);
+
+  btn.addEventListener('click', () => {
+    // Clear previous frame
+    frameLayer.innerHTML = "";
+
+    // Add selected frame overlaying photos
+    const frameImg = document.createElement('img');
+    frameImg.src = url;
+    frameImg.style.position = "absolute";
+    frameImg.style.top = 0;
+    frameImg.style.left = 0;
+    frameImg.style.width = "100%";
+    frameImg.style.height = "100%";
+    frameImg.style.pointerEvents = "none";  // allow dragging stickers over it
+    frameLayer.appendChild(frameImg);
+  });
+
+  framesGallery.appendChild(btn); // append to vertical gallery container
+});
 
 let currentFilter = "none"; // Track the currently selected filter
 let isPaid = false;          // Track if payment is completed
