@@ -44,24 +44,17 @@ header img {
 }
 
 /* === VIDEO === */
-/* Video container with thick frame */
-.video-container {
-  position: relative;
+#video {
+  border: 20px solid #FFD700;
+  border-radius: 16px;
+  border-image: url('https://i.imgur.com/wood-frame.png') 30 round;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); 
   max-width: 360px;
   width: 90%;
-  margin: 0 auto 15px auto;
-  border: 25px solid #FFD700;        /* thick gold border */
-  border-radius: 16px;
-  box-shadow: 0 0 30px rgba(255,215,0,0.7);
-  background: url('https://i.imgur.com/wood-frame.png') center/cover no-repeat; /* optional wood texture */
-}
-
-/* Video inside container */
-#video {
-  width: 100%;
   height: auto;
   display: block;
-  border-radius: 8px; /* slightly smaller to fit inside container */
+  margin: 0 auto 15px auto;
+  object-fit: contain;
 }
 
 /* 🔹 Add these lines to make filters work on mobile */
@@ -131,23 +124,6 @@ header img {
   box-shadow: 0 6px 12px rgba(255, 204, 51, 0.5);
 }
 
-/* === CENTER CONTROLS === */
-.controls {
-  display: flex;
-  justify-content: center;  /* horizontal centering */
-  align-items: center;      /* vertical alignment if container has height */
-  gap: 15px;                /* space between buttons */
-  margin: 20px auto;        /* vertical spacing and center horizontally */
-  flex-wrap: wrap;          /* wrap buttons on small screens */
-}
-
-.controls-wrapper {
-  display: flex;
-  justify-content: center; /* horizontal centering */
-  align-items: center;     /* vertical centering */
-  height: 100vh;           /* full viewport height */
-}
-
 /* === STICKER BAR === */
 #stickerBar {
   display: flex;
@@ -160,8 +136,8 @@ header img {
 }
 
 #stickerBar button img {
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 50px;
   border-radius: 8px;
 }
 
@@ -211,7 +187,6 @@ header img {
     max-height: 220px;
   }
 }
-
 
 
 
