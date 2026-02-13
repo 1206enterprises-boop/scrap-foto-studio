@@ -63,7 +63,7 @@ header img {
 }
 
 /* === Countdown Overlay === */
- #countdownOverlay {
+#countdownOverlay {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -72,9 +72,10 @@ header img {
   font-weight: bold;
   color: white;
   text-shadow: 0 0 20px gold;
-  display: none;
-  z-index: 50;
-  pointer-events: none;
+  display: none;           /* start hidden */
+  z-index: 999;            /* above everything */
+  pointer-events: none;    
+  display: flex;           /* flex for centering */
   justify-content: center;
   align-items: center;
   text-align: center;
