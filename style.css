@@ -23,25 +23,6 @@ body {
   margin: 0 auto;
 }
 
-/* === Landing Page Centering === */
-.centered-container {
-  display: flex;             /* use flexbox */
-  flex-direction: column;    /* stack vertically */
-  justify-content: center;   /* vertical centering */
-  align-items: center;       /* horizontal centering */
-  height: 100vh;             /* fill the viewport */
-  text-align: center;        /* center text above buttons */
-  gap: 20px;                 /* spacing between text and buttons */
-}
-
-.button-group {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;                /* spacing between the two main buttons */
-  flex-wrap: wrap;          /* wrap on small screens */
-}
-
 /* Buttons */
 .modern-btn {
   background: linear-gradient(135deg, #ffd700, #ffcc33);
@@ -173,6 +154,7 @@ video {
   box-shadow: 0 6px 12px rgba(255, 204, 51, 0.5);
 }
 
+/* Mobile adjustments */
 @media screen and (max-width:768px){
   .video-container { 
     width: 90%; 
@@ -182,10 +164,4 @@ video {
   .scrap-canvas { width: 80%; max-height: 600px; }
   .sticker-bar { width: 80%; }
   .modern-btn { padding: 10px 15px; font-size: 14px; margin: 5px; }
-
-  /* Mobile landing page button adjustment */
-  .button-group {
-    flex-direction: column;  /* stack buttons vertically on mobile */
-    gap: 15px;
-  }
 }
