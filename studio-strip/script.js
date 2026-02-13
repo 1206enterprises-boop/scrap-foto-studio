@@ -23,35 +23,30 @@ const frameLayer = document.getElementById('frameLayer');       // overlay frame
 const framesGallery = document.getElementById('framesGallery'); // container for vertical gallery
 
 const frames = [
-  "https://i.imgur.com/frame1.png"",
+  "https://i.imgur.com/frame1.png",
   "https://i.imgur.com/frame2.png",
   "https://i.imgur.com/frame3.png"
 ];
 
 frames.forEach(url => {
-  const btn = document.createElement('button');
   const img = document.createElement('img');
   img.src = url;
-  img.className = "frame-thumbnail";  // use the CSS thumbnail style
-  btn.appendChild(img);
-
-  btn.addEventListener('click', () => {
-    // Clear previous frame
-    frameLayer.innerHTML = "";
-
-    // Add selected frame overlaying photos
+  img.className = 'frame-thumbnail'; // CSS handles sizing
+  img.addEventListener('click', () => {
+    frameLayer.innerHTML = ''; // remove previous frame
     const frameImg = document.createElement('img');
     frameImg.src = url;
-    frameImg.style.position = "absolute";
+    frameImg.style.width = '100%';
+    frameImg.style.height = '100%';
+    frameImg.style.objectFit = 'cover';
+    frameImg.style.position = 'absolute';
     frameImg.style.top = 0;
     frameImg.style.left = 0;
-    frameImg.style.width = "100%";
-    frameImg.style.height = "100%";
-    frameImg.style.pointerEvents = "none";  // allow dragging stickers over it
+    frameImg.style.zIndex = 5;       // frames above photos
+    frameImg.style.pointerEvents = 'none'; // stickers can go over frames
     frameLayer.appendChild(frameImg);
   });
-
-  framesGallery.appendChild(btn); // append to vertical gallery container
+  framesGallery.appendChild(img); // vertical gallery
 });
 
 let currentFilter = "none"; // Track the currently selected filter
@@ -153,34 +148,6 @@ stickers.forEach(url => {
     stickerLayer.appendChild(sticker);
   });
   stickerBar.appendChild(btn);
-});
-
-// ================== FRAMES ==================
-const frames = [
-  "https://i.imgur.com/frame1.png",
-  "https://i.imgur.com/frame2.png",
-  "https://i.imgur.com/frame3.png"
-];
-
-const frameLayer = document.getElementById('frameLayer');
-const framesGallery = document.getElementById('framesGallery');
-
-// Create vertical frame thumbnails
-frames.forEach(url => {
-  const img = document.createElement('img');
-  img.src = url;
-  img.className = 'frame-thumbnail';
-  img.addEventListener('click', () => {
-    frameLayer.innerHTML = ''; // remove previous frame
-    const frameImg = document.createElement('img');
-    frameImg.src = url;
-    frameImg.style.width = '100%';
-    frameImg.style.height = '100%';
-    frameImg.style.objectFit = 'cover';
-    frameImg.style.position = 'absolute';
-    frameLayer.appendChild(frameImg);
-  });
-  framesGallery.appendChild(img);
 });
 
 // ================== DRAG & RESIZE ==================
