@@ -23,6 +23,25 @@ body {
   margin: 0 auto;
 }
 
+/* === Landing Page Centering === */
+.centered-container {
+  display: flex;             /* use flexbox */
+  flex-direction: column;    /* stack vertically */
+  justify-content: center;   /* vertical centering */
+  align-items: center;       /* horizontal centering */
+  height: 100vh;             /* fill the viewport */
+  text-align: center;        /* center text above buttons */
+  gap: 20px;                 /* spacing between text and buttons */
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;                /* spacing between the two main buttons */
+  flex-wrap: wrap;          /* wrap on small screens */
+}
+
 /* Buttons */
 .modern-btn {
   background: linear-gradient(135deg, #ffd700, #ffcc33);
