@@ -63,30 +63,13 @@ async function startCamera() {
 
 startBtn.addEventListener('click', startCamera);
 
-// ================== TAKE PHOTO ==================
-function takePhoto() {
-  if(!video.videoWidth) return;
-
-  const canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  const ctx = canvas.getContext('2d');
-  ctx.filter = "none";
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-  const img = document.createElement('img');
-  img.src = canvas.toDataURL('image/png');
-
-  // ================== BUTTON CLICK ==================
-takePhotoBtn.addEventListener('click', () => {
-  startCountdown(3); // change to 5 if you want 5 seconds
-});
-
-  function startCountdown(seconds) {
+// ================== COUNTDOWN ==================
+function startCountdown(seconds) {
   const overlay = document.getElementById("countdownOverlay");
-  let count = seconds;
+  if (!overlay) return;
 
-  overlay.style.display = "block";
+  let count = seconds;
+  overlay.style.display = "flex";
   overlay.textContent = count;
 
   const interval = setInterval(() => {
@@ -97,24 +80,40 @@ takePhotoBtn.addEventListener('click', () => {
     } else {
       clearInterval(interval);
       overlay.style.display = "none";
-      takePhoto(); // calls your original photo logic
+      takePhoto(); // ONLY take photo AFTER countdown
     }
   }, 1000);
-    
 }
-#countdownOverlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 100px;
-  font-weight: bold;
-  color: white;
-  text-shadow: 0 0 20px gold;
-  display: none;
-  z-index: 50;
-  pointer-events: none;
+
+
+// ================== TAKE PHOTO ==================
+function takePhoto() {
+  if (!video.videoWidth) return;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  const ctx = canvas.getContext('2d');
+  ctx.filter = "none";
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  const img = document.createElement('img');
+  img.src = canvas.toDataURL('image/png');
+  img.classList.add("captured-photo");
+
+  const photoContainer = document.getElementById("photoContainer");
+  if (photoContainer) {
+    photoContainer.innerHTML = "";
+    photoContainer.appendChild(img);
+  }
 }
+
+
+// ================== BUTTON CLICK ==================
+takePhotoBtn.addEventListener('click', () => {
+  startCountdown(3); // change to 5 if you want longer
+});
   
   // 4x6: draggable/resizable
   img.style.width = "150px";
@@ -144,8 +143,7 @@ rotateBtn.addEventListener('click', () => {
 });
 
 img.parentElement.appendChild(rotateBtn);
-
-});
+}
 
 // ================== RESET ==================
 resetBtn.addEventListener('click', () => {
