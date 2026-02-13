@@ -32,7 +32,10 @@ const frameLayer = document.getElementById('frameLayer');
 // Example: create frame buttons (can style as you like)
 frames.forEach(url => {
 const btn = document.createElement('button');
-btn.innerText = "Frame"; // Replace with thumbnail if you want
+const thumb = document.createElement("img");
+thumb.src = url;
+thumb.classList.add("frame-thumbnail");
+btn.appendChild(thumb); // Replace with thumbnail if you want
 btn.addEventListener('click', () => {
 // Clear previous frame
 frameLayer.innerHTML = "";
@@ -44,7 +47,7 @@ frameLayer.appendChild(frameImg);
 });
 
 // Append button to your existing frame selector container
-document.body.appendChild(btn); // Replace 'document.body' with your actual container
+document.getElementById("framesGallery").appendChild(btn); // Replace 'document.body' with your actual container
 });
 
 let photos = [];
