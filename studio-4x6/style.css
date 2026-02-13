@@ -156,67 +156,48 @@ left: 0;
   height: 80px;
 }
 
-/* === FRAME GALLERY (Above Camera) === */
+/* === FRAMES GALLERY (Vertical) === */
 .frames-container {
   display: flex;
-  flex-direction: column;   /* 👈 makes it vertical */
+  flex-direction: column; /* vertical scroll */
   gap: 15px;
   width: 90%;
-  max-height: 300px;        /* 👈 controls visible height */
-  overflow-y: auto;         /* 👈 vertical scroll */
-  overflow-x: hidden;       /* 👈 prevent horizontal scroll */
-  margin: 15px auto;
-  padding: 10px 0;
+  max-height: 300px;      /* visible height of gallery */
+  overflow-y: auto;       /* vertical scrolling */
+  overflow-x: hidden;
+  margin: 10px auto;      /* center gallery */
+  padding: 10px;
   border-top: 2px solid gold;
   border-bottom: 2px solid gold;
 }
 
 .frames-container::-webkit-scrollbar {
-height: 12px;
-}
-.frames-container::-webkit-scrollbar-thumb {
-background: gold;
-border-radius: 10px;
+  width: 10px;
 }
 
+.frames-container::-webkit-scrollbar-thumb {
+  background: gold;
+  border-radius: 5px;
+}
+
+/* Frame thumbnails */
 .frame-thumbnail {
-  width: 100%;        /* fill container width */
-  height: auto;
-  border: 3px solid gold;
-  border-radius: 12px;
+  width: 100%;             /* full width of gallery container */
+  max-height: 120px;       /* optional height limit */
+  object-fit: cover;
+  border: 2px solid gold;
+  border-radius: 8px;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .frame-thumbnail:hover {
-transform: scale(1.05);
-box-shadow: 0 6px 12px rgba(255, 204, 51, 0.5);
+  transform: scale(1.03);
+  box-shadow: 0 4px 8px rgba(255, 204, 51, 0.5);
 }
-
-/* === MOBILE OPTIMIZATIONS === */
-@media screen and (max-width: 768px){
-  #video {
-    width: 95%;
-    max-height: 300px;
-  }
-  #scrapCanvas {
-    width: 95%;
-    max-width: none;
-    aspect-ratio: 2 / 3;
-  }
-  .modern-btn {
-    width: 80%;
-    text-align: center;
-    padding: 10px 0;
-    font-size: 14px;
-  }
-  #stickerBar {
-    width: 95%;
-    padding: 5px;
-  }
-
-  /* === MOBILE FRAMES VERTICAL SCROLL ADJUSTMENT === */
+/* Mobile optimization */
+@media screen and (max-width: 768px) {
   .frames-container {
-    max-height: 220px;  /* shorter height on mobile for better scroll */
+    max-height: 220px;
   }
 }
