@@ -5,128 +5,57 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scrap Foto Studio</title>
 <link rel="stylesheet" href="style.css">
-<style>
-  body {
-    background: #000;
-    color: #fff;
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .centered-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 30px;
-    width: 90%;
-    max-width: 400px;
-  }
-
-  /* ✅ Moving Camera GIF */
-  .moving-camera {
-    width: 250px;
-    height: auto;
-    margin-bottom: 25px;
-  }
-
-  /* ✅ Instruction Box */
-  .instruction-box {
-    width: 100%;
-    border: 3px solid #FFD700;
-    border-radius: 12px;
-    background-color: #111;
-    padding: 15px;
-    margin-bottom: 25px;
-  }
-
-  .instruction-box h3 {
-    margin: 0 0 10px 0;
-    text-align: center;
-    color: #FFD700;
-    font-size: 20px;
-  }
-
-  .instruction-step {
-    padding: 10px 0;
-    text-align: left;
-  }
-
-  .instruction-step:not(:last-child) {
-    border-bottom: 1px solid #FFD700;
-  }
-
-  /* Buttons */
-  .button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
-  }
-
-  .modern-btn {
-    background: linear-gradient(135deg,#FFD700,#FFCC33);
-    color: #000;
-    border: none;
-    border-radius: 12px;
-    padding: 12px 25px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-  }
-
-  .modern-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(255, 204, 51, 0.5);
-  }
-</style>
 </head>
 <body>
 
+<!-- LOGO -->
 <div class="logo-container">
-  <img src="https://static.wixstatic.com/media/67478d_07b399da6cec4eedabdc9ff31dce1feb~mv2.png" alt="Scrap Foto Studio Logo" class="logo">
+  <img src="https://static.wixstatic.com/media/67478d_07b399da6cec4eedabdc9ff31dce1feb~mv2.png" 
+       alt="Scrap Foto Studio Logo" class="logo">
 </div>
 
+<!-- MAIN CONTENT -->
 <div class="centered-container">
 
-  <!-- ✅ Moving Camera GIF -->
-  <img id="movingCamera" class="moving-camera" src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Moving Camera GIF">
-
-  <!-- ✅ 3-Step Instruction Box -->
-  <div class="instruction-box">
-    <h3>How It Works</h3>
-    <div class="instruction-step">Step 1: Enter the studio and select your session type.</div>
-    <div class="instruction-step">Step 2: Capture your photos using the live camera.</div>
-    <div class="instruction-step">Step 3: Customize your photos with frames and stickers.</div>
+  <!-- ✅ CAMERA GIF -->
+  <div class="camera-gif-container">
+    <img id="cameraGif" src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" 
+         alt="Moving Camera GIF">
   </div>
 
-  <!-- ✅ Buttons -->
+  <!-- ✅ 3-STEP INSTRUCTIONS -->
+  <div class="instruction-box">
+    <div class="instruction-step">
+      <strong>Step 1:</strong> Enter your session and choose your type.
+    </div>
+    <div class="instruction-step">
+      <strong>Step 2:</strong> Use the camera to capture your photos.
+    </div>
+    <div class="instruction-step">
+      <strong>Step 3:</strong> Add stickers, frames, and download your photos.
+    </div>
+  </div>
+
+  <!-- ✅ MAIN BUTTONS -->
   <div class="button-group">
-    <button class="modern-btn" onclick="window.location.href='studio-strip/index.html?type=strip'">1"x3" Photo Strip</button>
-    <button class="modern-btn" onclick="window.location.href='studio-4x6/index.html?type=4x6'">4"x6" Scrapbook</button>
+    <button class="modern-btn" onclick="window.location.href='studio-strip/index.html?type=strip'">
+      1"x3" Photo Strip
+    </button>
+    <button class="modern-btn" onclick="window.location.href='studio-4x6/index.html?type=4x6'">
+      4"x6" Scrapbook
+    </button>
   </div>
 
 </div>
 
-<script>
-  const movingCamera = document.getElementById('movingCamera');
-  // Example: dynamically change GIF anytime
-  // movingCamera.src = "https://media.giphy.com/media/newGifURL/giphy.gif";
-</script>
-
-</body>
-</html>
-
-<!-- ✅ Footer -->
+<!-- ✅ FOOTER -->
 <footer class="site-footer">
   © 2026 Visura Haus, LLC. All rights reserved. <br>
   Owned and operated by Visura Haus, LLC
 </footer>
+
+</body>
+</html>
 
 
 
