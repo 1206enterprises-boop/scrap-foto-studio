@@ -173,7 +173,8 @@ resetBtn.addEventListener('click', () => {
 const stickers = [
   "https://static.wixstatic.com/media/67478d_4f71ca963cda42a983f251055f03011a~mv2.png",
   "https://static.wixstatic.com/media/67478d_51e4fa7634da47388a030739486d9da2~mv2.png",
-  "https://i.imgur.com/Sticker3.png"
+  "https://i.imgur.com/Sticker3.png",
+  "https://i.imgur.com/Sticker4.png",
 ];
 
 stickers.forEach(url => {
