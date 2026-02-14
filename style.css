@@ -176,3 +176,26 @@ video {
   .sticker-bar { width: 80%; }
   .modern-btn { padding: 10px 15px; font-size: 14px; margin: 5px; }
 }
+
+/* === FOOTER === */
+.site-footer {
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  color: #FFD700;          /* matches your gold theme */
+  padding: 15px 0;
+  background: #000;         /* optional, makes it stand out on black bg */
+  border-top: 2px solid #FFD700;  /* optional gold line on top */
+  position: relative;       /* keeps it in flow at bottom */
+}
+
+/* Stick footer to bottom for short pages */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.centered-container {
+  flex: 1;  /* allows main content to grow and push footer down */
+}
