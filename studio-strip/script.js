@@ -22,8 +22,9 @@ const stickerBar = document.getElementById('stickerBar');
 const frameLayer = document.getElementById('frameLayer');       // overlay frames on photos
 const framesGallery = document.getElementById('framesGallery'); // container for vertical gallery
 
+// ================== FRAMES ==================
 const frames = [
-  "https://i.imgur.com/frame1.png",
+  "https://static.wixstatic.com/media/67478d_1280ee3cf27345d983b01024064aad10~mv2.png",
   "https://i.imgur.com/frame2.png",
   "https://i.imgur.com/frame3.png"
 ];
