@@ -216,3 +216,16 @@ left: 0;
     max-height: 220px;
   }
 }
+
+/* ===== Footer Styling ===== */
+.footer {
+  width: 100%;
+  text-align: center;
+  padding: 12px 0;
+  background: #000;
+  color: #fff;
+  font-size: 14px;
+  border-top: 2px solid gold;
+  margin-top: 20px;
+  position: relative; /* keeps it at the bottom of content */
+}
