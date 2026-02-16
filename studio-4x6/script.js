@@ -63,6 +63,8 @@ async function startCamera() {
 
 startBtn.addEventListener('click', startCamera);
 
+let currentMode = "4x6"; // "strip" or "4x"
+
 // ================== TAKE PHOTO + COUNTDOWN ==================
 function takePhoto() {
   if (!video.videoWidth) return;
@@ -75,8 +77,19 @@ function takePhoto() {
   ctx.filter = "none"; // apply video filter if needed
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
+  const wrapper = document.createElement('div');
+  wrapper.style.position = "absolute";
+  wrapper.style.top = "10px";
+  wrapper.style.left = "10px";
+
   const img = document.createElement('img');
   img.src = canvas.toDataURL('image/png');
+  img.style.width = "150px";
+  img.style.height = "auto";
+
+  wrapper.appendChild(img);
+  makeDraggableResizable(wrapper, scrapCanvas);
+  photoLayer.appendChild(wrapper);
 
   // 4x6: draggable/resizable
   img.style.width = "150px";
@@ -89,24 +102,24 @@ function takePhoto() {
   photoLayer.appendChild(img);
 
   // ✅ Add rotate button
-  const rotateBtn = document.createElement('button');
-  rotateBtn.innerHTML = '⟳';
-  rotateBtn.style.position = 'absolute';
-  rotateBtn.style.top = '5px';
-  rotateBtn.style.right = '5px';
-  rotateBtn.style.zIndex = 20;
-  rotateBtn.style.background = '#FFD700';
-  rotateBtn.style.border = 'none';
-  rotateBtn.style.borderRadius = '50%';
-  rotateBtn.style.width = '30px';
-  rotateBtn.style.height = '30px';
-  rotateBtn.style.cursor = 'pointer';
-  rotateBtn.addEventListener('click', () => {
-    img.rotate(90); // rotate 90 degrees per click
-  });
+const rotateBtn = document.createElement('button');
+rotateBtn.innerHTML = '⟳';
+rotateBtn.style.position = 'absolute';
+rotateBtn.style.top = '-15px';
+rotateBtn.style.right = '-15px';
+rotateBtn.style.zIndex = 20;
+rotateBtn.style.background = '#FFD700';
+rotateBtn.style.border = 'none';
+rotateBtn.style.borderRadius = '50%';
+rotateBtn.style.width = '30px';
+rotateBtn.style.height = '30px';
+rotateBtn.style.cursor = 'pointer';
 
-  img.parentElement.appendChild(rotateBtn);
-}
+rotateBtn.addEventListener('click', () => {
+  wrapper.rotate(90);
+});
+
+wrapper.appendChild(rotateBtn);
 
 function startCountdown(seconds) {
   const overlay = document.getElementById("countdownOverlay");
@@ -122,6 +135,57 @@ function startCountdown(seconds) {
   overlay.style.textShadow = "0 0 20px gold";
   overlay.style.background = "rgba(0,0,0,0.5)";
   overlay.textContent = count;
+
+  function capturePhoto(index, maxPhotos) {
+
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+
+  ctx.filter = currentFilter || "none";
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  const img = document.createElement('img');
+  img.src = canvas.toDataURL('image/png');
+
+  img.style.position = "absolute";
+  img.style.left = "0px";
+  img.style.width = "100%";
+  img.style.objectFit = "cover";
+
+  if (currentMode === "4x6") {
+
+    const topMargin = 20;
+    const bottomMargin = 60;
+    const gap = 20;
+
+    const usableHeight = scrapCanvas.offsetHeight - topMargin - bottomMargin - (gap * (maxPhotos - 1));
+    const slotHeight = usableHeight / maxPhotos;
+
+    img.style.height = slotHeight + "px";
+    img.style.top = (topMargin + index * (slotHeight + gap)) + "px";
+
+  } else {
+
+    // 4x layout (2x2 grid)
+    const gap = 10;
+    const size = (scrapCanvas.offsetWidth - gap) / 2;
+
+    img.style.width = size + "px";
+    img.style.height = size + "px";
+
+    const row = Math.floor(index / 2);
+    const col = index % 2;
+
+    img.style.left = (col * (size + gap)) + "px";
+    img.style.top = (row * (size + gap)) + "px";
+
+  }
+
+  photos.push(img);
+  photoLayer.appendChild(img);
+}
 
   // Add CSS animation class
   overlay.classList.add("countdown-scale");
@@ -158,8 +222,28 @@ function startCountdown(seconds) {
 }
 
 // ================== BUTTON CLICK ==================
-takePhotoBtn.addEventListener('click', () => {
-  startCountdown(3); // 3-second countdown
+takePhotoBtn.addEventListener('click', async () => {
+
+  if (!video.videoWidth) return;
+
+  photos = [];
+  photoLayer.innerHTML = '';
+
+  const maxPhotos = currentMode === "strip" ? 3 : 4;
+
+  for (let i = 0; i < maxPhotos; i++) {
+
+    await new Promise(resolve => {
+      startCountdown(3, () => {
+
+        capturePhoto(i, maxPhotos);
+        resolve();
+
+      });
+    });
+
+  }
+
 });
 
 // ================== RESET ==================
@@ -298,11 +382,10 @@ downloadBtn.addEventListener('click', async () => {
     window.open(STRIPE_URL, "_blank");
 
     // Confirm payment
-    const confirmDownload = confirm("After completing payment, click OK to unlock and download your design.");
-    if (!confirmDownload) return;
-
-    isPaid = true;
-  }
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("paid") === "true") {
+  isPaid = true;
+}
 
   const canvas = document.createElement('canvas');
   canvas.width = scrapCanvas.offsetWidth;
