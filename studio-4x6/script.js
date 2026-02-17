@@ -75,10 +75,6 @@ frames.forEach(url => {
   framesGallery.appendChild(btn); // ensure this points to your frame container
 });
 
-// Append button to your existing frame selector container
-document.getElementById("framesGallery").appendChild(btn); // Replace 'document.body' with your actual container
-});
-
 let photos = [];
 
 async function startCamera() {
@@ -167,8 +163,7 @@ function startCountdown(seconds) {
   overlay.style.background = "rgba(0,0,0,0.5)";
   overlay.textContent = count;
 
-  function capturePhoto(index, maxPhotos) {
-
+function capturePhoto(index, maxPhotos) {
   const canvas = document.createElement('canvas');
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
@@ -179,45 +174,34 @@ function startCountdown(seconds) {
 
   const img = document.createElement('img');
   img.src = canvas.toDataURL('image/png');
-
   img.style.position = "absolute";
   img.style.left = "0px";
   img.style.width = "100%";
   img.style.objectFit = "cover";
 
   if (currentMode === "4x6") {
-
     const topMargin = 20;
     const bottomMargin = 60;
     const gap = 20;
-
     const usableHeight = scrapCanvas.offsetHeight - topMargin - bottomMargin - (gap * (maxPhotos - 1));
     const slotHeight = usableHeight / maxPhotos;
-
     img.style.height = slotHeight + "px";
     img.style.top = (topMargin + index * (slotHeight + gap)) + "px";
-
   } else {
-
-    // 4x layout (2x2 grid)
     const gap = 10;
     const size = (scrapCanvas.offsetWidth - gap) / 2;
-
-    img.style.width = size + "px";
-    img.style.height = size + "px";
-
     const row = Math.floor(index / 2);
     const col = index % 2;
-
+    img.style.width = size + "px";
+    img.style.height = size + "px";
     img.style.left = (col * (size + gap)) + "px";
     img.style.top = (row * (size + gap)) + "px";
-
   }
 
   photos.push(img);
   photoLayer.appendChild(img);
 }
-
+  
   // Add CSS animation class
   overlay.classList.add("countdown-scale");
 
