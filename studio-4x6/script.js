@@ -20,6 +20,34 @@ const photoLayer = document.getElementById('photoLayer');
 const stickerLayer = document.getElementById('stickerLayer');
 const stickerBar = document.getElementById('stickerBar');
 
+const stickers = [
+  "https://static.wixstatic.com/media/67478d_4f71ca963cda42a983f251055f03011a~mv2.png",
+  "https://static.wixstatic.com/media/67478d_51e4fa7634da47388a030739486d9da2~mv2.png",
+  "https://i.imgur.com/Sticker3.png",
+  "https://i.imgur.com/Sticker4.png",
+];
+
+stickers.forEach(url => {
+  const btn = document.createElement('button');
+  const img = document.createElement('img');
+  img.src = url;
+  btn.appendChild(img);
+
+  btn.addEventListener('click', () => {
+    const sticker = document.createElement('img');
+    sticker.src = url;
+    sticker.style.width = "80px";
+    sticker.style.height = "80px";
+    sticker.style.position = "absolute";
+    sticker.style.top = "20px";
+    sticker.style.left = "20px";
+    makeDraggableResizable(sticker, scrapCanvas);
+    stickerLayer.appendChild(sticker);
+  });
+
+  stickerBar.appendChild(btn);
+});
+
 // ================== FRAMES ==================
 const frames = [
 "https://static.wixstatic.com/media/67478d_f571bbe25fa64624a6610dbaa0c0daa5~mv2.png",
@@ -28,22 +56,23 @@ const frames = [
 ];
 
 const frameLayer = document.getElementById('frameLayer');
+const framesGallery = document.getElementById("framesGallery");
 
-// Example: create frame buttons (can style as you like)
 frames.forEach(url => {
-const btn = document.createElement('button');
-const thumb = document.createElement("img");
-thumb.src = url;
-thumb.classList.add("frame-thumbnail");
-btn.appendChild(thumb); // Replace with thumbnail if you want
-btn.addEventListener('click', () => {
-// Clear previous frame
-frameLayer.innerHTML = "";
+  const btn = document.createElement('button');
+  const thumb = document.createElement("img");
+  thumb.src = url;
+  thumb.classList.add("frame-thumbnail");
+  btn.appendChild(thumb);
 
-// Add selected frame
-const frameImg = document.createElement('img');
-frameImg.src = url;
-frameLayer.appendChild(frameImg);
+  btn.addEventListener('click', () => {
+    frameLayer.innerHTML = ""; // clear previous frame
+    const frameImg = document.createElement('img');
+    frameImg.src = url;
+    frameLayer.appendChild(frameImg);
+  });
+
+  framesGallery.appendChild(btn); // ensure this points to your frame container
 });
 
 // Append button to your existing frame selector container
@@ -55,12 +84,14 @@ let photos = [];
 async function startCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
-    video.srcObject = stream;
+    video.srcObject = stream; // attach stream directly to existing <video>
+    video.play();
   } catch(err) {
     alert("Camera not accessible: " + err);
   }
 }
 
+// Attach start button
 startBtn.addEventListener('click', startCamera);
 
 let currentMode = "4x6"; // "strip" or "4x"
