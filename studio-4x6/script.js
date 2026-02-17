@@ -6,7 +6,7 @@ function addWatermark(canvas) {
   ctx.font = "bold 40px Arial";
   ctx.fillStyle = "rgba(255,255,255,0.25)";
   ctx.textAlign = "center";
-  ctx.fillText("VISURA HAUS", canvas.width / 2, canvas.height / 2);
+  ctx.fillText("VISURA HAUS", canvas.width/2, canvas.height/2);
 }
 
 // ================== CAMERA ==================
@@ -19,89 +19,43 @@ const scrapCanvas = document.getElementById('scrapCanvas');
 const photoLayer = document.getElementById('photoLayer');
 const stickerLayer = document.getElementById('stickerLayer');
 const stickerBar = document.getElementById('stickerBar');
-const frameLayer = document.getElementById('frameLayer');
-const framesGallery = document.getElementById("framesGallery");
-
-// ================== 4x6 Canvas Setup ==================
-let currentMode = "4x6"; // "strip" or "4x6"
-if (currentMode === "4x6") {
-  scrapCanvas.style.height = '1000px'; // adjust for mobile
-  scrapCanvas.style.position = 'relative';
-  photoLayer.style.position = 'absolute';
-  stickerLayer.style.position = 'absolute';
-  frameLayer.style.position = 'absolute';
-}
-
-// ================== STICKERS ==================
-const stickers = [
-  "https://static.wixstatic.com/media/67478d_4f71ca963cda42a983f251055f03011a~mv2.png",
-  "https://static.wixstatic.com/media/67478d_51e4fa7634da47388a030739486d9da2~mv2.png",
-  "https://i.imgur.com/Sticker3.png",
-  "https://i.imgur.com/Sticker4.png",
-];
-
-stickers.forEach(url => {
-  const btn = document.createElement('button');
-  const img = document.createElement('img');
-  img.src = url;
-  btn.appendChild(img);
-
-  btn.addEventListener('click', () => {
-    const sticker = document.createElement('img');
-    sticker.src = url;
-    sticker.style.width = "80px";
-    sticker.style.height = "80px";
-    sticker.style.position = "absolute";
-    sticker.style.top = "20px";
-    sticker.style.left = "20px";
-    makeDraggableResizable(sticker, scrapCanvas);
-    stickerLayer.appendChild(sticker);
-  });
-
-  stickerBar.appendChild(btn);
-});
 
 // ================== FRAMES ==================
 const frames = [
-  "https://static.wixstatic.com/media/67478d_f571bbe25fa64624a6610dbaa0c0daa5~mv2.png",
-  "https://static.wixstatic.com/media/67478d_ef3f01a6181540639d224868888348de~mv2.png",
-  "https://i.imgur.com/frame3.png"
+"https://static.wixstatic.com/media/67478d_f571bbe25fa64624a6610dbaa0c0daa5~mv2.png",
+"https://static.wixstatic.com/media/67478d_ef3f01a6181540639d224868888348de~mv2.png",
+"https://i.imgur.com/frame3.png"
 ];
 
+const frameLayer = document.getElementById('frameLayer');
+
+// Example: create frame buttons (can style as you like)
 frames.forEach(url => {
-  const btn = document.createElement('button');
-  const thumb = document.createElement("img");
-  thumb.src = url;
-  thumb.classList.add("frame-thumbnail");
-  btn.appendChild(thumb);
+const btn = document.createElement('button');
+const thumb = document.createElement("img");
+thumb.src = url;
+thumb.classList.add("frame-thumbnail");
+btn.appendChild(thumb); // Replace with thumbnail if you want
+btn.addEventListener('click', () => {
+// Clear previous frame
+frameLayer.innerHTML = "";
 
-  btn.addEventListener('click', () => {
-    frameLayer.innerHTML = ""; // clear previous frame
-    const frameImg = document.createElement('img');
-    frameImg.src = url;
-
-    // ✅ Mobile-friendly frame styling
-    frameImg.style.position = "absolute";
-    frameImg.style.top = 0;
-    frameImg.style.left = 0;
-    frameImg.style.width = "100%";
-    frameImg.style.height = "100%";
-    frameImg.style.objectFit = "cover";
-    frameImg.style.zIndex = 5;
-    frameImg.style.pointerEvents = "none";
-
-    frameLayer.appendChild(frameImg);
-  });
-
-  framesGallery.appendChild(btn);
+// Add selected frame
+const frameImg = document.createElement('img');
+frameImg.src = url;
+frameLayer.appendChild(frameImg);
 });
 
-// ================== CAMERA START ==================
+// Append button to your existing frame selector container
+document.getElementById("framesGallery").appendChild(btn); // Replace 'document.body' with your actual container
+});
+
+let photos = [];
+
 async function startCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
     video.srcObject = stream;
-    video.play();
   } catch(err) {
     alert("Camera not accessible: " + err);
   }
@@ -109,50 +63,52 @@ async function startCamera() {
 
 startBtn.addEventListener('click', startCamera);
 
-let photos = [];
+// ================== TAKE PHOTO + COUNTDOWN ==================
+function takePhoto() {
+  if (!video.videoWidth) return;
 
-// ================== CAPTURE PHOTO ==================
-function capturePhoto(index, maxPhotos) {
   const canvas = document.createElement('canvas');
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
-  const ctx = canvas.getContext('2d');
 
-  ctx.filter = currentFilter || "none";
+  const ctx = canvas.getContext('2d');
+  ctx.filter = "none"; // apply video filter if needed
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
   const img = document.createElement('img');
   img.src = canvas.toDataURL('image/png');
-  img.style.position = "absolute";
-  img.style.left = "0px";
-  img.style.width = "100%";
-  img.style.objectFit = "cover";
 
-  if (currentMode === "4x6") {
-    const topMargin = 20;
-    const bottomMargin = 60;
-    const gap = 20;
-    const usableHeight = scrapCanvas.offsetHeight - topMargin - bottomMargin - (gap * (maxPhotos - 1));
-    const slotHeight = usableHeight / maxPhotos;
-    img.style.height = slotHeight + "px";
-    img.style.top = (topMargin + index * (slotHeight + gap)) + "px";
-  } else {
-    const gap = 10;
-    const size = (scrapCanvas.offsetWidth - gap) / 2;
-    const row = Math.floor(index / 2);
-    const col = index % 2;
-    img.style.width = size + "px";
-    img.style.height = size + "px";
-    img.style.left = (col * (size + gap)) + "px";
-    img.style.top = (row * (size + gap)) + "px";
-  }
+  // 4x6: draggable/resizable
+  img.style.width = "150px";
+  img.style.height = "auto";
+  img.style.top = "10px";
+  img.style.left = "10px";
+  makeDraggableResizable(img, scrapCanvas);
 
   photos.push(img);
   photoLayer.appendChild(img);
+
+  // ✅ Add rotate button
+  const rotateBtn = document.createElement('button');
+  rotateBtn.innerHTML = '⟳';
+  rotateBtn.style.position = 'absolute';
+  rotateBtn.style.top = '5px';
+  rotateBtn.style.right = '5px';
+  rotateBtn.style.zIndex = 20;
+  rotateBtn.style.background = '#FFD700';
+  rotateBtn.style.border = 'none';
+  rotateBtn.style.borderRadius = '50%';
+  rotateBtn.style.width = '30px';
+  rotateBtn.style.height = '30px';
+  rotateBtn.style.cursor = 'pointer';
+  rotateBtn.addEventListener('click', () => {
+    img.rotate(90); // rotate 90 degrees per click
+  });
+
+  img.parentElement.appendChild(rotateBtn);
 }
 
-// ================== COUNTDOWN + TAKE PHOTO ==================
-function startCountdown(seconds, callback) {
+function startCountdown(seconds) {
   const overlay = document.getElementById("countdownOverlay");
   if (!overlay) return;
 
@@ -167,6 +123,7 @@ function startCountdown(seconds, callback) {
   overlay.style.background = "rgba(0,0,0,0.5)";
   overlay.textContent = count;
 
+  // Add CSS animation class
   overlay.classList.add("countdown-scale");
 
   const interval = setInterval(() => {
@@ -174,11 +131,16 @@ function startCountdown(seconds, callback) {
 
     if (count > 0) {
       overlay.textContent = count;
+
+      // Restart the scale animation
       overlay.classList.remove("countdown-scale");
-      void overlay.offsetWidth; // restart animation
+      void overlay.offsetWidth; // trigger reflow
       overlay.classList.add("countdown-scale");
+
     } else {
       clearInterval(interval);
+
+      // Flash effect
       overlay.style.background = "#fff";
       overlay.style.color = "#000";
       overlay.style.textShadow = "none";
@@ -189,30 +151,15 @@ function startCountdown(seconds, callback) {
         overlay.style.background = "rgba(0,0,0,0.5)";
         overlay.style.color = "#fff";
         overlay.style.textShadow = "0 0 20px gold";
-        callback(); // take photo
-      }, 200);
+        takePhoto(); // take photo after flash
+      }, 200); // flash duration: 200ms
     }
   }, 1000);
 }
 
-// ================== TAKE PHOTO BUTTON ==================
-takePhotoBtn.addEventListener('click', async () => {
-  if (!video.videoWidth) return;
-
-  photos = [];
-  photoLayer.innerHTML = '';
-  stickerLayer.innerHTML = '';
-
-  const maxPhotos = currentMode === "strip" ? 3 : 4;
-
-  for (let i = 0; i < maxPhotos; i++) {
-    await new Promise(resolve => {
-      startCountdown(3, () => {
-        capturePhoto(i, maxPhotos);
-        resolve();
-      });
-    });
-  }
+// ================== BUTTON CLICK ==================
+takePhotoBtn.addEventListener('click', () => {
+  startCountdown(3); // 3-second countdown
 });
 
 // ================== RESET ==================
@@ -222,14 +169,41 @@ resetBtn.addEventListener('click', () => {
   stickerLayer.innerHTML = '';
 });
 
+// ================== STICKERS ==================
+const stickers = [
+  "https://static.wixstatic.com/media/67478d_4f71ca963cda42a983f251055f03011a~mv2.png",
+  "https://static.wixstatic.com/media/67478d_51e4fa7634da47388a030739486d9da2~mv2.png",
+  "https://i.imgur.com/Sticker3.png",
+  "https://i.imgur.com/Sticker4.png",
+];
+
+stickers.forEach(url => {
+  const btn = document.createElement('button');
+  const img = document.createElement('img');
+  img.src = url;
+  btn.appendChild(img);
+  btn.addEventListener('click', () => {
+    const sticker = document.createElement('img');
+    sticker.src = url;
+    sticker.style.width = "80px";
+    sticker.style.height = "80px";
+    sticker.style.top = "20px";
+    sticker.style.left = "20px";
+    makeDraggableResizable(sticker, scrapCanvas);
+    stickerLayer.appendChild(sticker);
+  });
+  stickerBar.appendChild(btn);
+});
+
 // ================== DRAG & RESIZE ==================
 function makeDraggableResizable(el, container) {
   el.style.position = "absolute";
   el.style.cursor = "move";
-  el.style.transform = "rotate(0deg)";
+  el.style.transform = "rotate(0deg)"; // start with 0 rotation
   let isDragging = false, offsetX, offsetY;
-  let currentRotation = 0;
+  let currentRotation = 0; // track rotation
 
+  // 🖱 Drag / Mouse events
   el.addEventListener("mousedown", e => {
     isDragging = true;
     offsetX = e.offsetX;
@@ -238,7 +212,7 @@ function makeDraggableResizable(el, container) {
 
   document.addEventListener("mousemove", e => {
     if (!isDragging) return;
-    const rect = container.getBoundingClientRect();
+    let rect = container.getBoundingClientRect();
     let x = e.clientX - rect.left - offsetX;
     let y = e.clientY - rect.top - offsetY;
     x = Math.max(0, Math.min(container.offsetWidth - el.offsetWidth, x));
@@ -249,68 +223,85 @@ function makeDraggableResizable(el, container) {
 
   document.addEventListener("mouseup", () => isDragging = false);
 
+  // 🖱 Mouse wheel resize
   el.addEventListener("wheel", e => {
     e.preventDefault();
     let newWidth = el.offsetWidth + (e.deltaY < 0 ? 10 : -10);
     if (newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
   });
 
-  // Touch support
-  let initialDistance = null;
-  el.addEventListener("touchstart", e => {
-    if (e.touches.length === 2) {
-      initialDistance = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-    } else if (e.touches.length === 1) {
-      isDragging = true;
-      const touch = e.touches[0];
-      const rect = el.getBoundingClientRect();
-      offsetX = touch.clientX - rect.left;
-      offsetY = touch.clientY - rect.top;
-    }
-  });
+  
+  // 📱 Touch pinch zoom (mobile) — prevent rotation/scroll
+let initialDistance = null;
 
-  el.addEventListener("touchmove", e => {
-    if (e.touches.length === 2 && initialDistance) {
-      e.preventDefault();
-      let currentDistance = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-      let scale = currentDistance / initialDistance;
-      let newWidth = el.offsetWidth * scale;
-      if (newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
-      initialDistance = currentDistance;
-    } else if (e.touches.length === 1 && isDragging) {
-      const touch = e.touches[0];
-      const rect = container.getBoundingClientRect();
-      let x = touch.clientX - rect.left - offsetX;
-      let y = touch.clientY - rect.top - offsetY;
-      el.style.left = x + "px";
-      el.style.top = y + "px";
-    }
-  });
+el.addEventListener("touchstart", e => {
+if (e.touches.length === 2) {
+// Pinch zoom start
+initialDistance = Math.hypot(
+e.touches[0].clientX - e.touches[1].clientX,
+e.touches[0].clientY - e.touches[1].clientY
+);
+} else if (e.touches.length === 1) {
+// Single finger drag start
+isDragging = true;
+const touch = e.touches[0];
+const rect = el.getBoundingClientRect();
+offsetX = touch.clientX - rect.left;
+offsetY = touch.clientY - rect.top;
+}
+});
 
-  el.addEventListener("touchend", e => {
-    if (e.touches.length < 2) initialDistance = null;
-    if (e.touches.length === 0) isDragging = false;
-  });
+el.addEventListener("touchmove", e => {
+if (e.touches.length === 2 && initialDistance) {
+// Pinch zoom
+e.preventDefault(); // only block pinch zoom
+let currentDistance = Math.hypot(
+e.touches[0].clientX - e.touches[1].clientX,
+e.touches[0].clientY - e.touches[1].clientY
+);
+let scale = currentDistance / initialDistance;
+let newWidth = el.offsetWidth * scale;
+if (newWidth > 50 && newWidth < 800) el.style.width = newWidth + "px";
+initialDistance = currentDistance;
+} else if (e.touches.length === 1 && isDragging) {
+// Single-finger drag
+const touch = e.touches[0];
+const rect = container.getBoundingClientRect();
+let x = touch.clientX - rect.left - offsetX;
+let y = touch.clientY - rect.top - offsetY;
+x = Math.max(0, Math.min(container.offsetWidth - el.offsetWidth, x));
+y = Math.max(0, Math.min(container.offsetHeight - el.offsetHeight, y));
+el.style.left = x + "px";
+el.style.top = y + "px";
+}
+});
 
+el.addEventListener("touchend", e => {
+if (e.touches.length < 2) initialDistance = null;
+if (e.touches.length === 0) isDragging = false;
+});
+
+  // 🔄 Add rotation function (for desktop button)
   el.rotate = function(deg) {
     currentRotation += deg;
     el.style.transform = `rotate(${currentRotation}deg)`;
   };
 }
 
-// ================== DOWNLOAD / STRIPE ==================
-let isPaid = false;
+// ================== DOWNLOAD / STRIPE FIX ==================
+let isPaid = false; // make sure this exists at the top of your JS if not already
+
 downloadBtn.addEventListener('click', async () => {
+
   if (!isPaid) {
+    // Open Stripe
     window.open(STRIPE_URL, "_blank");
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get("paid") === "true") isPaid = true;
+
+    // Confirm payment
+    const confirmDownload = confirm("After completing payment, click OK to unlock and download your design.");
+    if (!confirmDownload) return;
+
+    isPaid = true;
   }
 
   const canvas = document.createElement('canvas');
@@ -319,6 +310,7 @@ downloadBtn.addEventListener('click', async () => {
   const ctx = canvas.getContext('2d');
 
   const elements = scrapCanvas.querySelectorAll('img');
+
   for (let el of elements) {
     const rect = el.getBoundingClientRect();
     const parentRect = scrapCanvas.getBoundingClientRect();
@@ -330,17 +322,23 @@ downloadBtn.addEventListener('click', async () => {
       img.crossOrigin = "anonymous";
       img.src = el.src;
       img.onload = () => {
+
+        // Get current transform
         const style = window.getComputedStyle(el);
         const transform = style.transform;
-        ctx.save();
-        ctx.translate(x + el.offsetWidth/2, y + el.offsetHeight/2);
+
+        ctx.save(); // save current context
+
+        // Move to element center
+        ctx.translate(x + (el.offsetWidth / 2), y + (el.offsetHeight / 2));
 
         if (transform && transform !== "none") {
+          // Parse scale and rotation from matrix
           const values = transform.match(/matrix\(([^)]+)\)/);
           if (values) {
             const parts = values[1].split(',').map(parseFloat);
-            const a = parts[0];
-            const b = parts[1];
+            const a = parts[0]; // scaleX * cosθ
+            const b = parts[1]; // scaleX * sinθ
             const scaleX = Math.sqrt(a*a + b*b);
             const angle = Math.atan2(b, a);
             ctx.rotate(angle);
@@ -348,8 +346,10 @@ downloadBtn.addEventListener('click', async () => {
           }
         }
 
+        // Draw the image centered
         ctx.drawImage(img, -el.offsetWidth/2, -el.offsetHeight/2, el.offsetWidth, el.offsetHeight);
-        ctx.restore();
+
+        ctx.restore(); // restore context
         resolve();
       };
     });
@@ -365,5 +365,7 @@ downloadBtn.addEventListener('click', async () => {
 
 // ===== Disable Right Click on Images =====
 document.addEventListener('contextmenu', function(e) {
-  if (e.target.tagName === 'IMG') e.preventDefault();
+  if (e.target.tagName === 'IMG') {
+    e.preventDefault();
+  }
 });
