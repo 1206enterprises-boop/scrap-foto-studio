@@ -74,88 +74,59 @@ async function startCamera() {
 
 startBtn.addEventListener('click', startCamera);
 
-// ================== TAKE PHOTO WITH COUNTDOWN ==================
+// ================== TAKE PHOTO WITH COUNTDOWN (Mobile-Friendly) ==================
 takePhotoBtn.addEventListener('click', () => {
   if (!video.videoWidth) return;
 
-  // ✅ Limit to 3 photos only
-  if (photos.length >= 3) {
-    alert("This strip allows only 3 photos.");
+  const maxPhotos = 3; // photostrip allows 3 photos only
+
+  if (photos.length >= maxPhotos) {
+    alert(`This strip allows only ${maxPhotos} photos.`);
     return;
   }
 
-  // Start countdown for 3 seconds, then take the photo
+  // ✅ Start 3-second countdown before taking photo
   startCountdown(3, () => {
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const ctx = canvas.getContext('2d');
 
-    // ✅ Apply the current video filter
+    // Apply current filter
     ctx.filter = currentFilter || "none";
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const img = document.createElement('img');
     img.src = canvas.toDataURL('image/png');
 
-    // ✅ REAL PHOTO BOOTH SPACING SETTINGS
-    const topMargin = 20;          // space at top
-    const bottomMargin = 60;       // extra space at bottom (booth look)
-    const gap = 20;                // space between photos
+    // 🔹 REAL PHOTO BOOTH SPACING SETTINGS
+    const topMargin = 20;          // top space
+    const bottomMargin = 60;       // bottom space
+    const gap = 20;                // gap between photos
+    const numPhotos = maxPhotos;   // total photos in strip
 
-    const usableHeight = scrapCanvas.offsetHeight - topMargin - bottomMargin - (gap * 2);
-    const slotHeight = usableHeight / 3;
+    // 🔹 Calculate photo height to maintain video aspect ratio
+    const videoRatio = video.videoHeight / video.videoWidth; // e.g., 16:9
+    const photoWidth = scrapCanvas.offsetWidth;             // full width of strip
+    const photoHeight = photoWidth * videoRatio;           // maintain aspect ratio
 
+    // 🔹 Dynamically set scrapCanvas height to fit all photos + gaps + margins
+    scrapCanvas.style.height = `${topMargin + bottomMargin + gap*(numPhotos-1) + photoHeight*numPhotos}px`;
+
+    // 🔹 Position photo inside strip
     img.style.position = "absolute";
     img.style.width = "100%";
-    img.style.height = slotHeight + "px";
+    img.style.height = `${photoHeight}px`;
     img.style.objectFit = "cover";
-    img.style.top = (topMargin + photos.length * (slotHeight + gap)) + "px";
+    img.style.top = `${topMargin + photos.length * (photoHeight + gap)}px`;
     img.style.left = "0px";
     img.style.overflow = "hidden";
 
-    // ✅ Add photo to array and layer
+    // ✅ Add photo to layer and array
     photos.push(img);
     photoLayer.appendChild(img);
   });
 });
-
-// ================== COUNTDOWN FUNCTION ==================
-function startCountdown(seconds, callback) {
-  const overlay = document.getElementById("countdownOverlay");
-  if (!overlay) return;
-
-  let count = seconds;
-  overlay.style.display = "flex"; // show overlay
-  overlay.textContent = count;
-  overlay.classList.add("countdown-scale"); // animate
-
-  const interval = setInterval(() => {
-    count--;
-
-    if (count > 0) {
-      overlay.textContent = count;
-      overlay.classList.remove("countdown-scale");
-      void overlay.offsetWidth; // restart animation
-      overlay.classList.add("countdown-scale");
-    } else {
-      clearInterval(interval);
-
-      // FLASH effect
-      overlay.textContent = "";
-      overlay.style.backgroundColor = "white";
-      overlay.style.opacity = "0.8";
-      overlay.style.borderRadius = "0";
-      setTimeout(() => {
-        overlay.style.display = "none";
-        overlay.style.backgroundColor = "";
-        overlay.style.opacity = "";
-      }, 200);
-
-      callback(); // call the photo capture after countdown
-    }
-  }, 1000);
-}
 
 // ================== RESET ==================
 resetBtn.addEventListener('click', () => {
