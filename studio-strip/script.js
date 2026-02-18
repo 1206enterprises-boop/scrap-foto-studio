@@ -127,25 +127,29 @@ takePhotoBtn.addEventListener('click', () => {
     img.src = canvas.toDataURL('image/png');
 
     // Photostrip layout settings...
-    const sidePadding = 20;
-    const topMargin = 40;
-    const bottomMargin = 120;
-    const gap = 25;
-    const numPhotos = maxPhotos;
-    const videoRatio = height / width;
-    const photoWidth = scrapCanvas.offsetWidth - sidePadding*2;
-    const photoHeight = photoWidth * videoRatio;
+ const sidePadding = 20;
+const topMargin = 40;
+const bottomMargin = 120;
+const gap = 25;
+const numPhotos = maxPhotos;
 
-    scrapCanvas.style.height =
-      `${topMargin + bottomMargin + gap*(maxPhotos-1) + photoHeight*maxPhotos}px`;
+// calculate video aspect ratio
+const videoRatio = height / width;
 
-    img.style.position = "absolute";
-    img.style.width = `${photoWidth}px`;
-    img.style.height = `${photoHeight}px`;
-    img.style.objectFit = "cover";
-    img.style.left = `${sidePadding}px`;
-    img.style.top = `${topMargin + photos.length * (photoHeight + gap)}px`;
-    img.style.borderRadius = "8px";
+// photo width based on canvas width minus padding
+const photoWidth = scrapCanvas.offsetWidth - sidePadding*2;
+const photoHeight = photoWidth * videoRatio;
+
+// dynamically set canvas height to fit all photos + margins + gaps
+scrapCanvas.style.height =
+  `${topMargin + bottomMargin + gap*(numPhotos-1) + photoHeight*numPhotos}px`;
+
+// set photo positioning
+img.style.position = "absolute";
+img.style.width = `${photoWidth}px`;
+img.style.height = `${photoHeight}px`;
+img.style.left = `${sidePadding}px`;
+img.style.top = `${topMargin + photos.length * (photoHeight + gap)}px`;
 
     photos.push(img);
     photoLayer.appendChild(img);
