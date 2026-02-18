@@ -98,7 +98,7 @@ header img {
   max-width: 360px;
 
   /* Photostrip Proportions */
-  height: 720px;
+  min-height: 720px;
 
   /* Real strip look */
   background: white;
