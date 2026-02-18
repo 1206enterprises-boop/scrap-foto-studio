@@ -143,7 +143,8 @@ const photoHeight = photoWidth * videoRatio;
 const wrapper = document.querySelector('.photostrip-wrapper');
 const maxCanvasHeight = wrapper.clientHeight - 20; // small padding
 const calculatedHeight = topMargin + bottomMargin + gap*(numPhotos-1) + photoHeight*numPhotos;
-scrapCanvas.style.height = `${Math.min(calculatedHeight, maxCanvasHeight)}px`;
+// scrapCanvas grows naturally with photos
+scrapCanvas.style.height = `${calculatedHeight}px`;
 
 // set photo positioning
 img.style.position = "absolute";
