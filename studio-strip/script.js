@@ -20,6 +20,29 @@ const photoLayer = document.getElementById('photoLayer');
 const stickerLayer = document.getElementById('stickerLayer');
 const stickerBar = document.getElementById('stickerBar');
 
+// ================== PRE-PAYMENT LOCK OVERLAY ==================
+let isPaid = false;
+
+// Create overlay
+const lockOverlay = document.createElement("div");
+lockOverlay.style.position = "absolute";
+lockOverlay.style.top = "0";
+lockOverlay.style.left = "0";
+lockOverlay.style.width = "100%";
+lockOverlay.style.height = "100%";
+lockOverlay.style.background = "rgba(0,0,0,0.4)";
+lockOverlay.style.display = "flex";
+lockOverlay.style.alignItems = "center";
+lockOverlay.style.justifyContent = "center";
+lockOverlay.style.color = "white";
+lockOverlay.style.fontSize = "20px";
+lockOverlay.style.fontWeight = "bold";
+lockOverlay.style.zIndex = "999";
+lockOverlay.innerHTML = "🔒 Complete Payment to Download";
+
+scrapCanvas.style.position = "relative";
+scrapCanvas.appendChild(lockOverlay);
+
 let photos = [];
 
 async function startCamera() {
@@ -37,6 +60,12 @@ startBtn.addEventListener('click', startCamera);
 takePhotoBtn.addEventListener('click', () => {
   if(!video.videoWidth) return;
 
+  // ✅ Limit to 3 photos only
+  if(photos.length >= 3) {
+    alert("This strip allows only 3 photos.");
+    return;
+  }
+
   const canvas = document.createElement('canvas');
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
@@ -47,12 +76,19 @@ takePhotoBtn.addEventListener('click', () => {
   const img = document.createElement('img');
   img.src = canvas.toDataURL('image/png');
 
-  // 1x3 autofit
-  const slotHeight = scrapCanvas.offsetHeight / 4;
+  // ✅ REAL PHOTO BOOTH SPACING SETTINGS
+  const topMargin = 20;          // space at top
+  const bottomMargin = 60;       // extra space at bottom (booth look)
+  const gap = 20;                // space between photos
+
+  const usableHeight = scrapCanvas.offsetHeight - topMargin - bottomMargin - (gap * 2);
+  const slotHeight = usableHeight / 3;
+
+  img.style.position = "absolute";
   img.style.width = "100%";
   img.style.height = slotHeight + "px";
-  img.style.left = "0";
-  img.style.top = photos.length * slotHeight + "px";
+  img.style.left = "0px";
+  img.style.top = (topMargin + photos.length * (slotHeight + gap)) + "px";
 
   photos.push(img);
   photoLayer.appendChild(img);
@@ -124,9 +160,16 @@ function makeDraggableResizable(el, container){
 
 // ================== DOWNLOAD ==================
 downloadBtn.addEventListener('click', async () => {
-  window.open(STRIPE_URL, "_blank");
-  const confirmDownload = confirm("After completing payment, click OK to download your design.");
-  if(!confirmDownload) return;
+  
+  if (!isPaid) {
+    window.open(STRIPE_URL, "_blank");
+
+    const confirmDownload = confirm("After completing payment, click OK to unlock and download your design.");
+    if (!confirmDownload) return;
+
+    isPaid = true;
+    lockOverlay.remove(); // 🔓 Unlock after payment
+  }
 
   const canvas = document.createElement('canvas');
   canvas.width = scrapCanvas.offsetWidth;
