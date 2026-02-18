@@ -116,9 +116,14 @@ header img {
 }
 
 #photoLayer { 
-  position: relative;   /* keep photos inside canvas */
-  z-index: 1;           /* bottom layer */
+  position: absolute;   /* was relative */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
+
 
 #frameLayer { 
   position: absolute;   /* overlay on top of photos */
