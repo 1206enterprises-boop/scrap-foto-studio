@@ -122,6 +122,18 @@ header img {
   z-index: 1;
 }
 
+.photostrip-container {
+  width: 90%;
+  max-width: 360px;
+  height: 95vh; /* almost full viewport height on mobile */
+  overflow-y: auto; /* internal scroll for photostrip */
+  position: relative;
+  margin: 0 auto 20px auto;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+}
+
 #photoLayer { 
   position: absolute;   /* was relative */
   top: 0;
