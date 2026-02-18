@@ -74,6 +74,30 @@ async function startCamera() {
 
 startBtn.addEventListener('click', startCamera);
 
+function startCountdown(seconds, callback) {
+  const overlay = document.getElementById("countdownOverlay");
+  let remaining = seconds;
+
+  overlay.style.display = "flex";
+  overlay.textContent = remaining;
+
+  const interval = setInterval(() => {
+    remaining--;
+
+    if (remaining > 0) {
+      overlay.textContent = remaining;
+      overlay.classList.remove("countdown-scale");
+      void overlay.offsetWidth; // restart animation
+      overlay.classList.add("countdown-scale");
+    } else {
+      clearInterval(interval);
+      overlay.style.display = "none";
+      callback();
+    }
+  }, 1000);
+}
+
+
 // ================== TAKE PHOTO WITH COUNTDOWN (Mobile-Friendly) ==================
 takePhotoBtn.addEventListener('click', () => {
   if (!video.videoWidth) return;
