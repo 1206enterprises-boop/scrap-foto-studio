@@ -115,13 +115,6 @@ header img {
   z-index: 1;
 }
 
-/* Make canvas taller on mobile for proper photo height */
-@media screen and (max-width: 480px) {
-  #scrapCanvas {
-    height: 720px; /* taller so each photo has more space */
-  }
-}
-
 #photoLayer { 
   position: relative;   /* keep photos inside canvas */
   z-index: 1;           /* bottom layer */
