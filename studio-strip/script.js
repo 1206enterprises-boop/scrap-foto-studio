@@ -137,7 +137,7 @@ takePhotoBtn.addEventListener('click', () => {
     const photoHeight = photoWidth * videoRatio;
 
     scrapCanvas.style.height =
-      `${topMargin + bottomMargin + gap*(numPhotos-1) + photoHeight*numPhotos}px`;
+      `${topMargin + bottomMargin + gap*(maxPhotos-1) + photoHeight*maxPhotos}px`;
 
     img.style.position = "absolute";
     img.style.width = `${photoWidth}px`;
