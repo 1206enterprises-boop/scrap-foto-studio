@@ -100,10 +100,15 @@ function startCountdown(seconds, callback) {
 
 // ================== TAKE PHOTO WITH COUNTDOWN (Mobile-Friendly) ==================
 takePhotoBtn.addEventListener('click', () => {
-  if (!video.videoWidth) return;
+  const width = video.videoWidth || video.clientWidth;
+  const height = video.videoHeight || video.clientHeight;
+
+  if (!width || !height) {
+    alert("Camera not ready yet, please wait a moment.");
+    return;
+  }
 
   const maxPhotos = 3;
-
   if (photos.length >= maxPhotos) {
     alert(`This strip allows only ${maxPhotos} photos.`);
     return;
@@ -111,44 +116,41 @@ takePhotoBtn.addEventListener('click', () => {
 
   startCountdown(3, () => {
     const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    canvas.width = width;
+    canvas.height = height;
     const ctx = canvas.getContext('2d');
 
     ctx.filter = currentFilter || "none";
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video, 0, 0, width, height);
 
     const img = document.createElement('img');
     img.src = canvas.toDataURL('image/png');
 
-    // ================= VISUAL STRIP SETTINGS =================
-    const sidePadding = 20;        // white space on left/right
-    const topMargin = 40;          // space at top
-    const bottomMargin = 120;      // larger bottom space for caption
-    const gap = 25;                // spacing between photos
+    // Photostrip layout settings...
+    const sidePadding = 20;
+    const topMargin = 40;
+    const bottomMargin = 120;
+    const gap = 25;
     const numPhotos = maxPhotos;
-
-    const videoRatio = video.videoHeight / video.videoWidth;
-    const photoWidth = scrapCanvas.offsetWidth - (sidePadding * 2);
+    const videoRatio = height / width;
+    const photoWidth = scrapCanvas.offsetWidth - sidePadding*2;
     const photoHeight = photoWidth * videoRatio;
 
-    // Resize strip dynamically
     scrapCanvas.style.height =
       `${topMargin + bottomMargin + gap*(numPhotos-1) + photoHeight*numPhotos}px`;
 
-    // ================= PHOTO POSITIONING =================
     img.style.position = "absolute";
     img.style.width = `${photoWidth}px`;
     img.style.height = `${photoHeight}px`;
     img.style.objectFit = "cover";
     img.style.left = `${sidePadding}px`;
     img.style.top = `${topMargin + photos.length * (photoHeight + gap)}px`;
-    img.style.borderRadius = "8px"; // subtle softness
+    img.style.borderRadius = "8px";
 
     photos.push(img);
     photoLayer.appendChild(img);
 
-    // ================= ADD CAPTION ON LAST PHOTO =================
+    // Add caption on last photo
     if (photos.length === maxPhotos) {
       const caption = document.createElement("div");
       caption.innerText = "VISURA HAUS ✨ " + new Date().toLocaleDateString();
