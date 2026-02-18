@@ -19,29 +19,47 @@ const scrapCanvas = document.getElementById('scrapCanvas');
 const photoLayer = document.getElementById('photoLayer');
 const stickerLayer = document.getElementById('stickerLayer');
 const stickerBar = document.getElementById('stickerBar');
+const frameLayer = document.getElementById('frameLayer');       // overlay frames on photos
+const framesGallery = document.getElementById('framesGallery'); // container for vertical gallery
 
-// ================== PRE-PAYMENT LOCK OVERLAY ==================
-let isPaid = false;
+// ================== FRAMES ==================
+const frames = [
+  "https://static.wixstatic.com/media/67478d_1280ee3cf27345d983b01024064aad10~mv2.png",
+  "https://i.imgur.com/frame2.png",
+  "https://i.imgur.com/frame3.png"
+];
 
-// Create overlay
-const lockOverlay = document.createElement("div");
-lockOverlay.style.position = "absolute";
-lockOverlay.style.top = "0";
-lockOverlay.style.left = "0";
-lockOverlay.style.width = "100%";
-lockOverlay.style.height = "100%";
-lockOverlay.style.background = "rgba(0,0,0,0.4)";
-lockOverlay.style.display = "flex";
-lockOverlay.style.alignItems = "center";
-lockOverlay.style.justifyContent = "center";
-lockOverlay.style.color = "white";
-lockOverlay.style.fontSize = "20px";
-lockOverlay.style.fontWeight = "bold";
-lockOverlay.style.zIndex = "999";
-lockOverlay.innerHTML = "🔒 Complete Payment to Download";
+frames.forEach(url => {
+  const img = document.createElement('img');
+  img.src = url;
+  img.className = 'frame-thumbnail'; // CSS handles sizing
+  img.addEventListener('click', () => {
+    frameLayer.innerHTML = ''; // remove previous frame
+    const frameImg = document.createElement('img');
+    frameImg.src = url;
+    frameImg.style.width = '100%';
+    frameImg.style.height = '100%';
+    frameImg.style.objectFit = 'cover';
+    frameImg.style.position = 'absolute';
+    frameImg.style.top = 0;
+    frameImg.style.left = 0;
+    frameImg.style.zIndex = 5;       // frames above photos
+    frameImg.style.pointerEvents = 'none'; // stickers can go over frames
+    frameLayer.appendChild(frameImg);
+  });
+  framesGallery.appendChild(img); // vertical gallery
+});
 
-scrapCanvas.style.position = "relative";
-scrapCanvas.appendChild(lockOverlay);
+let currentFilter = "none"; // Track the currently selected filter
+let isPaid = false;          // Track if payment is completed
+
+function setFilter(value) {
+  currentFilter = value;
+
+  // Apply filter on video element
+  video.style.filter = value;
+  video.style.webkitFilter = value; // ✅ ensures Safari / iOS applies it
+}
 
 let photos = [];
 
@@ -56,42 +74,58 @@ async function startCamera() {
 
 startBtn.addEventListener('click', startCamera);
 
-// ================== TAKE PHOTO ==================
+// ================== TAKE PHOTO WITH COUNTDOWN (Mobile-Friendly) ==================
 takePhotoBtn.addEventListener('click', () => {
-  if(!video.videoWidth) return;
+  if (!video.videoWidth) return;
 
-  // ✅ Limit to 3 photos only
-  if(photos.length >= 3) {
-    alert("This strip allows only 3 photos.");
+  const maxPhotos = 3; // photostrip allows 3 photos only
+
+  if (photos.length >= maxPhotos) {
+    alert(`This strip allows only ${maxPhotos} photos.`);
     return;
   }
 
-  const canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  const ctx = canvas.getContext('2d');
-  ctx.filter = "none"; // filters preview only
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  // ✅ Start 3-second countdown before taking photo
+  startCountdown(3, () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
 
-  const img = document.createElement('img');
-  img.src = canvas.toDataURL('image/png');
+    // Apply current filter
+    ctx.filter = currentFilter || "none";
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  // ✅ REAL PHOTO BOOTH SPACING SETTINGS
-  const topMargin = 20;          // space at top
-  const bottomMargin = 60;       // extra space at bottom (booth look)
-  const gap = 20;                // space between photos
+    const img = document.createElement('img');
+    img.src = canvas.toDataURL('image/png');
 
-  const usableHeight = scrapCanvas.offsetHeight - topMargin - bottomMargin - (gap * 2);
-  const slotHeight = usableHeight / 3;
+    // 🔹 REAL PHOTO BOOTH SPACING SETTINGS
+    const topMargin = 20;          // top space
+    const bottomMargin = 60;       // bottom space
+    const gap = 20;                // gap between photos
+    const numPhotos = maxPhotos;   // total photos in strip
 
-  img.style.position = "absolute";
-  img.style.width = "100%";
-  img.style.height = slotHeight + "px";
-  img.style.left = "0px";
-  img.style.top = (topMargin + photos.length * (slotHeight + gap)) + "px";
+    // 🔹 Calculate photo height to maintain video aspect ratio
+    const videoRatio = video.videoHeight / video.videoWidth; // e.g., 16:9
+    const photoWidth = scrapCanvas.offsetWidth;             // full width of strip
+    const photoHeight = photoWidth * videoRatio;           // maintain aspect ratio
 
-  photos.push(img);
-  photoLayer.appendChild(img);
+    // 🔹 Dynamically set scrapCanvas height to fit all photos + gaps + margins
+    scrapCanvas.style.height = `${topMargin + bottomMargin + gap*(numPhotos-1) + photoHeight*numPhotos}px`;
+
+    // 🔹 Position photo inside strip
+    img.style.position = "absolute";
+    img.style.width = "100%";
+    img.style.height = `${photoHeight}px`;
+    img.style.objectFit = "cover";
+    img.style.top = `${topMargin + photos.length * (photoHeight + gap)}px`;
+    img.style.left = "0px";
+    img.style.overflow = "hidden";
+
+    // ✅ Add photo to layer and array
+    photos.push(img);
+    photoLayer.appendChild(img);
+  });
 });
 
 // ================== RESET ==================
@@ -103,8 +137,8 @@ resetBtn.addEventListener('click', () => {
 
 // ================== STICKERS ==================
 const stickers = [
-  "https://i.imgur.com/Sticker1.png",
-  "https://i.imgur.com/Sticker2.png",
+  "https://static.wixstatic.com/media/67478d_4f71ca963cda42a983f251055f03011a~mv2.png",
+  "https://static.wixstatic.com/media/67478d_51e4fa7634da47388a030739486d9da2~mv2.png",
   "https://i.imgur.com/Sticker3.png"
 ];
 
@@ -158,9 +192,9 @@ function makeDraggableResizable(el, container){
   });
 }
 
-// ================== DOWNLOAD ==================
+// ================== DOWNLOAD / STRIPE ==================
 downloadBtn.addEventListener('click', async () => {
-  
+
   if (!isPaid) {
     window.open(STRIPE_URL, "_blank");
 
@@ -168,16 +202,17 @@ downloadBtn.addEventListener('click', async () => {
     if (!confirmDownload) return;
 
     isPaid = true;
-    lockOverlay.remove(); // 🔓 Unlock after payment
   }
 
+  // Create canvas for photostrip
   const canvas = document.createElement('canvas');
   canvas.width = scrapCanvas.offsetWidth;
   canvas.height = scrapCanvas.offsetHeight;
   const ctx = canvas.getContext('2d');
 
+  // Draw all images from scrapCanvas
   const elements = scrapCanvas.querySelectorAll('img');
-  for(let el of elements){
+  for (let el of elements) {
     const rect = el.getBoundingClientRect();
     const parentRect = scrapCanvas.getBoundingClientRect();
     const x = rect.left - parentRect.left;
@@ -188,6 +223,8 @@ downloadBtn.addEventListener('click', async () => {
       img.crossOrigin = "anonymous";
       img.src = el.src;
       img.onload = () => {
+        // ✅ Apply the current filter to the canvas context
+        ctx.filter = currentFilter || "none";
         ctx.drawImage(img, x, y, el.offsetWidth, el.offsetHeight);
         resolve();
       };
@@ -196,10 +233,18 @@ downloadBtn.addEventListener('click', async () => {
 
   addWatermark(canvas);
 
+  // Trigger download
   const link = document.createElement('a');
   link.href = canvas.toDataURL('image/png');
   link.download = "visura-strip.png";
   link.click();
+});
+
+// ===== Disable Right Click on Images =====
+document.addEventListener('contextmenu', function(e) {
+  if (e.target.tagName === 'IMG') {
+    e.preventDefault();
+  }
 });
 
 
