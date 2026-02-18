@@ -78,55 +78,72 @@ startBtn.addEventListener('click', startCamera);
 takePhotoBtn.addEventListener('click', () => {
   if (!video.videoWidth) return;
 
-  const maxPhotos = 3; // photostrip allows 3 photos only
+  const maxPhotos = 3;
 
   if (photos.length >= maxPhotos) {
     alert(`This strip allows only ${maxPhotos} photos.`);
     return;
   }
 
-  // ✅ Start 3-second countdown before taking photo
   startCountdown(3, () => {
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const ctx = canvas.getContext('2d');
 
-    // Apply current filter
     ctx.filter = currentFilter || "none";
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const img = document.createElement('img');
     img.src = canvas.toDataURL('image/png');
 
-    // 🔹 REAL PHOTO BOOTH SPACING SETTINGS
-    const topMargin = 20;          // top space
-    const bottomMargin = 60;       // bottom space
-    const gap = 20;                // gap between photos
-    const numPhotos = maxPhotos;   // total photos in strip
+    // ================= VISUAL STRIP SETTINGS =================
+    const sidePadding = 20;        // white space on left/right
+    const topMargin = 40;          // space at top
+    const bottomMargin = 120;      // larger bottom space for caption
+    const gap = 25;                // spacing between photos
+    const numPhotos = maxPhotos;
 
-    // 🔹 Calculate photo height to maintain video aspect ratio
-    const videoRatio = video.videoHeight / video.videoWidth; // e.g., 16:9
-    const photoWidth = scrapCanvas.offsetWidth;             // full width of strip
-    const photoHeight = photoWidth * videoRatio;           // maintain aspect ratio
+    const videoRatio = video.videoHeight / video.videoWidth;
+    const photoWidth = scrapCanvas.offsetWidth - (sidePadding * 2);
+    const photoHeight = photoWidth * videoRatio;
 
-    // 🔹 Dynamically set scrapCanvas height to fit all photos + gaps + margins
-    scrapCanvas.style.height = `${topMargin + bottomMargin + gap*(numPhotos-1) + photoHeight*numPhotos}px`;
+    // Resize strip dynamically
+    scrapCanvas.style.height =
+      `${topMargin + bottomMargin + gap*(numPhotos-1) + photoHeight*numPhotos}px`;
 
-    // 🔹 Position photo inside strip
+    // ================= PHOTO POSITIONING =================
     img.style.position = "absolute";
-    img.style.width = "100%";
+    img.style.width = `${photoWidth}px`;
     img.style.height = `${photoHeight}px`;
     img.style.objectFit = "cover";
+    img.style.left = `${sidePadding}px`;
     img.style.top = `${topMargin + photos.length * (photoHeight + gap)}px`;
-    img.style.left = "0px";
-    img.style.overflow = "hidden";
+    img.style.borderRadius = "8px"; // subtle softness
 
-    // ✅ Add photo to layer and array
     photos.push(img);
     photoLayer.appendChild(img);
+
+    // ================= ADD CAPTION ON LAST PHOTO =================
+    if (photos.length === maxPhotos) {
+      const caption = document.createElement("div");
+      caption.innerText = "VISURA HAUS ✨ " + new Date().toLocaleDateString();
+      caption.style.position = "absolute";
+      caption.style.bottom = "40px";
+      caption.style.width = "100%";
+      caption.style.textAlign = "center";
+      caption.style.fontWeight = "bold";
+      caption.style.fontSize = "22px";
+      caption.style.fontFamily = "Courier New, monospace";
+      caption.style.letterSpacing = "2px";
+      caption.style.color = "#111";
+      caption.style.zIndex = "6";
+
+      photoLayer.appendChild(caption);
+    }
   });
 });
+
 
 // ================== RESET ==================
 resetBtn.addEventListener('click', () => {
