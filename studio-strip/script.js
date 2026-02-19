@@ -244,28 +244,43 @@ function makeDraggableResizable(el, container) {
     positionHandle(handle, pos);
 
     let resizing = false;
-    let startWidth, startHeight;
+    let startDistance;
 
-    handle.addEventListener("mousedown", (e) => {
-      e.stopPropagation();
-      resizing = true;
-      startX = e.clientX;
-      startY = e.clientY;
-      startWidth = el.offsetWidth;
-      startHeight = el.offsetHeight;
-    });
+  handle.addEventListener("mousedown", (e) => {
+  e.stopPropagation();
+  resizing = true;
 
-    document.addEventListener("mousemove", (e) => {
-      if (!resizing) return;
-      let dx = e.clientX - startX;
-      let newWidth = startWidth + dx;
-      if (newWidth > 50) el.style.width = newWidth + "px";
-    });
+  const rect = el.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
 
-    document.addEventListener("mouseup", () => resizing = false);
+  startDistance = Math.hypot(
+    e.clientX - centerX,
+    e.clientY - centerY
+  );
+});
 
-    el.appendChild(handle);
-  });
+document.addEventListener("mousemove", (e) => {
+  if (!resizing) return;
+
+  const rect = el.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+
+  const currentDistance = Math.hypot(
+    e.clientX - centerX,
+    e.clientY - centerY
+  );
+
+  let scaleAmount = currentDistance / startDistance;
+
+  el.style.transform = `rotate(${rotation}deg) scale(${scaleAmount})`;
+});
+
+document.addEventListener("mouseup", () => {
+  resizing = false;
+});
+
 
   // === ROTATE HANDLE ===
   const rotateHandle = document.createElement("div");
