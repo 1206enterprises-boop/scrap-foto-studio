@@ -317,8 +317,6 @@ function makeDraggableResizable(el, container) {
   }
 }
 
-}
-
 // ================== DOWNLOAD / STRIPE FIX ==================
 let isPaid = false; // make sure this exists at the top of your JS if not already
 
