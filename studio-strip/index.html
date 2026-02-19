@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>1x3 Photo Strip Studio</title>
+<title>4x6 Scrapbook Studio</title>
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -13,19 +13,11 @@
 </div>
 
 <div class="centered-container">
-<h2 style="text-align:center;">1"x 3" Photo Strip</h2>
-
-
+<h2 style="text-align:center;">4"x 6" Scrapbook</h2>
+  
   <div class="video-container">
-    <video id="video" autoplay></video>
+    <video id="video" autoplay playsinline></video>
       <div id="countdownOverlay">3</div>
-  </div>
-
-  <!-- Filters -->
-  <div class="filters-container">
-    <button onclick="setFilter('none')">Color</button>
-    <button onclick="setFilter('grayscale(100%)')">Black & White</button>
-    <button onclick="setFilter('sepia(0.6) contrast(1.2) brightness(1.1)')">Vintage</button>
   </div>
 
 <div class="controls-wrapper">
@@ -36,22 +28,22 @@
   </div>
 </div>
 
-<div class="photostrip-container">  
-<div class="scrap-canvas" id="scrapCanvas">
+  <div class="scrap-canvas" id="scrapCanvas" style="width:400px;height:600px;">
+    <div id="frameLayer"></div>
     <img id="templateImg" class="template" src="">
     <div id="photoLayer"></div>
-    <div id="frameLayer"></div>  
     <div id="stickerLayer"></div>
   </div>
 
-  <div class="frames-wrapper">
+<div class="frames-wrapper">
   <div class="frames-container" id="framesGallery"></div>
+</div>
   
   <div class="frame-scroll" id="stickerBar"></div>
 
   <!-- Download button moved here -->
 <div class="download-container" style="text-align:center; margin: 15px 0;">
-<button class="modern-btn" id="downloadBtn">Download (Payment Required)</button>
+  <button class="modern-btn" id="downloadBtn">Download (Payment Required)</button>
 </div>
 
   <div class="nav-btns">
@@ -62,11 +54,6 @@
 
 <script src="../js/html2canvas.min.js"></script>
 <script src="script.js"></script>
-<script>
-  function setFilter(value){
-    document.getElementById('video').style.filter = value;
-  }
-</script>
 </body>
 </html>
 
@@ -75,17 +62,3 @@
   © 2026 Visura Haus, LLC. All rights reserved. <br>
   Owned and operated by Visura Haus, LLC
 </footer>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
