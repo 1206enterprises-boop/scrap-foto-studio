@@ -213,7 +213,7 @@ left: 0;
 /* Mobile optimization */
 @media screen and (max-width: 768px) {
   .frames-container {
-    max-height: 220px;
+    max-height: 1000px;
   }
 }
 
