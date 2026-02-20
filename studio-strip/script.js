@@ -21,39 +21,60 @@ const scrapCanvas = document.getElementById('scrapCanvas');
 const photoLayer = document.getElementById('photoLayer');
 const stickerLayer = document.getElementById('stickerLayer');
 const stickerBar = document.getElementById('stickerBar');
+const frameLayer = document.getElementById('frameLayer');
 
 // ================== FRAMES ==================
 const frames = [
-"https://static.wixstatic.com/media/67478d_f571bbe25fa64624a6610dbaa0c0daa5~mv2.png",
-"https://static.wixstatic.com/media/67478d_ef3f01a6181540639d224868888348de~mv2.png",
-"https://i.imgur.com/frame3.png"
+  "https://static.wixstatic.com/media/67478d_f571bbe25fa64624a6610dbaa0c0daa5~mv2.png",
+  "https://static.wixstatic.com/media/67478d_ef3f01a6181540639d224868888348de~mv2.png",
+  "https://i.imgur.com/frame3.png"
 ];
 
-const frameLayer = document.getElementById('frameLayer');
-
-// Example: create frame buttons (can style as you like)
 frames.forEach(url => {
-const btn = document.createElement('button');
-const thumb = document.createElement("img");
-thumb.src = url;
-thumb.classList.add("frame-thumbnail");
-btn.appendChild(thumb); // Replace with thumbnail if you want
-btn.addEventListener('click', () => {
-// Clear previous frame
-frameLayer.innerHTML = "";
-
-// Add selected frame
-const frameImg = document.createElement('img');
-frameImg.src = url;
-frameLayer.appendChild(frameImg);
+  const btn = document.createElement('button');
+  const thumb = document.createElement("img");
+  thumb.src = url;
+  thumb.classList.add("frame-thumbnail");
+  btn.appendChild(thumb);
+  btn.addEventListener('click', () => {
+    frameLayer.innerHTML = "";
+    const frameImg = document.createElement('img');
+    frameImg.src = url;
+    frameImg.style.position = "absolute";
+    frameImg.style.top = 0;
+    frameImg.style.left = 0;
+    frameImg.style.width = "100%";
+    frameImg.style.height = "100%";
+    frameLayer.appendChild(frameImg);
+  });
+  document.getElementById("framesGallery").appendChild(btn);
 });
 
-// Append button to your existing frame selector container
-document.getElementById("framesGallery").appendChild(btn); // Replace 'document.body' with your actual container
+// ================== STICKERS ==================
+const stickers = [
+  "https://static.wixstatic.com/media/67478d_4f71ca963cda42a983f251055f03011a~mv2.png",
+  "https://static.wixstatic.com/media/67478d_51e4fa7634da47388a030739486d9da2~mv2.png",
+  "https://i.imgur.com/Sticker3.png",
+  "https://i.imgur.com/Sticker4.png"
+];
+
+stickers.forEach(url => {
+  const btn = document.createElement('button');
+  const img = document.createElement('img');
+  img.src = url;
+  btn.appendChild(img);
+  btn.addEventListener('click', () => {
+    const sticker = document.createElement('img');
+    sticker.src = url;
+    sticker.style.width = "80px";
+    sticker.style.height = "80px";
+    stickerLayer.appendChild(sticker);
+    makeDraggableResizable(sticker);
+  });
+  stickerBar.appendChild(btn);
 });
 
-let photos = [];
-
+// ================== CAMERA FUNCTIONS ==================
 async function startCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
@@ -65,21 +86,21 @@ async function startCamera() {
 
 startBtn.addEventListener('click', startCamera);
 
-// ================== TAKE PHOTO + COUNTDOWN ==================
 function takePhoto() {
-  const canvas = document.createElement("canvas");
+  if (!video.videoWidth) return;
+
+  const canvas = document.createElement('canvas');
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext('2d');
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  const img = document.createElement("img");
+  const img = document.createElement('img');
   img.src = canvas.toDataURL("image/png");
   img.style.width = "150px";
   img.style.height = "auto";
-
   photoLayer.appendChild(img);
-  makeDraggableResizable(img, scrapCanvas);
+  makeDraggableResizable(img);
 }
 
 function startCountdown(seconds) {
@@ -97,80 +118,39 @@ function startCountdown(seconds) {
   overlay.style.background = "rgba(0,0,0,0.5)";
   overlay.textContent = count;
 
-  // Add CSS animation class
   overlay.classList.add("countdown-scale");
 
   const interval = setInterval(() => {
     count--;
-
     if (count > 0) {
       overlay.textContent = count;
-
-      // Restart the scale animation
       overlay.classList.remove("countdown-scale");
-      void overlay.offsetWidth; // trigger reflow
+      void overlay.offsetWidth;
       overlay.classList.add("countdown-scale");
-
     } else {
       clearInterval(interval);
-
-      // Flash effect
       overlay.style.background = "#fff";
       overlay.style.color = "#000";
-      overlay.style.textShadow = "none";
       overlay.textContent = "";
-
       setTimeout(() => {
         overlay.style.display = "none";
         overlay.style.background = "rgba(0,0,0,0.5)";
         overlay.style.color = "#fff";
-        overlay.style.textShadow = "0 0 20px gold";
-        takePhoto(); // take photo after flash
-      }, 200); // flash duration: 200ms
+        takePhoto();
+      }, 200);
     }
   }, 1000);
 }
 
-// ================== BUTTON CLICK ==================
-takePhotoBtn.addEventListener('click', () => {
-  startCountdown(3); // 3-second countdown
-});
+takePhotoBtn.addEventListener('click', () => startCountdown(3));
 
-// ================== RESET ==================
 resetBtn.addEventListener('click', () => {
-  photos = [];
-  photoLayer.innerHTML = '';
-  stickerLayer.innerHTML = '';
+  photoLayer.innerHTML = "";
+  stickerLayer.innerHTML = "";
 });
 
-// ================== STICKERS ==================
-const stickers = [
-  "https://static.wixstatic.com/media/67478d_4f71ca963cda42a983f251055f03011a~mv2.png",
-  "https://static.wixstatic.com/media/67478d_51e4fa7634da47388a030739486d9da2~mv2.png",
-  "https://i.imgur.com/Sticker3.png",
-  "https://i.imgur.com/Sticker4.png",
-];
-
-stickers.forEach(url => {
-  const btn = document.createElement('button');
-  const img = document.createElement('img');
-  img.src = url;
-  btn.appendChild(img);
-  btn.addEventListener('click', () => {
-    const sticker = document.createElement('img');
-    sticker.src = url;
-    sticker.style.width = "80px";
-    sticker.style.height = "80px";
-    sticker.style.top = "20px";
-    sticker.style.left = "20px";
-    makeDraggableResizable(sticker, scrapCanvas);
-    stickerLayer.appendChild(sticker);
-  });
-  stickerBar.appendChild(btn);
-});
-
-// ================== DRAG & RESIZE ==================
-function makeDraggableResizable(el, container) {
+// ================== DRAG + RESIZE + ROTATE ==================
+function makeDraggableResizable(el) {
   el.style.position = "absolute";
   el.style.top = "10px";
   el.style.left = "10px";
@@ -206,18 +186,18 @@ function makeDraggableResizable(el, container) {
   document.addEventListener("mouseup", () => isDragging = false);
 
   // --- Resize handle ---
-  const handle = document.createElement("div");
-  handle.className = "resize-handle";
-  handle.style.position = "absolute";
-  handle.style.width = "12px";
-  handle.style.height = "12px";
-  handle.style.background = "#FFD700";
-  handle.style.bottom = "-6px";
-  handle.style.right = "-6px";
-  handle.style.cursor = "se-resize";
-  el.appendChild(handle);
+  const resizeHandle = document.createElement("div");
+  resizeHandle.className = "resize-handle";
+  resizeHandle.style.position = "absolute";
+  resizeHandle.style.width = "12px";
+  resizeHandle.style.height = "12px";
+  resizeHandle.style.background = "#FFD700";
+  resizeHandle.style.bottom = "-6px";
+  resizeHandle.style.right = "-6px";
+  resizeHandle.style.cursor = "se-resize";
+  el.appendChild(resizeHandle);
 
-  handle.addEventListener("mousedown", (e) => {
+  resizeHandle.addEventListener("mousedown", (e) => {
     e.stopPropagation();
     isResizing = true;
     startMouse.x = e.clientX;
@@ -272,19 +252,14 @@ function makeDraggableResizable(el, container) {
   document.addEventListener("mouseup", () => isRotating = false);
 }
 
-// ================== DOWNLOAD / STRIPE FIX ==================
-let isPaid = false; // make sure this exists at the top of your JS if not already
+// ================== DOWNLOAD / STRIPE ==================
+let isPaid = false;
 
 downloadBtn.addEventListener('click', async () => {
-
   if (!isPaid) {
-    // Open Stripe
     window.open(STRIPE_URL, "_blank");
-
-    // Confirm payment
     const confirmDownload = confirm("After completing payment, click OK to unlock and download your design.");
     if (!confirmDownload) return;
-
     isPaid = true;
   }
 
@@ -296,44 +271,33 @@ downloadBtn.addEventListener('click', async () => {
   const elements = scrapCanvas.querySelectorAll('img');
 
   for (let el of elements) {
-    const rect = el.getBoundingClientRect();
-    const parentRect = scrapCanvas.getBoundingClientRect();
-    const x = rect.left - parentRect.left;
-    const y = rect.top - parentRect.top;
-
     await new Promise(resolve => {
       const img = new Image();
       img.crossOrigin = "anonymous";
       img.src = el.src;
       img.onload = () => {
+        const rect = el.getBoundingClientRect();
+        const parentRect = scrapCanvas.getBoundingClientRect();
+        const x = rect.left - parentRect.left;
+        const y = rect.top - parentRect.top;
 
-        // Get current transform
+        ctx.save();
+        ctx.translate(x + el.offsetWidth / 2, y + el.offsetHeight / 2);
+
         const style = window.getComputedStyle(el);
         const transform = style.transform;
-
-        ctx.save(); // save current context
-
-        // Move to element center
-        ctx.translate(x + (el.offsetWidth / 2), y + (el.offsetHeight / 2));
-
         if (transform && transform !== "none") {
-          // Parse scale and rotation from matrix
           const values = transform.match(/matrix\(([^)]+)\)/);
           if (values) {
             const parts = values[1].split(',').map(parseFloat);
-            const a = parts[0]; // scaleX * cosθ
-            const b = parts[1]; // scaleX * sinθ
-            const scaleX = Math.sqrt(a*a + b*b);
+            const a = parts[0], b = parts[1];
             const angle = Math.atan2(b, a);
             ctx.rotate(angle);
-            ctx.scale(scaleX, scaleX);
           }
         }
 
-        // Draw the image centered
         ctx.drawImage(img, -el.offsetWidth/2, -el.offsetHeight/2, el.offsetWidth, el.offsetHeight);
-
-        ctx.restore(); // restore context
+        ctx.restore();
         resolve();
       };
     });
@@ -349,8 +313,7 @@ downloadBtn.addEventListener('click', async () => {
 
 // ===== Disable Right Click on Images =====
 document.addEventListener('contextmenu', function(e) {
-  if (e.target.tagName === 'IMG') {
-    e.preventDefault();
-  }
+  if (e.target.tagName === 'IMG') e.preventDefault();
 });
 
+});
