@@ -185,39 +185,47 @@ function makeDraggableResizable(el, container) {
   el.style.transformOrigin = "center center";
   el.style.cursor = "move";
 
-  let rotation = 0;
-  let scale = 1;
+  let pos = { x: 0, y: 0 };       // element position
+  let transform = { scale: 1, rotation: 0 }; // current transform
   let isDragging = false;
-  let startX, startY, startLeft, startTop;
+  let isResizing = false;
+  let isRotating = false;
+  let startMouse = { x: 0, y: 0 };
+  let startDims = { width: 0, height: 0 };
+  let startDistance = 0;
+  let startRotation = 0;
 
-  // === DRAG MOVE ===
+  // --- Helper: apply transform ---
+  function applyTransform() {
+    el.style.transform = `rotate(${transform.rotation}deg) scale(${transform.scale})`;
+  }
+
+  // --- DRAGGING ---
   el.addEventListener("mousedown", (e) => {
-    if (e.target.classList.contains("resize-handle") || 
-        e.target.classList.contains("rotate-handle")) return;
-
+    if (e.target.classList.contains("resize-handle") || e.target.classList.contains("rotate-handle")) return;
     isDragging = true;
-    startX = e.clientX;
-    startY = e.clientY;
-    startLeft = parseFloat(el.style.left) || 0;
-    startTop = parseFloat(el.style.top) || 0;
+    startMouse.x = e.clientX;
+    startMouse.y = e.clientY;
+    pos.x = parseFloat(el.style.left) || 0;
+    pos.y = parseFloat(el.style.top) || 0;
   });
 
   document.addEventListener("mousemove", (e) => {
-    if (!isDragging) return;
-    let dx = e.clientX - startX;
-    let dy = e.clientY - startY;
-    el.style.left = startLeft + dx + "px";
-    el.style.top = startTop + dy + "px";
+    if (isDragging) {
+      const dx = e.clientX - startMouse.x;
+      const dy = e.clientY - startMouse.y;
+      el.style.left = pos.x + dx + "px";
+      el.style.top = pos.y + dy + "px";
+    }
   });
 
   document.addEventListener("mouseup", () => isDragging = false);
 
-  // === RESIZE HANDLES ===
+  // --- RESIZE HANDLES ---
   const corners = ["nw", "ne", "sw", "se"];
-
-  corners.forEach(pos => {
+  corners.forEach(posCorner => {
     const handle = document.createElement("div");
-    handle.className = "resize-handle " + pos;
+    handle.className = "resize-handle " + posCorner;
     handle.style.position = "absolute";
     handle.style.width = "12px";
     handle.style.height = "12px";
@@ -225,48 +233,41 @@ function makeDraggableResizable(el, container) {
     handle.style.borderRadius = "50%";
     handle.style.zIndex = "1000";
 
-    positionHandle(handle, pos);
+    // position handle
+    if (posCorner.includes("n")) handle.style.top = "-6px";
+    if (posCorner.includes("s")) handle.style.bottom = "-6px";
+    if (posCorner.includes("w")) handle.style.left = "-6px";
+    if (posCorner.includes("e")) handle.style.right = "-6px";
 
-    let resizing = false;
-    let startDistance;
+    el.appendChild(handle);
 
-  handle.addEventListener("mousedown", (e) => {
-  e.stopPropagation();
-  resizing = true;
+    handle.addEventListener("mousedown", (e) => {
+      e.stopPropagation();
+      isResizing = true;
+      const rect = el.getBoundingClientRect();
+      startMouse.x = e.clientX;
+      startMouse.y = e.clientY;
+      startDims.width = rect.width;
+      startDims.height = rect.height;
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      startDistance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
+    });
 
-  const rect = el.getBoundingClientRect();
-  const centerX = rect.left + rect.width / 2;
-  const centerY = rect.top + rect.height / 2;
+    document.addEventListener("mousemove", (e) => {
+      if (!isResizing) return;
+      const rect = el.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const currentDistance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
+      transform.scale = currentDistance / startDistance;
+      applyTransform();
+    });
 
-  startDistance = Math.hypot(
-    e.clientX - centerX,
-    e.clientY - centerY
-  );
-});
+    document.addEventListener("mouseup", () => isResizing = false);
+  });
 
-document.addEventListener("mousemove", (e) => {
-  if (!resizing) return;
-
-  const rect = el.getBoundingClientRect();
-  const centerX = rect.left + rect.width / 2;
-  const centerY = rect.top + rect.height / 2;
-
-  const currentDistance = Math.hypot(
-    e.clientX - centerX,
-    e.clientY - centerY
-  );
-
-  let scaleAmount = currentDistance / startDistance;
-
-  el.style.transform = `rotate(${rotation}deg) scale(${scaleAmount})`;
-});
-
-document.addEventListener("mouseup", () => {
-  resizing = false;
-});
-
-
-  // === ROTATE HANDLE ===
+  // --- ROTATE HANDLE ---
   const rotateHandle = document.createElement("div");
   rotateHandle.className = "rotate-handle";
   rotateHandle.style.position = "absolute";
@@ -282,38 +283,26 @@ document.addEventListener("mouseup", () => {
 
   el.appendChild(rotateHandle);
 
-  let rotating = false;
-
   rotateHandle.addEventListener("mousedown", (e) => {
     e.stopPropagation();
-    rotating = true;
-  });
-
-  document.addEventListener("mousemove", (e) => {
-    if (!rotating) return;
-
+    isRotating = true;
     const rect = el.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-
-    const angle = Math.atan2(
-      e.clientY - centerY,
-      e.clientX - centerX
-    );
-
-    rotation = angle * (180 / Math.PI);
-    el.style.transform = `rotate(${rotation}deg)`;
+    startRotation = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI) - transform.rotation;
   });
 
-  document.addEventListener("mouseup", () => rotating = false);
+  document.addEventListener("mousemove", (e) => {
+    if (!isRotating) return;
+    const rect = el.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
+    transform.rotation = angle - startRotation;
+    applyTransform();
+  });
 
-  // === HELPER ===
-  function positionHandle(handle, pos) {
-    if (pos.includes("n")) handle.style.top = "-6px";
-    if (pos.includes("s")) handle.style.bottom = "-6px";
-    if (pos.includes("w")) handle.style.left = "-6px";
-    if (pos.includes("e")) handle.style.right = "-6px";
-  }
+  document.addEventListener("mouseup", () => isRotating = false);
 }
 
 // ================== DOWNLOAD / STRIPE FIX ==================
