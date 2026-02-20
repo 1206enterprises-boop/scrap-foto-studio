@@ -88,22 +88,6 @@ function takePhoto() {
   photos.push(img);
   photoLayer.appendChild(img);
 
-  // ✅ Add rotate button
-  const rotateBtn = document.createElement('button');
-  rotateBtn.innerHTML = '⟳';
-  rotateBtn.style.position = 'absolute';
-  rotateBtn.style.top = '5px';
-  rotateBtn.style.right = '5px';
-  rotateBtn.style.zIndex = 20;
-  rotateBtn.style.background = '#FFD700';
-  rotateBtn.style.border = 'none';
-  rotateBtn.style.borderRadius = '50%';
-  rotateBtn.style.width = '30px';
-  rotateBtn.style.height = '30px';
-  rotateBtn.style.cursor = 'pointer';
-  rotateBtn.addEventListener('click', () => {
-  });
-
   img.parentElement.appendChild(rotateBtn);
 }
 
