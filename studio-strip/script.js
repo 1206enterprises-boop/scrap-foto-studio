@@ -67,29 +67,19 @@ startBtn.addEventListener('click', startCamera);
 
 // ================== TAKE PHOTO + COUNTDOWN ==================
 function takePhoto() {
-  if (!video.videoWidth) return;
-
-  const canvas = document.createElement('canvas');
+  const canvas = document.createElement("canvas");
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
-
-  const ctx = canvas.getContext('2d');
-  ctx.filter = "none"; // apply video filter if needed
+  const ctx = canvas.getContext("2d");
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  const img = document.createElement('img');
-  img.src = canvas.toDataURL('image/png');
-
-  // 4x6: draggable/resizable
+  const img = document.createElement("img");
+  img.src = canvas.toDataURL("image/png");
   img.style.width = "150px";
   img.style.height = "auto";
-  img.style.top = "10px";
-  img.style.left = "10px";
-  makeDraggableResizable(img, scrapCanvas);
 
-  photos.push(img);
   photoLayer.appendChild(img);
-
+  makeDraggableResizable(img, scrapCanvas);
 }
 
 function startCountdown(seconds) {
@@ -182,96 +172,75 @@ stickers.forEach(url => {
 // ================== DRAG & RESIZE ==================
 function makeDraggableResizable(el, container) {
   el.style.position = "absolute";
+  el.style.top = "10px";
+  el.style.left = "10px";
   el.style.transformOrigin = "center center";
-  el.style.cursor = "move";
 
-  let pos = { x: 0, y: 0 };       // element position
-  let transform = { scale: 1, rotation: 0 }; // current transform
+  let rotation = 0;
   let isDragging = false;
   let isResizing = false;
   let isRotating = false;
   let startMouse = { x: 0, y: 0 };
   let startDims = { width: 0, height: 0 };
-  let startDistance = 0;
+  let startPos = { x: 0, y: 0 };
   let startRotation = 0;
 
-  // --- Helper: apply transform ---
-  function applyTransform() {
-    el.style.transform = `rotate(${transform.rotation}deg) scale(${transform.scale})`;
-  }
-
-  // --- DRAGGING ---
+  // --- Dragging ---
   el.addEventListener("mousedown", (e) => {
     if (e.target.classList.contains("resize-handle") || e.target.classList.contains("rotate-handle")) return;
     isDragging = true;
     startMouse.x = e.clientX;
     startMouse.y = e.clientY;
-    pos.x = parseFloat(el.style.left) || 0;
-    pos.y = parseFloat(el.style.top) || 0;
+    startPos.x = parseFloat(el.style.left);
+    startPos.y = parseFloat(el.style.top);
   });
 
   document.addEventListener("mousemove", (e) => {
-    if (isDragging) {
-      const dx = e.clientX - startMouse.x;
-      const dy = e.clientY - startMouse.y;
-      el.style.left = pos.x + dx + "px";
-      el.style.top = pos.y + dy + "px";
-    }
+    if (!isDragging) return;
+    const dx = e.clientX - startMouse.x;
+    const dy = e.clientY - startMouse.y;
+    el.style.left = startPos.x + dx + "px";
+    el.style.top = startPos.y + dy + "px";
   });
 
   document.addEventListener("mouseup", () => isDragging = false);
 
-  // --- RESIZE HANDLES ---
-  const corners = ["nw", "ne", "sw", "se"];
-  corners.forEach(posCorner => {
-    const handle = document.createElement("div");
-    handle.className = "resize-handle " + posCorner;
-    handle.style.position = "absolute";
-    handle.style.width = "12px";
-    handle.style.height = "12px";
-    handle.style.background = "#FFD700";
-    handle.style.borderRadius = "50%";
-    handle.style.zIndex = "1000";
+  // --- Resize handle ---
+  const handle = document.createElement("div");
+  handle.className = "resize-handle";
+  handle.style.position = "absolute";
+  handle.style.width = "12px";
+  handle.style.height = "12px";
+  handle.style.background = "#FFD700";
+  handle.style.bottom = "-6px";
+  handle.style.right = "-6px";
+  handle.style.cursor = "se-resize";
+  el.appendChild(handle);
 
-    // position handle
-    if (posCorner.includes("n")) handle.style.top = "-6px";
-    if (posCorner.includes("s")) handle.style.bottom = "-6px";
-    if (posCorner.includes("w")) handle.style.left = "-6px";
-    if (posCorner.includes("e")) handle.style.right = "-6px";
-
-    el.appendChild(handle);
-
-    handle.addEventListener("mousedown", (e) => {
-      e.stopPropagation();
-      isResizing = true;
-      const rect = el.getBoundingClientRect();
-      startMouse.x = e.clientX;
-      startMouse.y = e.clientY;
-      startDims.width = rect.width;
-      startDims.height = rect.height;
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      startDistance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
-    });
-
-    document.addEventListener("mousemove", (e) => {
-      if (!isResizing) return;
-      const rect = el.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const currentDistance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
-      transform.scale = currentDistance / startDistance;
-      applyTransform();
-    });
-
-    document.addEventListener("mouseup", () => isResizing = false);
+  handle.addEventListener("mousedown", (e) => {
+    e.stopPropagation();
+    isResizing = true;
+    startMouse.x = e.clientX;
+    startMouse.y = e.clientY;
+    startDims.width = el.offsetWidth;
+    startDims.height = el.offsetHeight;
   });
 
-  // --- ROTATE HANDLE ---
+  document.addEventListener("mousemove", (e) => {
+    if (!isResizing) return;
+    const dx = e.clientX - startMouse.x;
+    const dy = e.clientY - startMouse.y;
+    el.style.width = Math.max(50, startDims.width + dx) + "px";
+    el.style.height = Math.max(50, startDims.height + dy) + "px";
+  });
+
+  document.addEventListener("mouseup", () => isResizing = false);
+
+  // --- Rotate handle ---
   const rotateHandle = document.createElement("div");
   rotateHandle.className = "rotate-handle";
   rotateHandle.style.position = "absolute";
-  rotateHandle.style.top = "-25px";
+  rotateHandle.style.top = "-20px";
   rotateHandle.style.left = "50%";
   rotateHandle.style.transform = "translateX(-50%)";
   rotateHandle.style.width = "14px";
@@ -279,8 +248,6 @@ function makeDraggableResizable(el, container) {
   rotateHandle.style.background = "#FF4D4D";
   rotateHandle.style.borderRadius = "50%";
   rotateHandle.style.cursor = "grab";
-  rotateHandle.style.zIndex = "1000";
-
   el.appendChild(rotateHandle);
 
   rotateHandle.addEventListener("mousedown", (e) => {
@@ -289,7 +256,7 @@ function makeDraggableResizable(el, container) {
     const rect = el.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    startRotation = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI) - transform.rotation;
+    startRotation = Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI - rotation;
   });
 
   document.addEventListener("mousemove", (e) => {
@@ -297,9 +264,9 @@ function makeDraggableResizable(el, container) {
     const rect = el.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
-    transform.rotation = angle - startRotation;
-    applyTransform();
+    const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI;
+    rotation = angle - startRotation;
+    el.style.transform = `rotate(${rotation}deg)`;
   });
 
   document.addEventListener("mouseup", () => isRotating = false);
