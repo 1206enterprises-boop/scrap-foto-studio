@@ -90,7 +90,6 @@ function takePhoto() {
   photos.push(img);
   photoLayer.appendChild(img);
 
-  img.parentElement.appendChild(rotateBtn);
 }
 
 function startCountdown(seconds) {
