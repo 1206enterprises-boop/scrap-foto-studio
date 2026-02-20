@@ -102,7 +102,6 @@ function takePhoto() {
   rotateBtn.style.height = '30px';
   rotateBtn.style.cursor = 'pointer';
   rotateBtn.addEventListener('click', () => {
-    img.rotate(90); // rotate 90 degrees per click
   });
 
   img.parentElement.appendChild(rotateBtn);
