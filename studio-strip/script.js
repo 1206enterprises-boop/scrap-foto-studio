@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", function() {
+
 // ================== STRIPE + WATERMARK ==================
 const STRIPE_URL = "https://buy.stripe.com/YOUR_LINK_HERE";
 
@@ -396,3 +398,4 @@ document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
   }
 });
+
