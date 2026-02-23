@@ -212,3 +212,15 @@ body::before {
   background: #000;
   border-top: 2px solid #FFD700;
 }
+
+#scrapCanvas {
+  position: fixed !important;
+  top: 100px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 300px !important;
+  height: 1000px !important;
+  background: red !important;
+  z-index: 9999 !important;
+  border: 5px solid white !important;
+}
