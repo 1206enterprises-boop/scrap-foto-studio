@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up - Visura Haus</title>
+<style>
+  /* === BODY & BACKGROUND === */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at top, #000 0%, #111 100%);
+    overflow: hidden;
+    color: #fff;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    width: 200%;
+    height: 200%;
+    background-image: url('https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExb2Z3Z2h3amR1a2I2M3p0dWlrbGZzZm5uYjBsc2M0d2N1c3N4d3VwbiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3oEjI6SIIHBdRxXI40/giphy.gif');
+    background-size: cover;
+    opacity: 0.05;
+    animation: floatBg 60s linear infinite;
+    z-index: 0;
+  }
+
+  @keyframes floatBg {
+    from { transform: translate(0,0); }
+    to { transform: translate(-25%,-25%); }
+  }
+
+  /* === SIGNUP BOX === */
+  .signup-box {
+    position: relative;
+    z-index: 1;
+    background: #111;
+    border: 2px solid #FFD700;
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    width: 350px;
+    box-shadow: 0 0 60px rgba(255,215,0,0.5);
+    backdrop-filter: blur(4px);
+  }
+
+  .signup-box img.logo {
+    width: 120px;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    margin: 0 0 10px 0;
+    color: #FFD700;
+    font-size: 32px;
+    letter-spacing: 1px;
+  }
+
+  p {
+    color: #ccc;
+    font-size: 14px;
+    margin-bottom: 25px;
+  }
+
+  input[type=email],
+  input[type=password] {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid #FFD700;
+    background: #222;
+    color: #fff;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+
+  input:focus {
+    border-color: #fff;
+    outline: none;
+    box-shadow: 0 0 10px rgba(255,215,0,0.7);
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg,#FFD700,#e6c200);
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(255,215,0,0.4);
+  }
+
+  button:hover {
+    background: linear-gradient(135deg,#e6c200,#ccaa00);
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(255,215,0,0.6);
+  }
+
+  .error {
+    color: #ff5555;
+    font-size: 13px;
+    min-height: 18px;
+    margin-bottom: 10px;
+  }
+
+  .toggle {
+    margin-top: 15px;
+    font-size: 13px;
+    color: #ccc;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  /* MOBILE RESPONSIVE */
+  @media screen and (max-width: 400px) {
+    .signup-box {
+      width: 90%;
+      padding: 30px 20px;
+    }
+
+    h2 {
+      font-size: 28px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="signup-box">
+  <!-- Logo -->
+  <img src="https://static.wixstatic.com/media/67478d_07b399da6cec4eedabdc9ff31dce1feb~mv2.png" class="logo" alt="Visura Haus Logo">
+
+  <h2>Visura Haus</h2>
+  <p id="form-title">Sign Up with your email</p>
+
+  <input type="email" id="emailInput" placeholder="Enter your email" required>
+  <input type="password" id="passwordInput" placeholder="Enter a password (optional)">
+  <div class="error" id="errorMsg"></div>
+  <button id="submitBtn">Continue</button>
+
+  <div class="toggle" id="toggleMode">Already have an account? Sign In</div>
+</div>
+
+<script>
+const submitBtn = document.getElementById("submitBtn");
+const emailInput = document.getElementById("emailInput");
+const passwordInput = document.getElementById("passwordInput");
+const errorMsg = document.getElementById("errorMsg");
+const toggleMode = document.getElementById("toggleMode");
+const formTitle = document.getElementById("form-title");
+
+let isSignUp = true;
+
+// Toggle Sign Up / Sign In
+toggleMode.addEventListener("click", () => {
+  isSignUp = !isSignUp;
+  formTitle.textContent = isSignUp ? "Sign Up with your email" : "Sign In";
+  submitBtn.textContent = isSignUp ? "Continue" : "Sign In";
+  toggleMode.textContent = isSignUp ? "Already have an account? Sign In" : "Need an account? Sign Up";
+  passwordInput.style.display = isSignUp ? "block" : "none";
+  errorMsg.textContent = "";
+});
+
+// Simple email validation
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+// Handle submit
+submitBtn.addEventListener("click", () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  if (!email) {
+    errorMsg.textContent = "Email is required.";
+    return;
+  }
+
+  if (!isValidEmail(email)) {
+    errorMsg.textContent = "Please enter a valid email address.";
+    return;
+  }
+
+  if (isSignUp && !password) {
+    errorMsg.textContent = "Password is required for sign up.";
+    return;
+  }
+
+  // Save email locally (replace with backend later)
+  localStorage.setItem("visuraEmail", email);
+  if (isSignUp) localStorage.setItem("visuraPassword", password);
+
+  // Redirect to main landing page
+  window.location.href = "index.html";
+});
+
+// Auto redirect if email already exists
+const savedEmail = localStorage.getItem("visuraEmail");
+if (savedEmail) window.location.href = "index.html";
+</script>
+
+</body>
+</html>
