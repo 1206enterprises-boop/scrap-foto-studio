@@ -8,6 +8,7 @@ body {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
   align-items: center;
 }
 
@@ -27,40 +28,35 @@ body::before {
   to { transform: translate(-25%,-25%); }
 }
 
-/* === HEADER LOGO === */
-header {
+/* === MAIN CONTENT WRAPPER === */
+.centered-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
   width: 100%;
-  text-align: center;
-  margin: 15px 0;
 }
 
-header img {
-  height: 60px;
-  object-fit: contain;
-}
-
-/* === VIDEO & CANVAS === */
-/* Video container with thick frame */
+/* === VIDEO CONTAINER === */
 .video-container {
   position: relative;
   max-width: 360px;
   width: 90%;
   margin: 0 auto 15px auto;
-  border: 25px solid #FFD700;        /* thick gold border */
+  border: 25px solid #FFD700;
   border-radius: 16px;
   box-shadow: 0 0 30px rgba(255,215,0,0.7);
-  background: url('https://i.imgur.com/wood-frame.png') center/cover no-repeat; /* optional wood texture */
+  background: url('https://i.imgur.com/wood-frame.png') center/cover no-repeat;
 }
 
-/* Video inside container */
 #video {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 8px; /* slightly smaller to fit inside container */
+  border-radius: 8px;
 }
 
-/* === Countdown Overlay === */
+/* === COUNTDOWN === */
 #countdownOverlay {
   position: absolute;
   top: 50%;
@@ -75,16 +71,16 @@ header img {
   pointer-events: none;
 }
 
-/* === SCRAP CANVAS (Photostrip Container) === */
+/* === SCRAP CANVAS (FIXED SECTION) === */
 .scrap-canvas {
   position: relative;
   width: 300px;
-  min-height: 1000px;   /* changed from height */
-  background: rgba(255,255,255,0.05); /* TEMP so we can see it */
+  height: 1000px;
   margin: 20px auto;
   display: block;
 }
 
+/* === LAYERS === */
 #frameLayer,
 #photoLayer,
 #stickerLayer {
@@ -95,57 +91,46 @@ header img {
   height: 100%;
 }
 
+#frameLayer {
+  z-index: 1;
+}
+
+#photoLayer {
+  z-index: 2;
+}
+
+#stickerLayer {
+  z-index: 3;
+}
+
 #frameLayer img {
   width: 100%;
   height: 100%;
   object-fit: contain; /* prevents bottom cropping */
+  display: block;
 }
 
-/* === FRAME LAYER === */
-#frameLayer {
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-z-index: 1; /* behind photos and stickers (which are z-index 10) */
-}
-
-#frameLayer img {
-width: 100%;
-height: 100%;
-object-fit: contain;  /* prevents cropping */
-position: absolute;
-top: 0;
-left: 0;
-}
-
-/* === LAYERS === */
 #photoLayer img,
 #stickerLayer img {
   position: absolute;
 }
 
-.centered-container {
+/* === CONTROLS === */
+.controls {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin: 20px auto;
+  flex-wrap: wrap;
+}
+
+/* REMOVED height:100vh from controls-wrapper */
+.controls-wrapper {
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
-
-.frames-wrapper {
-  display: flex;           /* enable flex */
-  justify-content: center; /* center horizontally */
-  width: 100%;             /* full page width */
-}
-
-/* Force visual order */
-.frames-container { order: 1; }
-.video-container { order: 2; }
-.controls { order: 3; }
-.scrap-canvas { order: 4; }
-#stickerBar { order: 5; }
-.download-container { order: 6; }
-.nav-btns { order: 7; }
 
 /* === BUTTONS === */
 .modern-btn {
@@ -166,16 +151,6 @@ left: 0;
   transform: translateY(-2px);
 }
 
-/* === CENTER CONTROLS === */
-.controls {
-  display: flex;
-  justify-content: center;  /* horizontal centering */
-  align-items: center;      /* vertical alignment if container has height */
-  gap: 15px;                /* space between buttons */
-  margin: 20px auto;        /* vertical spacing and center horizontally */
-  flex-wrap: wrap;          /* wrap buttons on small screens */
-}
-
 /* === STICKER BAR === */
 #stickerBar {
   display: flex;
@@ -185,39 +160,36 @@ left: 0;
   padding: 5px;
   width: 90%;
 }
+
 #stickerBar button img {
   width: 80px;
   height: 80px;
 }
 
-/* === FRAMES GALLERY (Vertical) === */
+/* === FRAMES GALLERY === */
+.frames-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .frames-container {
   display: flex;
-  flex-direction: column; /* vertical scroll */
+  flex-direction: column;
   gap: 15px;
   width: 90%;
-  max-height: 300px;      /* visible height of gallery */
-  overflow-y: auto;       /* vertical scrolling */
+  max-height: 300px;
+  overflow-y: auto;
   overflow-x: hidden;
-  margin: 10px auto;      /* center gallery */
+  margin: 10px auto;
   padding: 10px;
   border-top: 2px solid gold;
   border-bottom: 2px solid gold;
 }
 
-.frames-container::-webkit-scrollbar {
-  width: 10px;
-}
-
-.frames-container::-webkit-scrollbar-thumb {
-  background: gold;
-  border-radius: 5px;
-}
-
-/* Frame thumbnails */
 .frame-thumbnail {
-  width: 100%;             /* full width of gallery container */
-  max-height: 120px;       /* optional height limit */
+  width: 100%;
+  max-height: 120px;
   object-fit: cover;
   border: 2px solid gold;
   border-radius: 8px;
@@ -229,32 +201,14 @@ left: 0;
   transform: scale(1.03);
   box-shadow: 0 4px 8px rgba(255, 204, 51, 0.5);
 }
-/* Mobile optimization */
-@media screen and (max-width: 768px) {
-  .frames-container {
-    max-height: 1000px;
-  }
-}
 
 /* === FOOTER === */
 .site-footer {
   width: 100%;
   text-align: center;
   font-size: 14px;
-  color: #FFD700;          /* matches your gold theme */
+  color: #FFD700;
   padding: 15px 0;
-  background: #000;         /* optional, makes it stand out on black bg */
-  border-top: 2px solid #FFD700;  /* optional gold line on top */
-  position: relative;       /* keeps it in flow at bottom */
-}
-
-/* Stick footer to bottom for short pages */
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.centered-container {
-  flex: 1;  /* allows main content to grow and push footer down */
+  background: #000;
+  border-top: 2px solid #FFD700;
 }
