@@ -22,7 +22,7 @@ const stickerBar = document.getElementById('stickerBar');
 
 // ================== FRAMES ==================
 const frames = [
-"https://static.wixstatic.com/media/67478d_50ebe714d4a04f3bbab946ebe5d18cd2~mv2.png",
+"https://static.wixstatic.com/media/67478d_0cbb389304ff4bfb96eaec471ef31a61~mv2.png",
 "https://i.imgur.com/frame2.png",
 "https://i.imgur.com/frame3.png"
 ];
