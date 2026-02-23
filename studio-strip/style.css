@@ -79,9 +79,10 @@ header img {
 .scrap-canvas {
   position: relative;
   width: 300px;
-  height: 1000px;
-  overflow: hidden;
+  min-height: 1000px;   /* changed from height */
+  background: rgba(255,255,255,0.05); /* TEMP so we can see it */
   margin: 20px auto;
+  display: block;
 }
 
 #frameLayer,
@@ -173,13 +174,6 @@ left: 0;
   gap: 15px;                /* space between buttons */
   margin: 20px auto;        /* vertical spacing and center horizontally */
   flex-wrap: wrap;          /* wrap buttons on small screens */
-}
-
-.controls-wrapper {
-  display: flex;
-  justify-content: center; /* horizontal centering */
-  align-items: center;     /* vertical centering */
-  height: 100vh;           /* full viewport height */
 }
 
 /* === STICKER BAR === */
