@@ -289,7 +289,7 @@ if (e.touches.length === 0) isDragging = false;
 }
 
 // ================== STRIPE LINKS ==================
-const STRIPE_STANDARD = "https://buy.stripe.com/STANDARD_LINK";
+const STRIPE_STANDARD = "https://buy.stripe.com/dRmcN753l51z0JS2gq2Nq01";
 const STRIPE_HQ = "https://buy.stripe.com/HQ_LINK";
 const STRIPE_BUNDLE = "https://buy.stripe.com/BUNDLE_LINK";
 
