@@ -1,10 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Processing Download...</title>
+</head>
+<body>
+
 <script>
-const stripData = localStorage.getItem("scrapfoto");
+const stripData = localStorage.getItem("scrapfoto_strip");
 
 if(stripData){
   const link = document.createElement("a");
   link.href = stripData;
   link.download = "scrapfoto.png";
+  document.body.appendChild(link);
   link.click();
+  localStorage.removeItem("scrapfoto_strip");
+} else {
+  document.body.innerHTML = "<h2>Download session expired. Please try again.</h2>";
 }
 </script>
+
+</body>
+</html>
