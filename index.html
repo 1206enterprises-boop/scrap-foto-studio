@@ -1,11 +1,12 @@
 <script>
-  // Check if the user is "logged in"
-  const email = localStorage.getItem("visuraEmail"); // Or sessionStorage
-  if (!email) {
-    // Not logged in → redirect to signup page
-    window.location.href = "signup.html";
-  }
+const params = new URLSearchParams(window.location.search);
+const access = params.get("access");
+
+if (!access) {
+  window.location.href = "https://your-wix-site.com";
+}
 </script>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
