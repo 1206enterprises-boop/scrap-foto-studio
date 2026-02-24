@@ -1,24 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Processing Download...</title>
-</head>
-<body>
-
 <script>
 const stripData = localStorage.getItem("scrapfoto_strip");
+const product = localStorage.getItem("product_type");
 
-if(stripData){
+if(stripData && product){
+
   const link = document.createElement("a");
   link.href = stripData;
-  link.download = "scrapfoto.png";
+
+  if(product === "standard"){
+      link.download = "scrapfoto-standard.png";
+  }
+
+  if(product === "hq"){
+      link.download = "scrapfoto-hq.png";
+  }
+
+  if(product === "bundle"){
+      link.download = "scrapfoto-bundle.png";
+  }
+
   document.body.appendChild(link);
   link.click();
+
   localStorage.removeItem("scrapfoto_strip");
+  localStorage.removeItem("product_type");
+
 } else {
-  document.body.innerHTML = "<h2>Download session expired. Please try again.</h2>";
+  document.body.innerHTML = "<h2>Session expired. Please try again.</h2>";
 }
 </script>
-
-</body>
-</html>
