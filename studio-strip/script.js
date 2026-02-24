@@ -288,21 +288,14 @@ if (e.touches.length === 0) isDragging = false;
   };
 }
 
-// ================== STRIPE ==================
-const STRIPE_URL = "https://buy.stripe.com/YOUR_LINK_HERE";
+// ================== STRIPE LINKS ==================
+const STRIPE_STANDARD = "https://buy.stripe.com/STANDARD_LINK";
+const STRIPE_HQ = "https://buy.stripe.com/HQ_LINK";
+const STRIPE_BUNDLE = "https://buy.stripe.com/BUNDLE_LINK";
 
-function addWatermark(canvas) {
-  const ctx = canvas.getContext("2d");
-  ctx.font = "bold 40px Arial";
-  ctx.fillStyle = "rgba(255,255,255,0.25)";
-  ctx.textAlign = "center";
-  ctx.fillText("VISURA HAUS", canvas.width/2, canvas.height/2);
-}
+// ================== DOWNLOAD FUNCTION ==================
+async function generateFinalImage() {
 
-// ================== DOWNLOAD + STRIPE FLOW ==================
-downloadBtn.addEventListener('click', async () => {
-
-  // Create final export canvas
   const canvas = document.createElement('canvas');
   canvas.width = scrapCanvas.offsetWidth;
   canvas.height = scrapCanvas.offsetHeight;
@@ -326,7 +319,6 @@ downloadBtn.addEventListener('click', async () => {
         const transform = style.transform;
 
         ctx.save();
-
         ctx.translate(x + (el.offsetWidth / 2), y + (el.offsetHeight / 2));
 
         if (transform && transform !== "none") {
@@ -356,15 +348,31 @@ downloadBtn.addEventListener('click', async () => {
     });
   }
 
-  // Add watermark before saving
   addWatermark(canvas);
 
-  // Save image in browser temporarily
-  const imageData = canvas.toDataURL("image/png");
-  localStorage.setItem("scrapfoto_strip", imageData);
+  return canvas.toDataURL("image/png");
+}
 
-  // Redirect to Stripe payment
-  window.location.href = STRIPE_URL;
+// ================== BUTTON EVENTS ==================
+document.getElementById("standardBtn").addEventListener("click", async () => {
+  const imageData = await generateFinalImage();
+  localStorage.setItem("scrapfoto_strip", imageData);
+  localStorage.setItem("product_type", "standard");
+  window.location.href = STRIPE_STANDARD;
+});
+
+document.getElementById("hqBtn").addEventListener("click", async () => {
+  const imageData = await generateFinalImage();
+  localStorage.setItem("scrapfoto_strip", imageData);
+  localStorage.setItem("product_type", "hq");
+  window.location.href = STRIPE_HQ;
+});
+
+document.getElementById("bundleBtn").addEventListener("click", async () => {
+  const imageData = await generateFinalImage();
+  localStorage.setItem("scrapfoto_strip", imageData);
+  localStorage.setItem("product_type", "bundle");
+  window.location.href = STRIPE_BUNDLE;
 });
 
 // ===== Disable Right Click on Images =====
