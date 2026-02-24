@@ -1,0 +1,10 @@
+<script>
+const stripData = localStorage.getItem("scrapfoto");
+
+if(stripData){
+  const link = document.createElement("a");
+  link.href = stripData;
+  link.download = "scrapfoto.png";
+  link.click();
+}
+</script>
