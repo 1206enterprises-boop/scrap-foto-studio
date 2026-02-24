@@ -288,91 +288,58 @@ if (e.touches.length === 0) isDragging = false;
   };
 }
 
-// ================== STRIPE LINKS ==================
-const STRIPE_STANDARD = "https://buy.stripe.com/dRmcN753l51z0JS2gq2Nq01";
-const STRIPE_HQ = "https://buy.stripe.com/HQ_LINK";
-const STRIPE_BUNDLE = "https://buy.stripe.com/BUNDLE_LINK";
+// ================== STRIPE DIGITAL ==================
+const STRIPE_DIGITAL_URL = "https://buy.stripe.com/digital_link"; // $5 digital copy
 
-// ================== DOWNLOAD FUNCTION ==================
-async function generateFinalImage() {
+function addWatermark(canvas) {
+  const ctx = canvas.getContext("2d");
+  ctx.font = "bold 40px Arial";
+  ctx.fillStyle = "rgba(255,255,255,0.25)";
+  ctx.textAlign = "center";
+  ctx.fillText("VISURA HAUS", canvas.width/2, canvas.height/2);
+}
 
-  const canvas = document.createElement('canvas');
-  canvas.width = scrapCanvas.offsetWidth;
-  canvas.height = scrapCanvas.offsetHeight;
-  const ctx = canvas.getContext('2d');
+const scrapCanvas = document.getElementById('scrapCanvas');
+const downloadDigitalBtn = document.getElementById('downloadDigitalBtn');
+const upgradeBtn = document.getElementById('upgradeBtn');
+
+downloadDigitalBtn.addEventListener('click', () => {
+  if (!scrapCanvas) return alert("Canvas not ready");
+
+  // Save canvas to localStorage temporarily
+  const tempCanvas = document.createElement('canvas');
+  tempCanvas.width = scrapCanvas.offsetWidth;
+  tempCanvas.height = scrapCanvas.offsetHeight;
+  const ctx = tempCanvas.getContext('2d');
 
   const elements = scrapCanvas.querySelectorAll('img');
-
-  for (let el of elements) {
+  elements.forEach(el => {
     const rect = el.getBoundingClientRect();
     const parentRect = scrapCanvas.getBoundingClientRect();
     const x = rect.left - parentRect.left;
     const y = rect.top - parentRect.top;
+    ctx.drawImage(el, x, y, el.offsetWidth, el.offsetHeight);
+  });
 
-    await new Promise(resolve => {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.src = el.src;
-      img.onload = () => {
+  addWatermark(tempCanvas);
+  localStorage.setItem('scrapPhoto', tempCanvas.toDataURL('image/png'));
 
-        const style = window.getComputedStyle(el);
-        const transform = style.transform;
+  // Open Stripe for $5 digital copy
+  window.open(STRIPE_DIGITAL_URL, "_blank");
 
-        ctx.save();
-        ctx.translate(x + (el.offsetWidth / 2), y + (el.offsetHeight / 2));
-
-        if (transform && transform !== "none") {
-          const values = transform.match(/matrix\(([^)]+)\)/);
-          if (values) {
-            const parts = values[1].split(',').map(parseFloat);
-            const a = parts[0];
-            const b = parts[1];
-            const scaleX = Math.sqrt(a*a + b*b);
-            const angle = Math.atan2(b, a);
-            ctx.rotate(angle);
-            ctx.scale(scaleX, scaleX);
-          }
-        }
-
-        ctx.drawImage(
-          img,
-          -el.offsetWidth/2,
-          -el.offsetHeight/2,
-          el.offsetWidth,
-          el.offsetHeight
-        );
-
-        ctx.restore();
-        resolve();
-      };
-    });
-  }
-
-  addWatermark(canvas);
-
-  return canvas.toDataURL("image/png");
-}
-
-// ================== BUTTON EVENTS ==================
-document.getElementById("standardBtn").addEventListener("click", async () => {
-  const imageData = await generateFinalImage();
-  localStorage.setItem("scrapfoto_strip", imageData);
-  localStorage.setItem("product_type", "standard");
-  window.location.href = STRIPE_STANDARD;
+  alert("Complete payment in the new tab, then go to the success page to download.");
 });
 
-document.getElementById("hqBtn").addEventListener("click", async () => {
-  const imageData = await generateFinalImage();
-  localStorage.setItem("scrapfoto_strip", imageData);
-  localStorage.setItem("product_type", "hq");
-  window.location.href = STRIPE_HQ;
-});
+// ================== UPGRADE BUTTON ==================
+upgradeBtn.addEventListener('click', () => {
+  const imageData = localStorage.getItem('scrapPhoto');
+  if (!imageData) return alert("Please download the digital copy first.");
 
-document.getElementById("bundleBtn").addEventListener("click", async () => {
-  const imageData = await generateFinalImage();
-  localStorage.setItem("scrapfoto_strip", imageData);
-  localStorage.setItem("product_type", "bundle");
-  window.location.href = STRIPE_BUNDLE;
+  // Convert image to Base64 and encode to URL for Wix form
+  const encodedImg = encodeURIComponent(imageData);
+
+  // Redirect to Wix form page with image in query string
+  window.location.href = `https://www.yourwixsite.com/scrapfoto-upgrades?image=${encodedImg}`;
 });
 
 // ===== Disable Right Click on Images =====
