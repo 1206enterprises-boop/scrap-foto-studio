@@ -288,22 +288,21 @@ if (e.touches.length === 0) isDragging = false;
   };
 }
 
-// ================== DOWNLOAD / STRIPE FIX ==================
-let isPaid = false; // make sure this exists at the top of your JS if not already
+// ================== STRIPE ==================
+const STRIPE_URL = "https://buy.stripe.com/YOUR_LINK_HERE";
 
+function addWatermark(canvas) {
+  const ctx = canvas.getContext("2d");
+  ctx.font = "bold 40px Arial";
+  ctx.fillStyle = "rgba(255,255,255,0.25)";
+  ctx.textAlign = "center";
+  ctx.fillText("VISURA HAUS", canvas.width/2, canvas.height/2);
+}
+
+// ================== DOWNLOAD + STRIPE FLOW ==================
 downloadBtn.addEventListener('click', async () => {
 
-  if (!isPaid) {
-    // Open Stripe
-    window.open(STRIPE_URL, "_blank");
-
-    // Confirm payment
-    const confirmDownload = confirm("After completing payment, click OK to unlock and download your design.");
-    if (!confirmDownload) return;
-
-    isPaid = true;
-  }
-
+  // Create final export canvas
   const canvas = document.createElement('canvas');
   canvas.width = scrapCanvas.offsetWidth;
   canvas.height = scrapCanvas.offsetHeight;
@@ -323,22 +322,19 @@ downloadBtn.addEventListener('click', async () => {
       img.src = el.src;
       img.onload = () => {
 
-        // Get current transform
         const style = window.getComputedStyle(el);
         const transform = style.transform;
 
-        ctx.save(); // save current context
+        ctx.save();
 
-        // Move to element center
         ctx.translate(x + (el.offsetWidth / 2), y + (el.offsetHeight / 2));
 
         if (transform && transform !== "none") {
-          // Parse scale and rotation from matrix
           const values = transform.match(/matrix\(([^)]+)\)/);
           if (values) {
             const parts = values[1].split(',').map(parseFloat);
-            const a = parts[0]; // scaleX * cosθ
-            const b = parts[1]; // scaleX * sinθ
+            const a = parts[0];
+            const b = parts[1];
             const scaleX = Math.sqrt(a*a + b*b);
             const angle = Math.atan2(b, a);
             ctx.rotate(angle);
@@ -346,21 +342,29 @@ downloadBtn.addEventListener('click', async () => {
           }
         }
 
-        // Draw the image centered
-        ctx.drawImage(img, -el.offsetWidth/2, -el.offsetHeight/2, el.offsetWidth, el.offsetHeight);
+        ctx.drawImage(
+          img,
+          -el.offsetWidth/2,
+          -el.offsetHeight/2,
+          el.offsetWidth,
+          el.offsetHeight
+        );
 
-        ctx.restore(); // restore context
+        ctx.restore();
         resolve();
       };
     });
   }
 
+  // Add watermark before saving
   addWatermark(canvas);
 
-  const link = document.createElement('a');
-  link.href = canvas.toDataURL('image/png');
-  link.download = "visura-4x6.png";
-  link.click();
+  // Save image in browser temporarily
+  const imageData = canvas.toDataURL("image/png");
+  localStorage.setItem("scrapfoto_strip", imageData);
+
+  // Redirect to Stripe payment
+  window.location.href = STRIPE_URL;
 });
 
 // ===== Disable Right Click on Images =====
