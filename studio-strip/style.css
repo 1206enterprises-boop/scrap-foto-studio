@@ -89,22 +89,14 @@ body::before {
   height: 100%;
 }
 
-#frameLayer {
-  z-index: 1;
-}
-
-#photoLayer {
-  z-index: 2;
-}
-
-#stickerLayer {
-  z-index: 3;
-}
+#frameLayer { z-index: 1; }
+#photoLayer { z-index: 2; }
+#stickerLayer { z-index: 3; }
 
 #frameLayer img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* prevents bottom cropping */
+  object-fit: contain;
   display: block;
 }
 
@@ -113,21 +105,21 @@ body::before {
   position: absolute;
 }
 
-/* === CONTROLS === */
+/* === CONTROLS (UPDATED CENTER FIX) === */
+.controls-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 20px 0;
+}
+
 .controls {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 15px;
-  margin: 20px auto;
   flex-wrap: wrap;
-}
-
-/* REMOVED height:100vh from controls-wrapper */
-.controls-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 /* === BUTTONS === */
@@ -211,6 +203,7 @@ body::before {
   border-top: 2px solid #FFD700;
 }
 
+/* === DEBUG SCRAP CANVAS (UNCHANGED) === */
 #scrapCanvas {
   position: fixed !important;
   top: 100px !important;
