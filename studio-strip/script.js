@@ -1,5 +1,5 @@
 // ================== STRIPE + WATERMARK ==================
-const STRIPE_DIGITAL_URL = "https://buy.stripe.com/digital_link"; // $5 digital copy
+const STRIPE_DIGITAL_URL = "https://buy.stripe.com/dRmcN753l51z0JS2gq2Nq01"; // $5 digital copy
 
 function addWatermark(canvas) {
   const ctx = canvas.getContext("2d");
