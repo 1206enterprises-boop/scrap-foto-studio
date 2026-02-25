@@ -56,40 +56,50 @@ body::before {
   border-radius: 8px;
 }
 
-/* === COUNTDOWN === */
+/* === CINEMATIC COUNTDOWN OVERLAY === */
 #countdownOverlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 100px;
-  font-weight: bold;
-  color: white;
-  text-shadow: 0 0 20px gold;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
   display: none;
-  z-index: 50;
-  pointer-events: none;
+  justify-content: center;
+  align-items: center;
+  font-size: 120px;
+  font-weight: 900;
+  color: #FFD700;
+  z-index: 9997;
+  text-shadow: 0 0 25px rgba(255,215,0,0.8);
+}
+
+.count-animate {
+  animation: scaleCount 1s ease-in-out;
+}
+
+@keyframes scaleCount {
+  0%   { transform: scale(0.5); opacity: 0; }
+  40%  { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 /* === SCRAP CANVAS – PREMIUM POLISH === */
 .scrap-canvas {
   position: relative;
   width: 300px;
-  height: 600px;              /* true 1x3 strip ratio */
+  height: 600px;
   margin: 30px auto;
   background: #111;
   border-radius: 20px;
   overflow: hidden;
-
-  /* subtle depth */
   box-shadow:
     0 10px 30px rgba(0,0,0,0.6),
     0 0 25px rgba(255,215,0,0.25);
-
   border: 3px solid rgba(255,215,0,0.6);
   backdrop-filter: blur(4px);
+  transition: box-shadow 0.4s ease;
 }
 
+/* Gloss finish */
 .scrap-canvas::after {
   content: "";
   position: absolute;
@@ -102,17 +112,18 @@ body::before {
   );
   pointer-events: none;
 }
-/* Remove debug override completely */
-#scrapCanvas {
-  position: relative !important;
-  top: auto !important;
-  left: auto !important;
-  transform: none !important;
-  width: 300px !important;
-  height: 600px !important;
-  background: #111 !important;
-  z-index: 1 !important;
-  border: none !important;
+
+/* === SESSION ACTIVE GOLD GLOW === */
+.session-active .scrap-canvas {
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.7),
+    0 0 40px rgba(255,215,0,0.8),
+    0 0 80px rgba(255,215,0,0.5);
+}
+
+.session-active .modern-btn {
+  opacity: 0.6;
+  pointer-events: none;
 }
 
 /* === LAYERS === */
@@ -142,7 +153,7 @@ body::before {
   position: absolute;
 }
 
-/* === CONTROLS (UPDATED CENTER FIX) === */
+/* === CONTROLS === */
 .controls-wrapper {
   display: flex;
   justify-content: center;
@@ -176,6 +187,71 @@ body::before {
 .modern-btn:hover {
   background: linear-gradient(135deg,#222,#444);
   transform: translateY(-2px);
+}
+
+/* === FLASH EFFECT === */
+.flash-effect {
+  position: fixed;
+  inset: 0;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.flash-effect.active {
+  animation: flashAnim 0.4s ease-out;
+}
+
+@keyframes flashAnim {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* === PRINTING OVERLAY === */
+.printing-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(5px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 9998;
+}
+
+.printing-overlay.active {
+  display: flex;
+}
+
+.printing-text {
+  font-size: 28px;
+  letter-spacing: 3px;
+  color: #FFD700;
+  animation: pulse 1.5s infinite;
+}
+
+/* Printing strip animation */
+.print-strip {
+  width: 200px;
+  height: 0;
+  background: linear-gradient(to bottom, #fff, #ddd);
+  margin-top: 30px;
+  border-radius: 10px;
+  animation: printSlide 2.5s ease forwards;
+}
+
+@keyframes printSlide {
+  from { height: 0; }
+  to { height: 300px; }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
 }
 
 /* === STICKER BAR === */
@@ -238,17 +314,4 @@ body::before {
   padding: 15px 0;
   background: #000;
   border-top: 2px solid #FFD700;
-}
-
-/* === DEBUG SCRAP CANVAS (UNCHANGED) === */
-#scrapCanvas {
-  position: fixed !important;
-  top: 100px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  width: 300px !important;
-  height: 1000px !important;
-  background: red !important;
-  z-index: 9999 !important;
-  border: 5px solid white !important;
 }
