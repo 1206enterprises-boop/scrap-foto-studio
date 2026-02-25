@@ -56,74 +56,43 @@ body::before {
   border-radius: 8px;
 }
 
-/* === CINEMATIC COUNTDOWN OVERLAY === */
+/* === COUNTDOWN === */
 #countdownOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(4px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 100px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 20px gold;
   display: none;
-  justify-content: center;
-  align-items: center;
-  font-size: 120px;
-  font-weight: 900;
-  color: #FFD700;
-  z-index: 9997;
-  text-shadow: 0 0 25px rgba(255,215,0,0.8);
+  z-index: 50;
+  pointer-events: none;
+  animation: none;
 }
 
-.count-animate {
-  animation: scaleCount 1s ease-in-out;
+/* Scale animation for countdown numbers */
+@keyframes countdown-scale {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
 }
 
-@keyframes scaleCount {
-  0%   { transform: scale(0.5); opacity: 0; }
-  40%  { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-/* === SCRAP CANVAS – PREMIUM POLISH === */
+/* === SCRAP CANVAS (FIXED SECTION) === */
 .scrap-canvas {
   position: relative;
-  width: 300px;
-  height: 600px;
-  margin: 30px auto;
-  background: #111;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow:
-    0 10px 30px rgba(0,0,0,0.6),
-    0 0 25px rgba(255,215,0,0.25);
-  border: 3px solid rgba(255,215,0,0.6);
-  backdrop-filter: blur(4px);
-  transition: box-shadow 0.4s ease;
-}
-
-/* Gloss finish */
-.scrap-canvas::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    120deg,
-    rgba(255,255,255,0.08) 0%,
-    rgba(255,255,255,0.02) 40%,
-    rgba(0,0,0,0.1) 100%
-  );
-  pointer-events: none;
-}
-
-/* === SESSION ACTIVE GOLD GLOW === */
-.session-active .scrap-canvas {
-  box-shadow:
-    0 10px 40px rgba(0,0,0,0.7),
-    0 0 40px rgba(255,215,0,0.8),
-    0 0 80px rgba(255,215,0,0.5);
-}
-
-.session-active .modern-btn {
-  opacity: 0.6;
-  pointer-events: none;
+  margin: 20px auto;
+  display: block;
 }
 
 /* === LAYERS === */
@@ -144,7 +113,7 @@ body::before {
 #frameLayer img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: contain; /* prevents bottom cropping */
   display: block;
 }
 
@@ -154,20 +123,19 @@ body::before {
 }
 
 /* === CONTROLS === */
-.controls-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin: 20px 0;
-}
-
 .controls {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 15px;
+  margin: 20px auto;
   flex-wrap: wrap;
+}
+
+.controls-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* === BUTTONS === */
@@ -187,71 +155,6 @@ body::before {
 .modern-btn:hover {
   background: linear-gradient(135deg,#222,#444);
   transform: translateY(-2px);
-}
-
-/* === FLASH EFFECT === */
-.flash-effect {
-  position: fixed;
-  inset: 0;
-  background: white;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-.flash-effect.active {
-  animation: flashAnim 0.4s ease-out;
-}
-
-@keyframes flashAnim {
-  0% { opacity: 0; }
-  20% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-/* === PRINTING OVERLAY === */
-.printing-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(5px);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  z-index: 9998;
-}
-
-.printing-overlay.active {
-  display: flex;
-}
-
-.printing-text {
-  font-size: 28px;
-  letter-spacing: 3px;
-  color: #FFD700;
-  animation: pulse 1.5s infinite;
-}
-
-/* Printing strip animation */
-.print-strip {
-  width: 200px;
-  height: 0;
-  background: linear-gradient(to bottom, #fff, #ddd);
-  margin-top: 30px;
-  border-radius: 10px;
-  animation: printSlide 2.5s ease forwards;
-}
-
-@keyframes printSlide {
-  from { height: 0; }
-  to { height: 300px; }
-}
-
-@keyframes pulse {
-  0% { opacity: 0.4; }
-  50% { opacity: 1; }
-  100% { opacity: 0.4; }
 }
 
 /* === STICKER BAR === */
@@ -314,4 +217,17 @@ body::before {
   padding: 15px 0;
   background: #000;
   border-top: 2px solid #FFD700;
+}
+
+/* === SCRAP CANVAS FIXED POSITION === */
+#scrapCanvas {
+  position: fixed !important;
+  top: 100px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 300px !important;
+  height: 1000px !important;
+  background: red !important;
+  z-index: 9999 !important;
+  border: 5px solid white !important;
 }
