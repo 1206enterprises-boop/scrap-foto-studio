@@ -90,6 +90,18 @@ body::before {
   backdrop-filter: blur(4px);
 }
 
+.scrap-canvas::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0.08) 0%,
+    rgba(255,255,255,0.02) 40%,
+    rgba(0,0,0,0.1) 100%
+  );
+  pointer-events: none;
+}
 /* Remove debug override completely */
 #scrapCanvas {
   position: relative !important;
