@@ -13,52 +13,56 @@
 </div>
 
 <div class="centered-container">
-<h2 style="text-align:center;">1"x 3" Fotostrip</h2>
+  <h2 style="text-align:center;">1"x 3" Fotostrip</h2>
   
   <div class="video-container">
     <video id="video" autoplay playsinline></video>
-      <div id="countdownOverlay">3</div>
+    <!-- ✅ Countdown overlay -->
+    <div id="countdownOverlay">3</div>
   </div>
 
-<div class="controls-wrapper">
-  <div class="controls">
-    <button class="modern-btn" id="startBtn">Start Session</button>
-    <button class="modern-btn" id="takePhotoBtn">Take Photo</button>
-    <button class="modern-btn" id="resetBtn">Reset</button>
+  <div class="controls-wrapper">
+    <div class="controls">
+      <button class="modern-btn" id="startBtn">Start Session</button>
+      <button class="modern-btn" id="takePhotoBtn">Take Photo</button>
+      <button class="modern-btn" id="resetBtn">Reset</button>
+    </div>
   </div>
-</div>
 
-<div class="scrap-canvas" id="scrapCanvas" style="width:300px; height:600px;">
+  <div class="scrap-canvas" id="scrapCanvas" style="width:300px; height:600px;">
     <div id="frameLayer"></div>
     <img id="templateImg" class="template" src="">
     <div id="photoLayer"></div>
     <div id="stickerLayer"></div>
   </div>
 
-<div class="frames-wrapper">
-  <div class="frames-container" id="framesGallery"></div>
-</div>
+  <div class="frames-wrapper">
+    <div class="frames-container" id="framesGallery"></div>
+  </div>
   
   <div class="frame-scroll" id="stickerBar"></div>
 
-  <!-- Download button moved here -->
-<div class="download-container" style="text-align:center; margin: 20px 0;">
-  <button class="modern-btn" id="downloadDigitalBtn">
-    💻 Download Digital Copy – $5
-  </button>
+  <!-- ✅ Download & Upgrade buttons -->
+  <div class="download-container" style="text-align:center; margin: 20px 0;">
+    <button class="modern-btn" id="downloadDigitalBtn">
+      💻 Download Digital Copy – $5
+    </button>
 
-  <button class="modern-btn" id="upgradeBtn" style="margin-top:10px;">
-    📦 Upgrade to Print or Keychain
-  </button>
+    <button class="modern-btn" id="upgradeBtn" style="margin-top:10px;">
+      📦 Upgrade to Print or Keychain
+    </button>
+  </div>
+
 </div>
 
 <script src="../js/html2canvas.min.js"></script>
 <script src="script.js"></script>
-</body>
-</html>
 
 <!-- ✅ Footer -->
 <footer class="site-footer">
   © 2026 Visura Haus, LLC. All rights reserved. <br>
   Owned and operated by Visura Haus, LLC
 </footer>
+
+</body>
+</html>
