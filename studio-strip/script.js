@@ -230,7 +230,7 @@ downloadDigitalBtn.addEventListener('click', () => {
   addWatermark(tempCanvas);
   localStorage.setItem('scrapPhoto', tempCanvas.toDataURL('image/png'));
 
-  window.open(STRIPE_DIGITAL_URL, "_blank");
+  window.open('https://buy.stripe.com/dRmcN753l51z0JS2gq2Nq01', "_blank");
   alert("Complete payment in the new tab, then go to the success page to download.");
 });
 
