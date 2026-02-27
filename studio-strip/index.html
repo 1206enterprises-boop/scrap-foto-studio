@@ -9,18 +9,21 @@
 <body>
 
 <div class="logo-container">
-  <img src="https://static.wixstatic.com/media/67478d_07b399da6cec4eedabdc9ff31dce1feb~mv2.png" alt="Scrap Foto Studio Logo" class="logo">
+  <img src="https://static.wixstatic.com/media/67478d_07b399da6cec4eedabdc9ff31dce1feb~mv2.png" 
+       alt="Scrap Foto Studio Logo" 
+       class="logo">
 </div>
 
 <div class="centered-container">
   <h2 style="text-align:center;">1"x 3" Fotostrip</h2>
   
+  <!-- ✅ VIDEO CONTAINER (overlay must live inside here) -->
   <div class="video-container">
     <video id="video" autoplay playsinline></video>
-    <!-- ✅ Countdown overlay -->
-    <div id="countdownOverlay">3</div>
+    <div id="countdownOverlay"></div> <!-- JS controls content -->
   </div>
 
+  <!-- ✅ BUTTONS -->
   <div class="controls-wrapper">
     <div class="controls">
       <button class="modern-btn" id="startBtn">Start Session</button>
@@ -29,20 +32,22 @@
     </div>
   </div>
 
+  <!-- ✅ SCRAP CANVAS -->
   <div class="scrap-canvas" id="scrapCanvas" style="width:300px; height:600px;">
     <div id="frameLayer"></div>
-    <img id="templateImg" class="template" src="">
     <div id="photoLayer"></div>
     <div id="stickerLayer"></div>
   </div>
 
+  <!-- ✅ FRAMES -->
   <div class="frames-wrapper">
     <div class="frames-container" id="framesGallery"></div>
   </div>
   
+  <!-- ✅ STICKERS -->
   <div class="frame-scroll" id="stickerBar"></div>
 
-  <!-- ✅ Download & Upgrade buttons -->
+  <!-- ✅ DOWNLOAD & UPGRADE -->
   <div class="download-container" style="text-align:center; margin: 20px 0;">
     <button class="modern-btn" id="downloadDigitalBtn">
       💻 Download Digital Copy – $5
@@ -55,10 +60,10 @@
 
 </div>
 
+<!-- ✅ IMPORTANT: Load scripts at bottom -->
 <script src="../js/html2canvas.min.js"></script>
-<script src="script.js"></script>
+<script src="script.js" defer></script>
 
-<!-- ✅ Footer -->
 <footer class="site-footer">
   © 2026 Visura Haus, LLC. All rights reserved. <br>
   Owned and operated by Visura Haus, LLC
